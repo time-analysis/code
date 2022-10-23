@@ -1,14 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>de.dnb</groupId>
-  <artifactId>time-analysis</artifactId>
+  <groupId>de.ase</groupId>
+  <artifactId>x-time-analysis</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  
   <packaging>pom</packaging>
   <modules>
-  	<module>3-time-analysis-domain</module>
-  	<module>2-time-analysis-application</module>
-  	<module>1-time-analysis-adapters</module>
   	<module>0-time-analysis-plugin-database</module>
+  	<module>1-time-analysis-adapters</module>
+  	<module>2-time-analysis-application</module>
+  	<module>3-time-analysis-domain</module>
   </modules>
 </project>
