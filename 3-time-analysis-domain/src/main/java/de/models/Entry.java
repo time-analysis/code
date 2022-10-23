@@ -18,6 +18,12 @@ public class Entry {
 		this.type = type;
 		this.details = details;
 	}
+	
+	public Entry(EntryType type, String details) {
+		super();
+		this.type = type;
+		this.details = details;
+	}
 
 	public LocalDateTime getStart() {
 		return start;
