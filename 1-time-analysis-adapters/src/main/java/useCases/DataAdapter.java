@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.models.Entry;
+import de.models.Lecture;
 
 public class DataAdapter implements DataAdapterInterface {
 	private DataPluginInterface output;
@@ -13,10 +14,12 @@ public class DataAdapter implements DataAdapterInterface {
 		output = dataPlugin;
 	}
 
-	public void mapData(Entry entry) {
+	public void mapData(Entry entry,Lecture lecture) {
 		map.put("Start", entry.getStart().toString());
-		map.put("Ende", entry.getEnd().toString());
-
+		map.put("End", entry.getEnd().toString());
+		map.put("Details", entry.getDetails());
+		map.put("Type", entry.getType().toString());
+		map.put("Lecture", lecture.getName());
 		output.writeData(map);
 	}
 

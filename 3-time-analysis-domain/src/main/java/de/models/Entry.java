@@ -24,6 +24,7 @@ public class Entry {
 		this.type = type;
 		this.details = details;
 	}
+	
 
 	public LocalDateTime getStart() {
 		return start;

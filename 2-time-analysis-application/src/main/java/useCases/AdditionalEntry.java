@@ -1,6 +1,7 @@
 package useCases;
 
 import de.models.Entry;
+import de.models.Lecture;
 
 public class AdditionalEntry {
 	DataAdapterInterface mapData;
@@ -9,7 +10,12 @@ public class AdditionalEntry {
 		this.mapData = mapData;
 	}
 
-	public void addEntry(Entry entry) {
-		mapData.mapData(entry);
+	public void addEntry(Entry entry,Lecture lecture) {
+		lecture.addEntry(entry);
+		mapData.mapData(entry,lecture);
 	}
+	public void addEntryByTimer(Lecture lecture) {
+		mapData.mapData(Timer.getEntry(),lecture);
+	}
+	
 }

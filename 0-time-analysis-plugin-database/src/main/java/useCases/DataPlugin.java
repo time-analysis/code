@@ -10,7 +10,8 @@ public class DataPlugin implements DataPluginInterface {
 	public void writeData(Map<String, String> data) {
 		File file = new File("Entries.csv");
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
-			writer.write(data.get("Start") + " | " + data.get("Ende"));
+			String csvEntry = String.format("%s,%s,%s,%s,%s", data.get("Start"),data.get("End"),data.get("Type"),data.get("Details"),data.get("Lecture"));
+			writer.write(csvEntry);
 			writer.newLine();
 		} catch (Exception e) {
 			e.printStackTrace();
