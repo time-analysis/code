@@ -23,4 +23,16 @@ class AdditionalEntryTest {
 		assertEquals(lecture.getEntries().get(0), e);
 	}
 
+	@Test
+	void EntryIsAddedToLectureFromTimer() {
+		Entry e = new Entry(EntryType.PRESENCE, "Test");
+		Lecture lecture = new Lecture("ASE", new Semester(), 0, 0);
+		Timer.setEntry(e);
+		Timer.toggleTimer();
+		Timer.toggleTimer();
+		AdditionalEntry ae = new AdditionalEntry(null); //TODO was muss hier übergeben werden ?? mock?
+		ae.addEntryByTimer(lecture);
+		assertEquals(lecture.getEntries().get(0), e);
+	}
+
 }
