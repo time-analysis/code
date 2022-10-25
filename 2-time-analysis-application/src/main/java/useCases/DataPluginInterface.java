@@ -2,6 +2,6 @@ package useCases;
 
 import java.util.Map;
 
-public interface DataPluginInterface { //TODO gehört eigl ins adapter-package
-	public void writeData(Map<String, String> data);
+public interface DataPluginInterface { //TODO gehï¿½rt eigl ins adapter-package
+	public boolean writeData(Map<String, String> data);
 }
