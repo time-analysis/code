@@ -15,7 +15,8 @@ public class AdditionalEntry {
 		mapData.mapData(entry,lecture);
 	}
 	public void addEntryByTimer(Lecture lecture) {
+		lecture.addEntry(Timer.getEntry());
 		mapData.mapData(Timer.getEntry(),lecture);
 	}
-	
+
 }

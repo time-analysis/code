@@ -12,13 +12,13 @@ import de.models.Lecture;
 import de.models.Semester;
 
 class AdditionalEntryTest {
-
+	DataAdapterInterface mock = new DataAdapterMock();
 	@Test
 	void EntryIsAddedToLecture() {
 		Entry e = new Entry(LocalDateTime.now(), LocalDateTime.now(), EntryType.PRESENCE, "Test");
 		Lecture lecture = new Lecture("ASE", new Semester(), 0, 0);
 		
-		AdditionalEntry ae = new AdditionalEntry(null); //TODO was muss hier übergeben werden ?? mock?
+		AdditionalEntry ae = new AdditionalEntry(mock);
 		ae.addEntry(e,lecture);
 		assertEquals(lecture.getEntries().get(0), e);
 	}
@@ -30,7 +30,7 @@ class AdditionalEntryTest {
 		Timer.setEntry(e);
 		Timer.toggleTimer();
 		Timer.toggleTimer();
-		AdditionalEntry ae = new AdditionalEntry(null); //TODO was muss hier übergeben werden ?? mock?
+		AdditionalEntry ae = new AdditionalEntry(mock);
 		ae.addEntryByTimer(lecture);
 		assertEquals(lecture.getEntries().get(0), e);
 	}
