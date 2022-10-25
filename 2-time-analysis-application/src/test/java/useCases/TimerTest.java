@@ -1,8 +1,5 @@
 package useCases;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -11,6 +8,9 @@ import org.junit.jupiter.api.Test;
 
 import de.models.Entry;
 import de.models.EntryType;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TimerTest {
 	@BeforeEach
