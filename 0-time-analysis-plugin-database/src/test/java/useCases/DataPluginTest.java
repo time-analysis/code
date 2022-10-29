@@ -21,11 +21,14 @@ class DataPluginTest {
     @BeforeEach
     void setup() {
         File file = new File(fileName);
+        PrintWriter writer = null;
         try {
-            Files.deleteIfExists(file.toPath());
-        } catch (IOException e) {
+            writer = new PrintWriter(file);
+        } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+        writer.print("");
+        writer.close();
         plugin = new DataPlugin(fileName);
         try {
             reader = new BufferedReader(new FileReader(fileName));
@@ -33,11 +36,6 @@ class DataPluginTest {
             throw new RuntimeException(e);
         }
 
-    }
-
-    @Test
-    public void test() {
-        System.out.println("hello");
     }
 
     @Test
@@ -59,6 +57,5 @@ class DataPluginTest {
             throw new RuntimeException(e);
         }
         assertEquals(assumed, fromFile);
-        plugin = null;
     }
 }

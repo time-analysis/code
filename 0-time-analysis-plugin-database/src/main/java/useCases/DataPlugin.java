@@ -4,17 +4,14 @@ import java.io.*;
 import java.util.Map;
 
 public class DataPlugin implements DataPluginInterface {
-    private BufferedWriter writer;
+    private String fileName;
 
     public DataPlugin(String fileName) {
-        try {
-            writer = new BufferedWriter(new FileWriter(fileName, true));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        this.fileName = fileName;
     }
 
     public boolean writeData(Map<String, String> data) {
+
         String csvEntry = String.format(
                 "%s,%s,%s,%s,%s"
                 , data.get("Start")
@@ -22,12 +19,12 @@ public class DataPlugin implements DataPluginInterface {
                 , data.get("Type")
                 , data.get("Details")
                 , data.get("Lecture"));
-        try {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {
             writer.write(csvEntry);
             writer.newLine();
             writer.flush();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        }catch(IOException e) {
+            e.printStackTrace();
         }
         return false;
     }
