@@ -4,19 +4,14 @@ import java.io.*;
 import java.util.Map;
 
 public class DataPlugin implements DataPluginInterface {
-    private File file = new File("Entries.csv");
     private BufferedWriter writer;
 
-    public DataPlugin() {
+    public DataPlugin(String fileName) {
         try {
-            writer = new BufferedWriter(new FileWriter(file, true));
+            writer = new BufferedWriter(new FileWriter(fileName, true));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public void setWriter(BufferedWriter writer){
-        this.writer = writer;
     }
 
     public boolean writeData(Map<String, String> data) {

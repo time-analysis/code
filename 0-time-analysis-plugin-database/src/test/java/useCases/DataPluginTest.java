@@ -1,9 +1,11 @@
 package useCases;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,26 +14,30 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DataPluginTest {
 
-    private DataPlugin plugin = new DataPlugin();
-    private BufferedWriter writer;
+    private final String fileName = "Test.csv";
+    private DataPlugin plugin;
     private BufferedReader reader;
-    private File file = new File("Test.csv");
 
     @BeforeEach
     void setup() {
-
+        File file = new File(fileName);
         try {
-            writer = new BufferedWriter(new FileWriter(file, false));
+            Files.deleteIfExists(file.toPath());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        plugin.setWriter(writer);
-
+        plugin = new DataPlugin(fileName);
         try {
-            reader = new BufferedReader(new FileReader(file));
+            reader = new BufferedReader(new FileReader(fileName));
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+
+    }
+
+    @Test
+    public void test() {
+        System.out.println("hello");
     }
 
     @Test
@@ -52,7 +58,7 @@ class DataPluginTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
         assertEquals(assumed, fromFile);
+        plugin = null;
     }
 }
