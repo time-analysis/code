@@ -10,6 +10,7 @@
         <module name="1-time-analysis-adapters" />
         <module name="2-time-analysis-application" />
         <module name="0-time-analysis-plugin-database" />
+        <module name="0-time-analysis-plugin-terminal" />
       </profile>
     </annotationProcessing>
   </component>

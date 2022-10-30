@@ -25,7 +25,7 @@ class TimerTest {
         Timer.toggleTimer();
         LocalDateTime currentTime = LocalDateTime.now();
         assertTrue(Timer.isRunning());
-        assertTrue(Duration.between(Timer.getEntry().getStart(), currentTime).toMillis() < 100); //10 ms can pass between starting timer and measuring time...
+        assertTrue(Duration.between(Timer.getEntry().getStart(), currentTime).toMillis() < 100); //100 ms can pass between starting timer and measuring time...
     }
 
     @Test
@@ -34,7 +34,7 @@ class TimerTest {
         Timer.toggleTimer();
         LocalDateTime currentTime = LocalDateTime.now();
         assertFalse(Timer.isRunning());
-        assertTrue(Duration.between(Timer.getEntry().getEnd(), currentTime).toMillis() < 100); //10 ms can pass between starting timer and measuring time...
+        assertTrue(Duration.between(Timer.getEntry().getEnd(), currentTime).toMillis() < 100); //100 ms can pass between starting timer and measuring time...
     }
 
 }
