@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="3-time-analysis-domain" />
+        <module name="1-time-analysis-adapters" />
+        <module name="2-time-analysis-application" />
+        <module name="0-time-analysis-plugin-database" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>
