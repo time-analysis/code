@@ -1,6 +1,8 @@
+import de.models.EntryType;
 import useCases.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -17,30 +19,42 @@ public class UITerminalPlugin implements UIPluginInterface {
         //get lecture
         //create entry: start,end, type,details
         //create entry: start timer, stop timer, type, details
+        //TODO besseres,direktes errorhandling (Fehlermeldung statt crash, direkt nach eingabe (nicht erst am ende)
         UIAdapter uiAdapter = new UIAdapter(this, dataPlugin);
         Scanner scanner = new Scanner(System.in).useDelimiter("\n");
         System.out.println("Start time");
         String start = scanner.next();
         System.out.println("End time");
         String end = scanner.next();
-        //show list of type
+
         System.out.println("Type of study");
-        String type = scanner.next();
+        int counter = 0;
+        for (EntryType type : EntryType.values()) {
+            System.out.println(counter + ">" + type.toString());
+            counter++;
+        }
+        int typeIndex = scanner.nextInt(); //vorsicht: array out of bounds
+
         System.out.println("Details of study");
         String details = scanner.next();
         //show list of lectures
         System.out.println("Lecture");
-        String lecture = scanner.next();
+        List<String> lectures = uiAdapter.getAllLecturesOfCurrentSemester();
+        counter = 0;
+        for (String l : lectures) {
+            System.out.println(counter + ">" + l);
+            counter++;
+        }
+        int lectureIndex = scanner.nextInt();//vorsicht: array out of bounds
 
         Map<String, String> data = new HashMap<>();
         data.put("Start", start);
         data.put("End", end);
         data.put("Details", details);
-        data.put("Lecture", lecture);
-        data.put("Type", type);
+        data.put("Lecture", lectures.get(lectureIndex));
+        data.put("Type", EntryType.values()[typeIndex].toString());
 
         uiAdapter.addEntryByTimeStamp(data);
-
     }
 
     @Override
@@ -58,6 +72,11 @@ public class UITerminalPlugin implements UIPluginInterface {
                 "    |_|  |_|_| |_| |_|\\___| /_/    \\_\\_| |_|\\__,_|_|\\__, |___/_|___/\n" +
                 "                                                     __/ |          \n" +
                 "                                                    |___/           \n");
+        showMainMenu();
+    }
+
+    public void showMainMenu() {
+        //TODO Semester auswaehlen?
         System.out.println("Options:\n1>Create new Lecture\n2>Create new Entry");
         Scanner scanner = new Scanner(System.in);
         String option = scanner.next();
@@ -66,7 +85,11 @@ public class UITerminalPlugin implements UIPluginInterface {
                 break;
             case "2":
                 addEntryByTimeStamp();
+                break;
+            default:
+                System.out.println(option + " ist keine valide Auswahl.");
         }
+        showMainMenu();
     }
 
 

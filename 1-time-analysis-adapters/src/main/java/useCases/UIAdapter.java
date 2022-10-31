@@ -7,6 +7,7 @@ import de.models.Semester;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 
 public class UIAdapter {
@@ -30,5 +31,9 @@ public class UIAdapter {
         Lecture lecture = new Lecture(data.get("Lecture"), new Semester(), 1, 1);
         add.addEntry(entry, lecture);
 
+    }
+
+    public List<String> getAllLecturesOfCurrentSemester() {
+        return List.of("BWL", "Evo-Alg"); //zugriff auf dataadapter oder auf (neuen) usecase??
     }
 }
