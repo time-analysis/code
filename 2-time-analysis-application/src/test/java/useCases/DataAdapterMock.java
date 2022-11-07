@@ -5,7 +5,7 @@ import de.models.Lecture;
 
 public class DataAdapterMock implements DataAdapterInterface{
     @Override
-    public void mapData(Entry entry, Lecture lecture) {
+    public void mapEntryData(Entry entry) {
         //do nothing for now, pretend to map data...
     }
 }

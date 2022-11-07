@@ -6,19 +6,17 @@ import de.models.Lecture;
 public class AdditionalEntry {
     DataAdapterInterface mapData;
 
-
     public AdditionalEntry(DataAdapterInterface mapData) {
         this.mapData = mapData;
     }
 
     public void addEntry(Entry entry, Lecture lecture) {
-        lecture.addEntry(entry);
-        mapData.mapData(entry, lecture);
+        entry.setLecture(lecture);
+        mapData.mapEntryData(entry);
     }
 
     public void addEntryByTimer(Lecture lecture) {
-        lecture.addEntry(Timer.getEntry());
-        mapData.mapData(Timer.getEntry(), lecture);
+        Timer.getEntry().setLecture(lecture);
+        mapData.mapEntryData(Timer.getEntry());
     }
-
 }

@@ -5,67 +5,49 @@ import java.util.List;
 
 public class Lecture {
 
-	private String name;
-	private Semester semster; //TODO reference needed?
-	private List<Entry> entries = new ArrayList<Entry>();
-	private int presence;
-	private int study;
-	
-	
+    private String name;
+    private Semester semster;
+    private int presence;
+    private int study;
 
-	public Lecture(String name, Semester semster, int presence, int study) {
-		super();
-		this.name = name;
-		this.semster = semster;
-		this.presence = presence;
-		this.study = study;
-	}
 
-	public String getName() {
-		return name;
-	}
+    public Lecture(String name, Semester semster, int presence, int study) {
+        super();
+        this.name = name;
+        this.semster = semster;
+        this.presence = presence;
+        this.study = study;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public Semester getSemster() {
-		return semster;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setSemster(Semester semster) {
-		this.semster = semster;
-	}
+    public Semester getSemster() {
+        return semster;
+    }
 
-	public List<Entry> getEntries() {
-		return entries;
-	}
+    public void setSemster(Semester semster) {
+        this.semster = semster;
+    }
 
-	public void setEntries(ArrayList<Entry> entries) {
-		this.entries = entries;
-	}
+    public int getPresence() {
+        return presence;
+    }
 
-	public void addEntry(Entry entry) {
-		this.entries.add(entry);
-	}
+    public void setPresence(int presence) {
+        this.presence = presence;
+    }
 
-	public void removeEntry(Entry entry) {
-		this.entries.remove(entry);
-	}
+    public int getStudy() {
+        return study;
+    }
 
-	public int getPresence() {
-		return presence;
-	}
-
-	public void setPresence(int presence) {
-		this.presence = presence;
-	}
-
-	public int getStudy() {
-		return study;
-	}
-
-	public void setStudy(int study) {
-		this.study = study;
-	}
+    public void setStudy(int study) {
+        this.study = study;
+    }
 }

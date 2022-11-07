@@ -9,6 +9,7 @@
         <module name="3-time-analysis-domain" />
         <module name="1-time-analysis-adapters" />
         <module name="2-time-analysis-application" />
+        <module name="time-analysis-plugin-terminal" />
         <module name="0-time-analysis-plugin-database" />
         <module name="0-time-analysis-plugin-terminal" />
       </profile>

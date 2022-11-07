@@ -1,8 +1,11 @@
 package useCases;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import de.models.Lecture;
+import de.models.Semester;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class TimerTest {
     @BeforeEach
     void setup() {
-        Timer.setEntry(new Entry(EntryType.PRESENCE, "hehe"));
+        Semester semester = new Semester("5. Semester", LocalDate.now(), LocalDate.now());
+        Lecture lecture = new Lecture("ASE", semester, 10, 20);
+        Timer.setEntry(new Entry(EntryType.PRESENCE, "hehe", lecture));
         Timer timer = new Timer();
     }
 
