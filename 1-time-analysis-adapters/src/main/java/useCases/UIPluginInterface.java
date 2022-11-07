@@ -1,7 +1,6 @@
 package useCases;
 
 public interface UIPluginInterface {
-    public void addEntryByTimeStamp();
+    void addEntryByTimeStamp();
 
-    public void showLastEntry();
 }

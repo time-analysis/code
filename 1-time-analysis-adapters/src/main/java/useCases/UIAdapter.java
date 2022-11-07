@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class UIAdapter {
 
-    //TODO
+    //TODO navigation
     UIPluginInterface uiPlugin;
     DataPluginInterface dataPlugin;
 
