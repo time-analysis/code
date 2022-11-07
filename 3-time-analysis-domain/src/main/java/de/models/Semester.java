@@ -5,41 +5,38 @@ import java.util.ArrayList;
 
 public class Semester {
 
-	private String name;
-	private ArrayList<Lecture> lectures;
-	private LocalDate start;
-	private LocalDate end;
+    private String name;
+    private LocalDate start;
+    private LocalDate end;
 
-	public String getName() {
-		return name;
-	}
+    public Semester(String name, LocalDate start, LocalDate end) {
+        this.name = name;
+        this.start = start;
+        this.end = end;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public ArrayList<Lecture> getLectures() {
-		return lectures;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setLectures(ArrayList<Lecture> lectures) {
-		this.lectures = lectures;
-	}
+    public LocalDate getStart() {
+        return start;
+    }
 
-	public LocalDate getStart() {
-		return start;
-	}
+    public void setStart(LocalDate start) {
+        this.start = start;
+    }
 
-	public void setStart(LocalDate start) {
-		this.start = start;
-	}
+    public LocalDate getEnd() {
+        return end;
+    }
 
-	public LocalDate getEnd() {
-		return end;
-	}
-
-	public void setEnd(LocalDate end) {
-		this.end = end;
-	}
+    public void setEnd(LocalDate end) {
+        this.end = end;
+    }
 
 }

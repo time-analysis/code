@@ -8,9 +8,9 @@ public class Entry {
     private LocalDateTime end;
     private EntryType type;
     private String details;
+    private Lecture lecture;
 
-
-    public Entry(LocalDateTime start, LocalDateTime end, EntryType type, String details) {
+    public Entry(LocalDateTime start, LocalDateTime end, EntryType type, String details, Lecture lecture) {
         super();
         if (start.isAfter(end)) {
             throw new IllegalStateException();
@@ -19,14 +19,15 @@ public class Entry {
         this.end = end;
         this.type = type;
         this.details = details;
+        this.lecture = lecture;
     }
 
-    public Entry(EntryType type, String details) {
+    public Entry(EntryType type, String details, Lecture lecture) {
         super();
         this.type = type;
         this.details = details;
+        this.lecture = lecture;
     }
-
 
     public LocalDateTime getStart() {
         return start;
@@ -56,7 +57,15 @@ public class Entry {
         return details;
     }
 
+    public void setLecture(Lecture lecture) {
+        this.lecture = lecture;
+    }
+
     public void setDetails(String details) {
         this.details = details;
+    }
+
+    public Lecture getLecture() {
+        return lecture;
     }
 }

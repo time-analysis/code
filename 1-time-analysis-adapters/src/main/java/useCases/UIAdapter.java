@@ -5,12 +5,15 @@ import de.models.EntryType;
 import de.models.Lecture;
 import de.models.Semester;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
 public class UIAdapter {
+
+    //TODO
     UIPluginInterface uiPlugin;
     DataPluginInterface dataPlugin;
 
@@ -27,10 +30,9 @@ public class UIAdapter {
         LocalDateTime start = LocalDateTime.parse(data.get("Start"), formatter);
         LocalDateTime end = LocalDateTime.parse(data.get("End"), formatter);
 
-        Entry entry = new Entry(start, end, EntryType.valueOf(data.get("Type")), data.get("Details"));
-        Lecture lecture = new Lecture(data.get("Lecture"), new Semester(), 1, 1);
+        Lecture lecture = new Lecture(data.get("Lecture"), new Semester("5. Semester", LocalDate.now(), LocalDate.now()), 1, 1);
+        Entry entry = new Entry(start, end, EntryType.valueOf(data.get("Type")), data.get("Details"), lecture);
         add.addEntry(entry, lecture);
-
     }
 
     public List<String> getAllLecturesOfCurrentSemester() {
