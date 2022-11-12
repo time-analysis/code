@@ -13,9 +13,9 @@ public class Timer {
 
     public static void toggleTimer() {
         if (isRunning) {
-            entry.setEnd(LocalDateTime.now());
+            Entry entryWithNewTime = new Entry(entry.getStart(), LocalDateTime.now(), entry.getType(), entry.getDetails(), entry.getLecture());
         } else {
-            entry.setStart(LocalDateTime.now());
+            Entry entryWithNewTime = new Entry(LocalDateTime.now(), entry.getEnd(), entry.getType(), entry.getDetails(), entry.getLecture());
         }
         isRunning = !isRunning;
     }

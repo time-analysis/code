@@ -11,12 +11,12 @@ public class AdditionalEntry {
     }
 
     public void addEntry(Entry entry, Lecture lecture) {
-        entry.setLecture(lecture);
-        mapData.mapEntryData(entry);
+        Entry entryWithLection = new Entry(entry.getStart(), entry.getEnd(), entry.getType(), entry.getDetails(), lecture);
+        mapData.mapEntryData(entryWithLection);
     }
 
-    public void addEntryByTimer(Lecture lecture) {
-        Timer.getEntry().setLecture(lecture);
-        mapData.mapEntryData(Timer.getEntry());
-    }
+//    public void addEntryByTimer(Lecture lecture) {
+//        Timer.getEntry().setLecture(lecture);
+//        mapData.mapEntryData(Timer.getEntry());
+//    }
 }

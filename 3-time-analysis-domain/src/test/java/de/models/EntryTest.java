@@ -2,6 +2,7 @@ package de.models;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -22,4 +23,32 @@ class EntryTest {
 
     }
 
+    @Test
+    void testConstructor() {
+        LocalDateTime startEnd = LocalDateTime.now();
+        LocalDate now = LocalDate.now();
+        Semester semster = new Semester("5. Semester", now, now);
+        Lecture lecture = new Lecture("ASE", semster, 50, 10);
+        Entry entry = new Entry(startEnd, startEnd, EntryType.STUDY, "more information", lecture);
+
+        assertEquals(entry.getStart(), startEnd);
+        assertEquals(entry.getEnd(), startEnd);
+        assertEquals(entry.getType(), EntryType.STUDY);
+        assertEquals(entry.getDetails(), "more information");
+        assertEquals(entry.getLecture(), lecture);
+    }
+
+    @Test
+    void testConstructorWithoutStartAndEnd() {
+        LocalDate now = LocalDate.now();
+        Semester semster = new Semester("5. Semester", now, now);
+        Lecture lecture = new Lecture("ASE", semster, 50, 10);
+        Entry entry = new Entry(EntryType.STUDY, "more information", lecture);
+
+        assertTrue(Duration.between(entry.getStart(), LocalDateTime.now()).toMillis() < 10);
+        assertTrue(Duration.between(entry.getEnd(), LocalDateTime.now()).toMillis() < 10);
+        assertEquals(entry.getType(), EntryType.STUDY);
+        assertEquals(entry.getDetails(), "more information");
+        assertEquals(entry.getLecture(), lecture);
+    }
 }
