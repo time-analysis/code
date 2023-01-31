@@ -1,34 +1,21 @@
 package de.models;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
-public final class Entry {
+public class Entry {
 
-    private final LocalDateTime start;
-    private final LocalDateTime end;
-    private final EntryType type;
-    private final String details;
-    private final Lecture lecture;
+    private LocalDateTime start;
+    private LocalDateTime end;
+    private EntryType type;
+    private String details;
+    private Lecture lecture;
 
-    public Entry(LocalDateTime start, LocalDateTime end, EntryType type, String details, Lecture lecture) {
-        super();
-        if (start.isAfter(end)) {
-            throw new IllegalStateException();
-        }
+    public Entry(LocalDateTime start, EntryType type, String details, Lecture lecture) {
         this.start = start;
-        this.end = end;
         this.type = type;
         this.details = details;
         this.lecture = lecture;
-    }
-
-    public Entry(EntryType type, String details, Lecture lecture) {
-        super();
-        this.type = type;
-        this.details = details;
-        this.lecture = lecture;
-        this.start = LocalDateTime.now();
-        this.end = LocalDateTime.now();
     }
 
     public LocalDateTime getStart() {
@@ -49,5 +36,16 @@ public final class Entry {
 
     public Lecture getLecture() {
         return lecture;
+    }
+
+    public void setEnd(LocalDateTime end) {
+        if (start.isAfter(end)) {
+            throw new IllegalStateException();
+        }
+        this.end = end;
+    }
+
+    public Duration calculateDuration() {
+        return Duration.between(start, end);
     }
 }

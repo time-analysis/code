@@ -3,32 +3,32 @@ package de.models;
 public final class Lecture {
 
     private final String name;
-    private final Semester semster;
-    private final int presence;
-    private final int study;
+    private final Semester semester;
+    private final int lectureTime;
+    private final int selfStudyTime;
 
 
-    public Lecture(String name, Semester semster, int presence, int study) {
+    public Lecture(String name, Semester semester, int lectureTime, int selfStudyTime) {
         super();
         this.name = name;
-        this.semster = semster;
-        this.presence = presence;
-        this.study = study;
+        this.semester = semester;
+        this.lectureTime = lectureTime;
+        this.selfStudyTime = selfStudyTime;
     }
 
     public String getName() {
         return name;
     }
 
-    public Semester getSemster() {
-        return semster;
+    public Semester getSemester() {
+        return semester;
     }
 
-    public int getPresence() {
-        return presence;
+    public int getLectureTime() {
+        return lectureTime;
     }
 
-    public int getStudy() {
-        return study;
+    public int getSelfStudyTime() {
+        return selfStudyTime;
     }
 }

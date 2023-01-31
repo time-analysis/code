@@ -11,7 +11,9 @@ public class AdditionalEntry {
     }
 
     public void addEntry(Entry entry, Lecture lecture) {
-        Entry entryWithLection = new Entry(entry.getStart(), entry.getEnd(), entry.getType(), entry.getDetails(), lecture);
+        Entry entryWithLection = new Entry(entry.getStart(), entry.getType(), entry.getDetails(), lecture);
+        //TODO set end only for fixing the changed constructor
+        entryWithLection.setEnd(entry.getEnd());
         mapData.mapEntryData(entryWithLection);
     }
 

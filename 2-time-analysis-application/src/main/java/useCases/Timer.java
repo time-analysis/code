@@ -13,9 +13,13 @@ public class Timer {
 
     public static void toggleTimer() {
         if (isRunning) {
-            Entry entryWithNewTime = new Entry(entry.getStart(), LocalDateTime.now(), entry.getType(), entry.getDetails(), entry.getLecture());
+            Entry entryWithNewTime = new Entry(entry.getStart(), entry.getType(), entry.getDetails(), entry.getLecture());
+            //TODO set end only for fixing the changed constructor
+            entryWithNewTime.setEnd(LocalDateTime.now());
         } else {
-            Entry entryWithNewTime = new Entry(LocalDateTime.now(), entry.getEnd(), entry.getType(), entry.getDetails(), entry.getLecture());
+            Entry entryWithNewTime = new Entry(LocalDateTime.now(), entry.getType(), entry.getDetails(), entry.getLecture());
+            //TODO set end only for fixing the changed constructor
+            entryWithNewTime.setEnd(entry.getEnd());
         }
         isRunning = !isRunning;
     }

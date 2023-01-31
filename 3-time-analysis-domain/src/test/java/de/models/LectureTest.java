@@ -1,9 +1,6 @@
 package de.models;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 
 import java.time.LocalDate;
 
@@ -18,8 +15,8 @@ class LectureTest {
         Lecture lecture = new Lecture("Projektmanagement", semster, 10, 30);
 
         assertEquals(lecture.getName(), "Projektmanagement");
-        assertEquals(lecture.getSemster(), semster);
-        assertEquals(lecture.getPresence(), 10);
-        assertEquals(lecture.getStudy(), 30);
+        assertEquals(lecture.getSemester(), semster);
+        assertEquals(lecture.getLectureTime(), 10);
+        assertEquals(lecture.getSelfStudyTime(), 30);
     }
 }

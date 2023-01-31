@@ -26,12 +26,13 @@ public class UIAdapter {
         DataAdapterInterface dataAdapter = new DataAdapter(this.dataPlugin);
         AdditionalEntry add = new AdditionalEntry(dataAdapter);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"); //example for correct date: 2023-01-31 09:05
         LocalDateTime start = LocalDateTime.parse(data.get("Start"), formatter);
         LocalDateTime end = LocalDateTime.parse(data.get("End"), formatter);
 
         Lecture lecture = new Lecture(data.get("Lecture"), new Semester("5. Semester", LocalDate.now(), LocalDate.now()), 1, 1);
-        Entry entry = new Entry(start, end, EntryType.valueOf(data.get("Type")), data.get("Details"), lecture);
+        Entry entry = new Entry(start, EntryType.valueOf(data.get("Type")), data.get("Details"), lecture);
+        entry.setEnd(end);
         add.addEntry(entry, lecture);
     }
 
