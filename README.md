@@ -11,6 +11,7 @@ Basic:
 * startTimer()
 * stopTimer()
 * addLecture(...)
+* addSemester(...)
 * getEntryTime()
 ---
 User Administration
