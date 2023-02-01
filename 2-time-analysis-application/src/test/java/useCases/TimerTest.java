@@ -17,12 +17,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TimerTest {
 
-    //TODO needs to be refactored because of changes
     @BeforeEach
     void setup() {
         Semester semester = new Semester("5. Semester", LocalDate.now(), LocalDate.now());
         Lecture lecture = new Lecture("ASE", semester, 10, 20);
-        Timer.setEntry(new Entry(LocalDateTime.now(), EntryType.PRESENCE, "hehe", lecture));
+        Timer.setEntry(new Entry(LocalDateTime.now(), EntryType.PRESENCE, lecture));
         Timer timer = new Timer();
     }
 

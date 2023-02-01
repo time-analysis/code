@@ -31,8 +31,8 @@ public class UIAdapter {
         LocalDateTime end = LocalDateTime.parse(data.get("End"), formatter);
 
         Lecture lecture = new Lecture(data.get("Lecture"), new Semester("5. Semester", LocalDate.now(), LocalDate.now()), 1, 1);
-        Entry entry = new Entry(start, EntryType.valueOf(data.get("Type")), data.get("Details"), lecture);
-        entry.setEnd(end);
+        Entry entry = new Entry(start, EntryType.valueOf(data.get("Type")), lecture);
+        entry.finishEntry(end, data.get("Details"));
         add.addEntry(entry, lecture);
     }
 

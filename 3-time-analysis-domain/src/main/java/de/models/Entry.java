@@ -2,6 +2,7 @@ package de.models;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Entry {
 
@@ -11,10 +12,9 @@ public class Entry {
     private String details;
     private Lecture lecture;
 
-    public Entry(LocalDateTime start, EntryType type, String details, Lecture lecture) {
+    public Entry(LocalDateTime start, EntryType type, Lecture lecture) {
         this.start = start;
         this.type = type;
-        this.details = details;
         this.lecture = lecture;
     }
 
@@ -38,11 +38,21 @@ public class Entry {
         return lecture;
     }
 
-    public void setEnd(LocalDateTime end) {
+    public void finishEntry(LocalDateTime end, String details) {
         if (start.isAfter(end)) {
             throw new IllegalStateException();
         }
-        this.end = end;
+        if (Objects.isNull(this.end)) {
+            this.end = end;
+        } else {
+            System.out.println("end is already set!");
+        }
+        if (details.length() == 0) {
+            this.details = "No details available";
+        } else {
+            this.details = details;
+        }
+
     }
 
     public Duration calculateDuration() {

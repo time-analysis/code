@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 import static org.junit.jupiter.api.Assertions.*;
 
 class EntryTest {
-    
+
     @Test
     void startHasToBeBeforeEnd() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -20,7 +20,7 @@ class EntryTest {
         Semester semester = new Semester("5. Semester", LocalDate.now(), LocalDate.now());
         Lecture lecture = new Lecture("ASE", semester, 10, 20);
         assertThrows(IllegalStateException.class,
-                () -> new Entry(start, EntryType.PRESENCE, "test", lecture).setEnd(end));
+                () -> new Entry(start, EntryType.PRESENCE, lecture).finishEntry(end, "details"));
 
     }
 
@@ -30,8 +30,8 @@ class EntryTest {
         LocalDate now = LocalDate.now();
         Semester semester = new Semester("5. Semester", now, now);
         Lecture lecture = new Lecture("ASE", semester, 50, 10);
-        Entry entry = new Entry(startEnd, EntryType.STUDY, "more information", lecture);
-        entry.setEnd(startEnd);
+        Entry entry = new Entry(startEnd, EntryType.STUDY, lecture);
+        entry.finishEntry(startEnd, "more information");
 
         assertEquals(entry.getStart(), startEnd);
         assertEquals(entry.getEnd(), startEnd);
@@ -47,8 +47,8 @@ class EntryTest {
         LocalDateTime end = LocalDateTime.of(LocalDate.of(2022, 10, 10), LocalTime.of(11, 0, 0, 0));
         Semester semester = new Semester("5. Semester", now, now);
         Lecture lecture = new Lecture("ASE", semester, 50, 10);
-        Entry entry = new Entry(start, EntryType.STUDY, "more information", lecture);
-        entry.setEnd(end);
+        Entry entry = new Entry(start, EntryType.STUDY, lecture);
+        entry.finishEntry(end, "more information");
         assertEquals(entry.calculateDuration(), Duration.ofHours(1));
 
     }
