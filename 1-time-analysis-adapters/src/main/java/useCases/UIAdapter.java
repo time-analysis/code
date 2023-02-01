@@ -14,11 +14,11 @@ import java.util.Map;
 public class UIAdapter {
 
     //TODO navigation
-    UIPluginInterface uiPlugin;
+    //UIPluginInterface uiPlugin;
     DataPluginInterface dataPlugin;
 
     public UIAdapter(UIPluginInterface uiPlugin, DataPluginInterface dataPlugin) {
-        this.uiPlugin = uiPlugin;
+        //this.uiPlugin = uiPlugin;
         this.dataPlugin = dataPlugin;
     }
 

@@ -15,17 +15,17 @@ import de.models.Semester;
 class AdditionalEntryTest {
     DataAdapterInterface mock = new DataAdapterMock();
 
-//    @Test
-//    void EntryIsAddedToLecture() {
-//        Semester semester = new Semester("5. Semester", LocalDate.now(), LocalDate.now());
-//        Lecture lecture = new Lecture("ASE", semester, 0, 0);
-//        Entry e = new Entry(LocalDateTime.now(), LocalDateTime.now(), EntryType.PRESENCE, "Test", lecture);
-//
-//        AdditionalEntry ae = new AdditionalEntry(mock);
-//        ae.addEntry(e, lecture);
-//        assertEquals(lecture.getEntries().get(0), e);
-//    }
-//
+    @Test
+    void EntryIsAddedToLecture() {
+        Semester semester = new Semester("5. Semester", LocalDate.now(), LocalDate.now());
+        Lecture lecture = new Lecture("ASE", semester, 0, 0);
+        Entry e = new Entry(LocalDateTime.now(), EntryType.PRESENCE, lecture);
+
+        AdditionalEntry ae = new AdditionalEntry(mock);
+        ae.addEntry(e, lecture);
+        assertEquals(e.getLecture(), lecture);
+    }
+
 //    @Test
 //    void EntryIsAddedToLectureFromTimer() {
 //        Entry e = new Entry(EntryType.PRESENCE, "Test");

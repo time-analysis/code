@@ -10,8 +10,8 @@ public class UITerminalPlugin implements UIPluginInterface {
 
     DataPluginInterface dataPlugin;
 
-    public UITerminalPlugin() {
-        this.dataPlugin = new DataPlugin("Entries.csv");
+    public UITerminalPlugin(DataPluginInterface dataPlugin) {
+        this.dataPlugin = dataPlugin;
     }
 
     @Override
@@ -33,6 +33,7 @@ public class UITerminalPlugin implements UIPluginInterface {
             System.out.println(counter + ">" + type.toString());
             counter++;
         }
+        //todo get data from adapter
         int typeIndex = scanner.nextInt(); //vorsicht: array out of bounds
 
         System.out.println("Details of study");
