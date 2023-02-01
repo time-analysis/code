@@ -1,6 +1,6 @@
 package de.models;
 
 public enum EntryType {
-	PRESENCE,STUDY
+    PRESENCE, STUDY
 
 }

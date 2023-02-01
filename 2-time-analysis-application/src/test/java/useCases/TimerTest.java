@@ -16,11 +16,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TimerTest {
+
     @BeforeEach
     void setup() {
         Semester semester = new Semester("5. Semester", LocalDate.now(), LocalDate.now());
         Lecture lecture = new Lecture("ASE", semester, 10, 20);
-        Timer.setEntry(new Entry(EntryType.PRESENCE, "hehe", lecture));
+        Timer.setEntry(new Entry(LocalDateTime.now(), EntryType.PRESENCE, lecture));
         Timer timer = new Timer();
     }
 

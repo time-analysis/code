@@ -12,11 +12,14 @@ public class Timer {
     static private boolean isRunning = false;
 
     public static void toggleTimer() {
+        Entry entryWithNewTime;
         if (isRunning) {
-            entry.setEnd(LocalDateTime.now());
+            entryWithNewTime = new Entry(entry.getStart(), entry.getType(), entry.getLecture());
+            entryWithNewTime.finishEntry(LocalDateTime.now(), entry.getDetails());
         } else {
-            entry.setStart(LocalDateTime.now());
+            entryWithNewTime = new Entry(LocalDateTime.now(), entry.getType(), entry.getLecture());
         }
+        entry = entryWithNewTime;
         isRunning = !isRunning;
     }
 

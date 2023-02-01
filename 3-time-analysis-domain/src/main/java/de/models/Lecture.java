@@ -1,53 +1,34 @@
 package de.models;
 
-import java.util.ArrayList;
-import java.util.List;
+public final class Lecture {
 
-public class Lecture {
-
-    private String name;
-    private Semester semster;
-    private int presence;
-    private int study;
+    private final String name;
+    private final Semester semester;
+    private final int lectureTime;
+    private final int selfStudyTime;
 
 
-    public Lecture(String name, Semester semster, int presence, int study) {
+    public Lecture(String name, Semester semester, int lectureTime, int selfStudyTime) {
         super();
         this.name = name;
-        this.semster = semster;
-        this.presence = presence;
-        this.study = study;
+        this.semester = semester;
+        this.lectureTime = lectureTime;
+        this.selfStudyTime = selfStudyTime;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public Semester getSemester() {
+        return semester;
     }
 
-    public Semester getSemster() {
-        return semster;
+    public int getLectureTime() {
+        return lectureTime;
     }
 
-    public void setSemster(Semester semster) {
-        this.semster = semster;
-    }
-
-    public int getPresence() {
-        return presence;
-    }
-
-    public void setPresence(int presence) {
-        this.presence = presence;
-    }
-
-    public int getStudy() {
-        return study;
-    }
-
-    public void setStudy(int study) {
-        this.study = study;
+    public int getSelfStudyTime() {
+        return selfStudyTime;
     }
 }

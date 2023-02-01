@@ -1,15 +1,20 @@
 package de.models;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
-public class Semester {
+public final class Semester {
 
-    private String name;
-    private LocalDate start;
-    private LocalDate end;
+    private final String name;
+    private final LocalDate start;
+    private final LocalDate end;
 
     public Semester(String name, LocalDate start, LocalDate end) {
+
+        if(start.isAfter(end)){
+            throw new IllegalStateException("start cannot be after end");
+        } else if (name.length()<=0) {
+            throw new IllegalArgumentException("name must contain at least one letter");
+        }
         this.name = name;
         this.start = start;
         this.end = end;
@@ -19,24 +24,11 @@ public class Semester {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public LocalDate getStart() {
         return start;
-    }
-
-    public void setStart(LocalDate start) {
-        this.start = start;
     }
 
     public LocalDate getEnd() {
         return end;
     }
-
-    public void setEnd(LocalDate end) {
-        this.end = end;
-    }
-
 }

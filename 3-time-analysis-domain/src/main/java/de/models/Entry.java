@@ -1,6 +1,8 @@
 package de.models;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Entry {
 
@@ -10,22 +12,9 @@ public class Entry {
     private String details;
     private Lecture lecture;
 
-    public Entry(LocalDateTime start, LocalDateTime end, EntryType type, String details, Lecture lecture) {
-        super();
-        if (start.isAfter(end)) {
-            throw new IllegalStateException();
-        }
+    public Entry(LocalDateTime start, EntryType type, Lecture lecture) {
         this.start = start;
-        this.end = end;
         this.type = type;
-        this.details = details;
-        this.lecture = lecture;
-    }
-
-    public Entry(EntryType type, String details, Lecture lecture) {
-        super();
-        this.type = type;
-        this.details = details;
         this.lecture = lecture;
     }
 
@@ -33,39 +22,40 @@ public class Entry {
         return start;
     }
 
-    public void setStart(LocalDateTime start) {
-        this.start = start;
-    }
-
     public LocalDateTime getEnd() {
         return end;
-    }
-
-    public void setEnd(LocalDateTime end) {
-        this.end = end;
     }
 
     public EntryType getType() {
         return type;
     }
 
-    public void setType(EntryType type) {
-        this.type = type;
-    }
-
     public String getDetails() {
         return details;
     }
 
-    public void setLecture(Lecture lecture) {
-        this.lecture = lecture;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
-    }
-
     public Lecture getLecture() {
         return lecture;
+    }
+
+    public void finishEntry(LocalDateTime end, String details) {
+        if (start.isAfter(end)) {
+            throw new IllegalStateException();
+        }
+        if (Objects.isNull(this.end)) {
+            this.end = end;
+        } else {
+            System.out.println("end is already set!");
+        }
+        if (details.length() == 0) {
+            this.details = "No details available";
+        } else {
+            this.details = details;
+        }
+
+    }
+
+    public Duration calculateDuration() {
+        return Duration.between(start, end);
     }
 }
