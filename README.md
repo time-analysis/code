@@ -7,17 +7,21 @@ The application should provide analysis for the theorie phase of several semeste
 ## Use Cases:
 Basic:
 * addEntry(Duration)
-* addEntry(start, stop)
-* startTimer()
-* stopTimer()
 * addLecture(...)
 * addSemester(...)
-* getEntryTime()
+* getEntryTime()  
+---
+done:
+* addEntry(start, stop) -> option to set the current time over the terminal
+
+
 ---
 User Administration
 * createUser(name, password)
 * loginUser(name, password)
 * addSemester(...)
+
+
 ---
 Analyse:
 * timePerLecture(Lecture)
@@ -47,5 +51,3 @@ Beim Starten eurer Anwendung findet die Instanzierung der Klassen dann wie folgt
 Die Use-Case-Klasse und die DatenspeicherMapping-Klasse kennen so nur eine Abstraktion und sind nicht weiter von Details abhängig. Zur Speicherung rufen sie einfach speichere- bzw. schreibeDaten-Methode auf.
 
 Damit müsst ihr kein komplettes Listener-Muster implementieren, sondern lediglich die Aufrufe zum Speichern an die äußeren Schichten delegieren.
-
-Versteht ihr was ich meine?

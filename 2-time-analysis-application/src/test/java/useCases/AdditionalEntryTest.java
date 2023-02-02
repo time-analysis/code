@@ -15,27 +15,21 @@ import de.models.Semester;
 class AdditionalEntryTest {
     DataAdapterInterface mock = new DataAdapterMock();
 
-//    @Test
-//    void EntryIsAddedToLecture() {
-//        Semester semester = new Semester("5. Semester", LocalDate.now(), LocalDate.now());
-//        Lecture lecture = new Lecture("ASE", semester, 0, 0);
-//        Entry e = new Entry(LocalDateTime.now(), LocalDateTime.now(), EntryType.PRESENCE, "Test", lecture);
-//
-//        AdditionalEntry ae = new AdditionalEntry(mock);
-//        ae.addEntry(e, lecture);
-//        assertEquals(lecture.getEntries().get(0), e);
-//    }
-//
-//    @Test
-//    void EntryIsAddedToLectureFromTimer() {
-//        Entry e = new Entry(EntryType.PRESENCE, "Test");
-//        Lecture lecture = new Lecture("ASE", new Semester(), 0, 0);
-//        Timer.setEntry(e);
-//        Timer.toggleTimer();
-//        Timer.toggleTimer();
-//        AdditionalEntry ae = new AdditionalEntry(mock);
-//        ae.addEntryByTimer(lecture);
-//        assertEquals(lecture.getEntries().get(0), e);
-//    }
+    @Test
+    void EntryIsAddedToLecture() {
+        Semester semester = new Semester("5. Semester", LocalDate.now(), LocalDate.now());
+        Lecture lecture = new Lecture("ASE", semester, 0, 0);
+        Entry e = new Entry(LocalDateTime.of(2022, 10, 9, 0, 0), EntryType.PRESENCE, lecture);
 
+        AdditionalEntry ae = new AdditionalEntry(mock);
+        ae.addEntry(e, lecture);
+        String details = "test";
+        LocalDateTime end = LocalDateTime.of(2022, 10, 10, 0, 0);
+        e.finishEntry(end, details);
+        assertEquals(end, e.getEnd());
+        assertEquals(details, e.getDetails());
+        assertEquals(e.getLecture(), lecture);
+
+    }
+    
 }

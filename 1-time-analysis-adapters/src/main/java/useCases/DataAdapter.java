@@ -13,7 +13,7 @@ public class DataAdapter implements DataAdapterInterface {
         output = dataPlugin;
     }
 
-    public void mapEntryData(Entry entry) {
+    public void mapEntryDataToPersist(Entry entry) {
         map.put("Start", entry.getStart().toString());
         map.put("End", entry.getEnd().toString());
         map.put("Details", entry.getDetails());
