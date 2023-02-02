@@ -39,4 +39,9 @@ public class UIAdapter {
     public List<String> getAllLecturesOfCurrentSemester() {
         return List.of("BWL", "Evo-Alg"); //zugriff auf dataadapter oder auf (neuen) usecase??
     }
+
+    public String formatLocalDateTime(LocalDateTime time) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return time.format(formatter);
+    }
 }

@@ -1,6 +1,7 @@
 import de.models.EntryType;
 import useCases.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,11 +23,17 @@ public class UITerminalPlugin implements UIPluginInterface {
         //TODO besseres,direktes errorhandling (Fehlermeldung statt crash, direkt nach eingabe (nicht erst am ende)
         UIAdapter uiAdapter = new UIAdapter(this, dataPlugin);
         Scanner scanner = new Scanner(System.in).useDelimiter("\n");
-        System.out.println("Start time");
+        System.out.println("Start time (press \"n\" to use current time)");
         String start = scanner.next();
-        System.out.println("End time");
-        String end = scanner.next();
 
+        if (start.equals("n")) {
+            start = uiAdapter.formatLocalDateTime(LocalDateTime.now());
+        }
+        System.out.println("End time (press \"n\" to use current time)");
+        String end = scanner.next();
+        if (end.equals("n")) {
+            end = uiAdapter.formatLocalDateTime(LocalDateTime.now());
+        }
         System.out.println("Type of study");
         int counter = 0;
         for (EntryType type : EntryType.values()) {
