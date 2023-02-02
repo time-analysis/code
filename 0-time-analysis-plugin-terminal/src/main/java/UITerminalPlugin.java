@@ -2,10 +2,7 @@ import de.models.EntryType;
 import useCases.*;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class UITerminalPlugin implements UIPluginInterface {
 
@@ -20,7 +17,6 @@ public class UITerminalPlugin implements UIPluginInterface {
         //get lecture
         //create entry: start,end, type,details
         //create entry: start timer, stop timer, type, details
-        //TODO besseres,direktes errorhandling (Fehlermeldung statt crash, direkt nach eingabe (nicht erst am ende)
         UIAdapter uiAdapter = new UIAdapter(this, dataPlugin);
         Scanner scanner = new Scanner(System.in).useDelimiter("\n");
         System.out.println("Start time (press \"n\" to use current time)");
@@ -41,7 +37,12 @@ public class UITerminalPlugin implements UIPluginInterface {
             counter++;
         }
         //todo get data from adapter
-        int typeIndex = scanner.nextInt(); //vorsicht: array out of bounds
+
+        String typeIndex = scanner.next();
+        while (!isInputValidNumber(typeIndex, EntryType.values().length)) {
+            System.out.println("invalid input, try again!");
+            typeIndex = scanner.next();
+        }
 
         System.out.println("Details of study");
         String details = scanner.next();
@@ -53,15 +54,20 @@ public class UITerminalPlugin implements UIPluginInterface {
             System.out.println(counter + ">" + l);
             counter++;
         }
-        int lectureIndex = scanner.nextInt();//vorsicht: array out of bounds
+
+        String lectureIndex = scanner.next();
+        while (!isInputValidNumber(lectureIndex, lectures.size())) {
+            System.out.println("invalid input, try again!");
+            lectureIndex = scanner.next();
+        }
+
 
         Map<String, String> data = new HashMap<>();
         data.put("Start", start);
         data.put("End", end);
         data.put("Details", details);
-        data.put("Lecture", lectures.get(lectureIndex));
-        data.put("Type", EntryType.values()[typeIndex].toString());
-
+        data.put("Lecture", lectures.get(Integer.parseInt(lectureIndex)));
+        data.put("Type", EntryType.values()[Integer.parseInt(typeIndex)].toString());
         uiAdapter.addEntryByTimeStamp(data);
     }
 
@@ -85,6 +91,18 @@ public class UITerminalPlugin implements UIPluginInterface {
                 System.out.println(option + " ist keine valide Auswahl.");
         }
         showMainMenu();
+    }
+
+    private boolean isInputValidNumber(String input, int expectedRange) {
+        //todo ist das hier richtig oder gehört das in den adapter oder woanders hin??
+        try {
+            Integer.parseInt(input);
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
+        }
+        int inputAsInt = Integer.parseInt(input);
+        return inputAsInt < expectedRange && inputAsInt >= 0;
     }
 
 
