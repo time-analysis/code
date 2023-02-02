@@ -9,14 +9,19 @@ Basic:
 * addEntry(Duration)
 * addLecture(...)
 * addSemester(...)
-* getEntryTime()
+* getEntryTime()  
+---
 done:
-* addEntry(start, stop) -> optional timer-feeling over UI
+* addEntry(start, stop) -> option to set the current time over the terminal
+
+
 ---
 User Administration
 * createUser(name, password)
 * loginUser(name, password)
 * addSemester(...)
+
+
 ---
 Analyse:
 * timePerLecture(Lecture)
