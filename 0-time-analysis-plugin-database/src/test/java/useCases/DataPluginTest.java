@@ -36,6 +36,7 @@ class DataPluginTest {
 
     }
 
+    //todo wie testet man dieses plugin am besten? idee: WriterImplementierung im constructor übergeben (für test: Stringwrite, für normalen Betriebe: FileWriter)
     @Test
     void writeData() {
         Map<String, String> map = new HashMap();
