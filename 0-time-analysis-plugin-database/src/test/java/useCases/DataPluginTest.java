@@ -1,11 +1,9 @@
 package useCases;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +45,7 @@ class DataPluginTest {
         map.put("Details", "weitere Informationen");
         map.put("Lecture", "Testvorlesung");
 
-        plugin.writeData(map);
+        plugin.persistEntry(map);
         String assumed = time + "," + time + ",null,weitere Informationen,Testvorlesung";
 
         String fromFile;

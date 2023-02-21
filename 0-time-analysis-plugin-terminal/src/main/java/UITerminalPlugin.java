@@ -84,7 +84,7 @@ public class UITerminalPlugin implements UIPluginInterface {
         String name, semester, lectureTime, selfStudyTime;
         System.out.println("Name of the lecture:");
         name = scanner.nextLine();
-        System.out.println("choose the semester");
+        System.out.println("choose the semester"); //todo liste von semestern ausgeben
         semester = scanner.nextLine();
         System.out.println("enter the official lecture time");
         lectureTime = scanner.nextLine();
@@ -99,7 +99,7 @@ public class UITerminalPlugin implements UIPluginInterface {
         data.put("SelfStudyTime", selfStudyTime);
 
         //map an uiadapter
-        uiAdapter.addLecture(data);
+        uiAdapter.addLecture(data); //todo oder: AddLecture.addLecture(uiAdapter.mapTODo(data))??
         //adapter->daten an neuen usecase
         //usecase->neues lecture objekt
         //usecase->datenadapter
@@ -118,6 +118,7 @@ public class UITerminalPlugin implements UIPluginInterface {
         switch (option) {
             case "1":
                 addLecture();
+                break;
             case "2":
                 addEntryByTimeStamp();
                 break;

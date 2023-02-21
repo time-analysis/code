@@ -45,9 +45,12 @@ public class UIAdapter {
         //adapter->daten an neuen usecase
         DataAdapterInterface dataAdapter = new DataAdapter(this.dataPlugin);
         AdditionalLecture additionalLecture = new AdditionalLecture(dataAdapter); //todo wo werden daten validiert?im plugin?im adapter?hier?
-        String name = data.get("Name");
-        Semester semester = data.get("Semester");
-        Lecture lecture = new Lecture();
+        String name = data.get("Name"); //todo wo prüfe ich, ob diese VL nicht schon exsitiert? erst beim rausschreiben? oder muss man intern eine liste aller semester im ram halten?
+        int lectureTime = Integer.valueOf(data.get("LectureTime"));
+        int selfStudyTime = Integer.valueOf(data.get("SelfStudyTime"));
+        int indexOfSemester = Integer.valueOf(data.get("Semester")); //todo wie kommt man hier vom index des Semester an das SemesterObjekt
+        Semester TEMPSEMESTER = new Semester("MOCKSEMESTER", LocalDate.now(), LocalDate.now()); //todo entfernen, "echtes" Semester hohlen
+        Lecture lecture = new Lecture(name, TEMPSEMESTER, lectureTime, selfStudyTime);
         additionalLecture.addLecture(lecture);
     }
 
