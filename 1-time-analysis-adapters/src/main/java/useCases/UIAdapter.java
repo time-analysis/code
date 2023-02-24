@@ -41,7 +41,7 @@ public class UIAdapter {
         return List.of("BWL", "Evo-Alg"); //zugriff auf dataadapter oder auf (neuen) usecase??
     }
 
-    public void addLecture(Map<String, String> data) {
+    public void addLecture(Map<String, String> data) { //todo kommunikation über maps zwischen adapter und plugin sinvoll?
         //adapter->daten an neuen usecase
         DataAdapterInterface dataAdapter = new DataAdapter(this.dataPlugin);
         AdditionalLecture additionalLecture = new AdditionalLecture(dataAdapter); //todo wo werden daten validiert?im plugin?im adapter?hier?
