@@ -10,8 +10,14 @@ public final class Lecture {
 
     public Lecture(String name, Semester semester, int lectureTime, int selfStudyTime) {
         super();
+        if (name.length() == 0) {
+            throw new IllegalArgumentException("Name einer Vorlesung darf nicht leer sein!");
+        }
         this.name = name;
         this.semester = semester;
+        if (lectureTime < 0 || selfStudyTime < 0) {
+            throw new IllegalArgumentException("Zeit darf nicht kleiner Null sein!");
+        }
         this.lectureTime = lectureTime;
         this.selfStudyTime = selfStudyTime;
     }
