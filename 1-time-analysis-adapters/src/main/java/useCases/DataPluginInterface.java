@@ -1,9 +1,13 @@
 package useCases;
 
+import models.EntryRessource;
+import models.LectureResource;
+
 import java.util.Map;
 
 public interface DataPluginInterface {
-    public boolean persistEntry(Map<String, String> data);
 
-    void persistNewLecture(Map<String, String> lectureMap);
+    boolean persistEntry(EntryRessource entryRessource);
+
+    void persistNewLecture(LectureResource lectureResource);
 }

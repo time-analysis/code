@@ -1,7 +1,9 @@
 package useCases;
 
+import models.EntryRessource;
+import models.LectureResource;
+
 import java.io.*;
-import java.util.Map;
 
 public class DataPlugin implements DataPluginInterface {
     private String entryFileName;
@@ -12,15 +14,16 @@ public class DataPlugin implements DataPluginInterface {
         this.lectureFileName = lectureFileName;
     }
 
-    public boolean persistEntry(Map<String, String> data) {
+    @Override
+    public boolean persistEntry(EntryRessource entryRessource) {
 
         String csvEntry = String.format(
                 "%s,%s,%s,%s,%s"
-                , data.get("Start")
-                , data.get("End")
-                , data.get("Type")
-                , data.get("Details")
-                , data.get("Lecture"));
+                , entryRessource.getStart()
+                , entryRessource.getEnd()
+                , entryRessource.getType()
+                , entryRessource.getDetails()
+                , entryRessource.getLecture());
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(entryFileName, true))) {
             writer.write(csvEntry);
             writer.newLine();
@@ -32,13 +35,13 @@ public class DataPlugin implements DataPluginInterface {
     }
 
     @Override
-    public void persistNewLecture(Map<String, String> lectureMap) {
+    public void persistNewLecture(LectureResource lectureResource) {
         String csvLecture = String.format(
                 "%s,%s,%s,%s"
-                , lectureMap.get("name")
-                , lectureMap.get("lectureTime")
-                , lectureMap.get("selfStudyTime")
-                , lectureMap.get("semesterName"));
+                , lectureResource.getName()
+                , lectureResource.getLectureTime()
+                , lectureResource.getSelfStudyTime()
+                , lectureResource.getSemester());
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(lectureFileName, true))) {
             writer.write(csvLecture);
             writer.newLine();
