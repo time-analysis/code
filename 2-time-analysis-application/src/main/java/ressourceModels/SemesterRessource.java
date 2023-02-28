@@ -1,6 +1,4 @@
-package models;
-
-import java.time.LocalDate;
+package ressourceModels;
 
 public class SemesterRessource {
     private String name;

@@ -1,13 +1,15 @@
 package useCases;
 
-import models.EntryRessource;
-import models.LectureResource;
+import ressourceModels.EntryRessource;
+import ressourceModels.LectureResource;
 
-import java.util.Map;
+import java.util.List;
 
 public interface DataPluginInterface {
 
     boolean persistEntry(EntryRessource entryRessource);
 
     void persistNewLecture(LectureResource lectureResource);
+
+    List<LectureResource> getLectures();
 }

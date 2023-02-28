@@ -1,6 +1,8 @@
 import de.models.EntryType;
 import de.models.Lecture;
 import de.models.Semester;
+import ressourceModels.EntryRessource;
+import ressourceModels.LectureResource;
 import useCases.*;
 
 import java.time.LocalDateTime;
@@ -11,11 +13,15 @@ public class UITerminalPlugin implements UIPluginInterface {
     private DataPluginInterface dataPlugin;
     private UIAdapter uiAdapter;
     private Scanner scanner;
+    private AdditionalLecture additionalLecture;
+    private AdditionalEntry additionalEntry;
 
-    public UITerminalPlugin(DataPluginInterface dataPlugin) {
+    public UITerminalPlugin(DataPluginInterface dataPlugin, AdditionalEntry additionalEntry, AdditionalLecture additionalLecture) {
         this.dataPlugin = dataPlugin;
         this.uiAdapter = new UIAdapter(this, this.dataPlugin);//todo im konstruktor reingeben??
         this.scanner = new Scanner(System.in);
+        this.additionalEntry = additionalEntry;
+        this.additionalLecture = additionalLecture;
 
     }
 
@@ -55,10 +61,10 @@ public class UITerminalPlugin implements UIPluginInterface {
         String details = scanner.nextLine();
         //show list of lectures
         System.out.println("Lecture");
-        List<String> lectures = uiAdapter.getAllLecturesOfCurrentSemester();
+        List<LectureResource> lectures = uiAdapter.getAllLecturesOfCurrentSemester();
         counter = 0;
-        for (String l : lectures) {
-            System.out.println(counter + ">" + l);
+        for (LectureResource l : lectures) {
+            System.out.println(counter + ">" + l.getName());
             counter++;
         }
 
@@ -68,7 +74,8 @@ public class UITerminalPlugin implements UIPluginInterface {
             lectureIndex = scanner.nextLine();
         }
 
-
+        EntryRessource entryRessource = new EntryRessource(start, end, EntryType.values()[Integer.parseInt(typeIndex)], details, lectures.get(Integer.parseInt(lectureIndex)));
+        this.additionalEntry.addEntry(this.uiAdapter.mapEntryRessourceToEntry(entryRessource), lec);
         Map<String, String> data = new HashMap<>();
         data.put("Start", start);
         data.put("End", end);
@@ -91,19 +98,8 @@ public class UITerminalPlugin implements UIPluginInterface {
         System.out.println("enter the ammount of time you are supposed to study on your own");
         selfStudyTime = scanner.nextLine();
 
-        //in map schreiben
-        Map<String, String> data = new HashMap<>();
-        data.put("Name", name);
-        data.put("Semester", semester);
-        data.put("LectureTime", lectureTime);
-        data.put("SelfStudyTime", selfStudyTime);
-
-        //map an uiadapter
-        uiAdapter.addLecture(data); //todo oder: AddLecture.addLecture(uiAdapter.mapTODo(data))??
-        //adapter->daten an neuen usecase
-        //usecase->neues lecture objekt
-        //usecase->datenadapter
-        //datenadapter->datenplugin
+        LectureResource lectureResource = new LectureResource(name, semester, Integer.parseInt(lectureTime), Integer.parseInt(selfStudyTime)); //todo hier eher mit String für zeitangabe oder als int?
+        this.additionalLecture.addLecture(this.uiAdapter.mapLectureRessourceToLecture(lectureResource)); //todo so richtig?
     }
 
     public void start() {

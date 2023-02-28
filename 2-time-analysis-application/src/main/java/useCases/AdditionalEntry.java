@@ -6,7 +6,7 @@ import de.models.Lecture;
 public class AdditionalEntry {
     DataAdapterInterface mapData;
 
-    public AdditionalEntry(DataAdapterInterface mapData) {
+    public AdditionalEntry(DataAdapterInterface mapData,DataP) {
         this.mapData = mapData;
     }
 

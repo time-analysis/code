@@ -1,8 +1,7 @@
-package models;
+package ressourceModels;
 
 import de.models.EntryType;
 import de.models.Lecture;
-import de.models.Semester;
 
 import java.time.LocalDateTime;
 
@@ -13,12 +12,16 @@ public class EntryRessource {
     private String details;
     private String lecture;
 
-    public EntryRessource(LocalDateTime start, LocalDateTime end, EntryType type, String details, Lecture lecture) {
-        this.start = start.toString();
-        this.end = end.toString();
+    public EntryRessource(String start, String end, EntryType type, String details, String lecture) { //todo hier eher mit LocaldateTime arbeiten oder mit Strin
+        this.start = start;
+        this.end = end;
         this.type = type.toString();
         this.details = details;
-        this.lecture = lecture.getName();
+        this.lecture = lecture;
+    }
+
+    public EntryRessource() {
+
     }
 
     public String getStart() {

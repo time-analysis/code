@@ -1,4 +1,4 @@
-package models;
+package ressourceModels;
 
 import de.models.Semester;
 
@@ -8,11 +8,14 @@ public class LectureResource {
     private int lectureTime;
     private int selfStudyTime;
 
-    public LectureResource(String name, Semester semester, int lectureTime, int selfStudyTime) {
+    public LectureResource(String name, String semester, int lectureTime, int selfStudyTime) {
         this.name = name;
-        this.semester = semester.getName();
+        this.semester = semester;
         this.lectureTime = lectureTime;
         this.selfStudyTime = selfStudyTime;
+    }
+
+    public LectureResource() {
     }
 
     public String getName() {

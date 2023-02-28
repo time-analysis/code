@@ -2,10 +2,12 @@ package useCases;
 
 import de.models.Entry;
 import de.models.Lecture;
+import ressourceModels.EntryRessource;
+import ressourceModels.LectureResource;
 
 public interface DataAdapterInterface {
 
-    void mapEntryDataToPersist(Entry entry);
+    EntryRessource mapEntryDataToPersist(Entry entry);
 
-    void mapLectureDataToPersist(Lecture lecture);
+    LectureResource mapLectureDataToPersist(Lecture lecture);
 }

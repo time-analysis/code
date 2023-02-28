@@ -5,6 +5,8 @@ import java.util.Map;
 
 import de.models.Entry;
 import de.models.Lecture;
+import ressourceModels.EntryRessource;
+import ressourceModels.LectureResource;
 
 public class DataAdapter implements DataAdapterInterface {
     private DataPluginInterface output;
@@ -14,24 +16,17 @@ public class DataAdapter implements DataAdapterInterface {
         output = dataPlugin;
     }
 
-    public void mapEntryDataToPersist(Entry entry) {
-        map.put("Start", entry.getStart().toString());
-        map.put("End", entry.getEnd().toString());
-        map.put("Details", entry.getDetails());
-        map.put("Type", entry.getType().toString());
-        map.put("Lecture", entry.getLecture().getName());
-        output.persistEntry(map);
+    public EntryRessource mapEntryDataToPersist(Entry entry) {
+        EntryRessource entryRessource = new EntryRessource(entry.getStart(), entry.getEnd(), entry.getType(), entry.getDetails(), entry.getLecture());
+        return entryRessource;
+
     }
 
     @Override
-    public void mapLectureDataToPersist(Lecture lecture) {
-        Map<String, String> lectureMap = new HashMap<String, String>();
-        lectureMap.put("name", lecture.getName());
-        lectureMap.put("lectureTime", Integer.toString(lecture.getLectureTime()));
-        lectureMap.put("selfStudyTime", Integer.toString(lecture.getSelfStudyTime()));
-        lectureMap.put("semesterName", lecture.getSemester().getName());
-        output.persistNewLecture(lectureMap);
-
+    public LectureResource mapLectureDataToPersist(Lecture lecture) {
+        LectureResource lectureResource = new LectureResource(lecture.getName(), lecture.getSemester(), lecture.getLectureTime(), lecture.getSelfStudyTime());
+        return lectureResource;
+        
     }
 
 }

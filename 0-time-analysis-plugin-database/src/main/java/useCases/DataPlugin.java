@@ -1,9 +1,10 @@
 package useCases;
 
-import models.EntryRessource;
-import models.LectureResource;
+import ressourceModels.EntryRessource;
+import ressourceModels.LectureResource;
 
 import java.io.*;
+import java.util.List;
 
 public class DataPlugin implements DataPluginInterface {
     private String entryFileName;
@@ -49,5 +50,10 @@ public class DataPlugin implements DataPluginInterface {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public List<LectureResource> getLectures() {
+
     }
 }
