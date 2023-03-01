@@ -1,5 +1,8 @@
 package useCases;
 
+import Interfaces.DataAdapterInterface;
+import Interfaces.DataPluginInterface;
+import Interfaces.UIPluginInterface;
 import de.models.Entry;
 import de.models.EntryType;
 import de.models.Lecture;
@@ -14,10 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 public class UIAdapter {
-
-    //TODO navigation
-    //todo interface fehlt?
-    //UIPluginInterface uiPlugin;
+    
     DataPluginInterface dataPlugin;
 
     public UIAdapter(UIPluginInterface uiPlugin, DataPluginInterface dataPlugin) {

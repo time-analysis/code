@@ -1,4 +1,4 @@
-package useCases;
+package Interfaces;
 
 public interface UIPluginInterface {
     void addEntryByTimeStamp();

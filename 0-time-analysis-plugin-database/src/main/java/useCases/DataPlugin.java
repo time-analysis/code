@@ -1,5 +1,6 @@
 package useCases;
 
+import Interfaces.DataPluginInterface;
 import ressourceModels.EntryRessource;
 import ressourceModels.LectureResource;
 
@@ -36,7 +37,7 @@ public class DataPlugin implements DataPluginInterface {
     }
 
     @Override
-    public void persistNewLecture(LectureResource lectureResource) {
+    public void persistLecture(LectureResource lectureResource) {
         String csvLecture = String.format(
                 "%s,%s,%s,%s"
                 , lectureResource.getName()

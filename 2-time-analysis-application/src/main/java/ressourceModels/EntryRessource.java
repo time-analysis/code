@@ -12,10 +12,10 @@ public class EntryRessource {
     private String details;
     private String lecture;
 
-    public EntryRessource(String start, String end, EntryType type, String details, String lecture) { //todo hier eher mit LocaldateTime arbeiten oder mit Strin
+    public EntryRessource(String start, String end, String type, String details, String lecture) {
         this.start = start;
         this.end = end;
-        this.type = type.toString();
+        this.type = type;
         this.details = details;
         this.lecture = lecture;
     }
