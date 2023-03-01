@@ -1,6 +1,6 @@
+import Interfaces.DataPluginInterface;
+import Interfaces.UIPluginInterface;
 import de.models.EntryType;
-import de.models.Lecture;
-import de.models.Semester;
 import ressourceModels.EntryRessource;
 import ressourceModels.LectureResource;
 import useCases.*;
