@@ -79,7 +79,7 @@ public class DataPlugin implements DataPluginInterface {
 
     @Override
     public Optional<SemesterRessource> getSemesterByName(String semesterName) {
-
+        //todo implement
         return Optional.empty();
     }
 

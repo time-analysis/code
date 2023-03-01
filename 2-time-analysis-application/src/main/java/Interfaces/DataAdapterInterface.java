@@ -11,7 +11,7 @@ public interface DataAdapterInterface {
 
     EntryRessource mapEntryToEntryRessource(Entry entry);
 
-    LectureResource mapLectureDataToPersist(Lecture lecture);
+    LectureResource mapLectureToLectureRessource(Lecture lecture);
 
     SemesterRessource mapSemesterToSemesterRessource(Semester semester);
 

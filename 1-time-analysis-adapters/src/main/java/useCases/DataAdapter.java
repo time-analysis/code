@@ -34,7 +34,7 @@ public class DataAdapter implements DataAdapterInterface {
     }
 
     @Override
-    public LectureResource mapLectureDataToPersist(Lecture lecture) {
+    public LectureResource mapLectureToLectureRessource(Lecture lecture) {
         String name = lecture.getName();
         String semester = lecture.getSemester().getName();
         int lectureTime = lecture.getLectureTime();
