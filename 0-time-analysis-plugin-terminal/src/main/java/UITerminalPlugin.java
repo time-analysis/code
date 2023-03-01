@@ -13,16 +13,11 @@ public class UITerminalPlugin implements UIPluginInterface {
     private DataPluginInterface dataPlugin;
     private UIAdapter uiAdapter;
     private Scanner scanner;
-    private AdditionalLecture additionalLecture;
-    private AdditionalEntry additionalEntry;
 
-    public UITerminalPlugin(DataPluginInterface dataPlugin, AdditionalEntry additionalEntry, AdditionalLecture additionalLecture) {
+    public UITerminalPlugin(DataPluginInterface dataPlugin) {
         this.dataPlugin = dataPlugin;
         this.uiAdapter = new UIAdapter(this, this.dataPlugin);//todo im konstruktor reingeben??
         this.scanner = new Scanner(System.in);
-        this.additionalEntry = additionalEntry;
-        this.additionalLecture = additionalLecture;
-
     }
 
     @Override
@@ -74,15 +69,9 @@ public class UITerminalPlugin implements UIPluginInterface {
             lectureIndex = scanner.nextLine();
         }
 
-        EntryRessource entryRessource = new EntryRessource(start, end, EntryType.values()[Integer.parseInt(typeIndex)], details, lectures.get(Integer.parseInt(lectureIndex)));
-        this.additionalEntry.addEntry(this.uiAdapter.mapEntryRessourceToEntry(entryRessource), lec);
-        Map<String, String> data = new HashMap<>();
-        data.put("Start", start);
-        data.put("End", end);
-        data.put("Details", details);
-        data.put("Lecture", lectures.get(Integer.parseInt(lectureIndex)));
-        data.put("Type", EntryType.values()[Integer.parseInt(typeIndex)].toString());
-        uiAdapter.addEntryByTimeStamp(data);
+        EntryRessource entryRessource = new EntryRessource(start, end, EntryType.values()[Integer.parseInt(typeIndex)].name(), details, lectures.get(Integer.parseInt(lectureIndex)).getName());
+        AdditionalEntry additionalEntry = new AdditionalEntry();
+        additionalEntry.addEntry(this.uiAdapter.mapEntryRessourceToEntry(entryRessource), this.uiAdapter.mapLectureRessourceToLecture(lectures.get(Integer.parseInt(lectureIndex))));
     }
 
     @Override
@@ -98,8 +87,9 @@ public class UITerminalPlugin implements UIPluginInterface {
         System.out.println("enter the ammount of time you are supposed to study on your own");
         selfStudyTime = scanner.nextLine();
 
-        LectureResource lectureResource = new LectureResource(name, semester, Integer.parseInt(lectureTime), Integer.parseInt(selfStudyTime)); //todo hier eher mit String für zeitangabe oder als int?
-        this.additionalLecture.addLecture(this.uiAdapter.mapLectureRessourceToLecture(lectureResource)); //todo so richtig?
+        LectureResource lectureResource = new LectureResource(name, semester, Integer.parseInt(lectureTime), Integer.parseInt(selfStudyTime));
+        AdditionalLecture additionalLecture = new AdditionalLecture(dataAdapter, dataPlugin, uiAdapter);
+        additionalLecture.addLecture(this.uiAdapter.mapLectureRessourceToLecture(lectureResource));
     }
 
     @Override
@@ -128,10 +118,24 @@ public class UITerminalPlugin implements UIPluginInterface {
             case "2":
                 addEntryByTimeStamp();
                 break;
+            case "3":
+                addSemester();
             default:
-                System.out.println(option + " ist keine valide Auswahl.");
+                System.out.println(option + " is not a valid option.");
         }
         showMainMenu();
+    }
+
+    private void addSemester() {
+        System.out.println("Name of the semester:");
+        String name = scanner.nextLine();
+        System.out.println("start date");
+        String start = scanner.nextLine();
+        System.out.println("end date");
+        String end = scanner.nextLine();
+
+        AdditionalSemester additionalSemester = new AdditionalSemester();
+        additionalSemester.addSemester(this.data);
     }
 
 
