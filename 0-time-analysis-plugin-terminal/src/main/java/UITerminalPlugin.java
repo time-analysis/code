@@ -102,6 +102,16 @@ public class UITerminalPlugin implements UIPluginInterface {
         this.additionalLecture.addLecture(this.uiAdapter.mapLectureRessourceToLecture(lectureResource)); //todo so richtig?
     }
 
+    @Override
+    public void displayMessage(String message) {
+        System.out.println(message);
+    }
+
+    @Override
+    public void displayError(String errorMessage) {
+        System.out.println(errorMessage);
+    }
+
     public void start() {
         System.out.println("\n" + "  _______ _                                       _           _     \n" + " |__   __(_)                    /\\               | |         (_)    \n" + "    | |   _ _ __ ___   ___     /  \\   _ __   __ _| |_   _ ___ _ ___ \n" + "    | |  | | '_ ` _ \\ / _ \\   / /\\ \\ | '_ \\ / _` | | | | / __| / __|\n" + "    | |  | | | | | | |  __/  / ____ \\| | | | (_| | | |_| \\__ \\ \\__ \\\n" + "    |_|  |_|_| |_| |_|\\___| /_/    \\_\\_| |_|\\__,_|_|\\__, |___/_|___/\n" + "                                                     __/ |          \n" + "                                                    |___/           \n");
         showMainMenu();
