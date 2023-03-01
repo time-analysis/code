@@ -5,4 +5,8 @@ public interface UIPluginInterface {
 
     void addLecture();
 
+    void displayMessage(String message);
+
+    void displayError(String errorMessage);
+
 }
