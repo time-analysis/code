@@ -23,7 +23,7 @@ public class DataPlugin implements DataPluginInterface {
         this.semesterFileName = semesterFileName;
     }
 
-    //todo check if files exists
+    //todo check if files exists, dont allow comma as input
     @Override
     public boolean persistEntry(EntryRessource entryRessource) {
 
