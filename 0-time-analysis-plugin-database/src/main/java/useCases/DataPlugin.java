@@ -125,4 +125,21 @@ public class DataPlugin implements DataPluginInterface {
         }
         return lectureList;
     }
+
+    @Override
+    public List<SemesterRessource> getSemesters() {
+        List<SemesterRessource> semesterList = new ArrayList<>();
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(semesterFileName))) {
+            bufferedReader.lines().forEach(line -> {
+                String[] split = line.split(",");
+                String name = split[0];
+                String start= split[1];
+                String end = split[2];
+                semesterList.add(new SemesterRessource(name,start,end));
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return semesterList;
+    }
 }

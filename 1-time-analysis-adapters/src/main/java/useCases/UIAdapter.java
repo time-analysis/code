@@ -10,6 +10,7 @@ import de.models.Lecture;
 import de.models.Semester;
 import ressourceModels.EntryRessource;
 import ressourceModels.LectureResource;
+import ressourceModels.SemesterRessource;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -49,6 +50,9 @@ public class UIAdapter implements UIAdapterInterface {
     public List<LectureResource> getAllLecturesOfCurrentSemester() {
         //return List.of("BWL", "Evo-Alg"); //todo zugriff auf dataadapter oder auf (neuen) usecase??
         return dataPlugin.getLectures();
+    }
+    public  List<SemesterRessource> getAllSemesters(){
+        return dataPlugin.getSemesters();
     }
 
     public String formatLocalDateTime(LocalDateTime time) {

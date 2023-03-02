@@ -134,14 +134,14 @@ public class UITerminalPlugin implements UIPluginInterface {
     }
 
     private void addSemester() {
-        System.out.println("Name of the semester:");
+        System.out.println("Name of the semester:");//todo show list of semester
         String name = scanner.nextLine();
         System.out.println("start date");
         String start = scanner.nextLine();
         System.out.println("end date");
         String end = scanner.nextLine();
 
-        AdditionalSemester additionalSemester = new AdditionalSemester();
+        AdditionalSemester additionalSemester = new AdditionalSemester(dataAdapter,dataPlugin,this);
         SemesterRessource semesterRessource = new SemesterRessource(name,start,end);
         additionalSemester.addSemester(dataAdapter.mapSemesterRessourceToSemester(semesterRessource));
     }

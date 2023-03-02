@@ -20,4 +20,6 @@ public interface DataPluginInterface {
     Optional<LectureResource> getLectureByName(String lectureName);
 
     List<LectureResource> getLectures();
+
+    List<SemesterRessource> getSemesters();
 }
