@@ -15,7 +15,7 @@ public class AdditionalSemester {
     private DataPluginInterface dataPlugin;
     private UIPluginInterface uiPlugin;
 
-    public void AdditionalSemester(DataAdapterInterface dataAdapter, DataPluginInterface dataPlugin, UIPluginInterface uiPlugin) {
+    public AdditionalSemester(DataAdapterInterface dataAdapter, DataPluginInterface dataPlugin, UIPluginInterface uiPlugin) {
         this.dataAdapter = dataAdapter;
         this.dataPlugin = dataPlugin;
         this.uiPlugin = uiPlugin;
