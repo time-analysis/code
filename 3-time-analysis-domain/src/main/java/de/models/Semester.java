@@ -1,6 +1,7 @@
 package de.models;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public final class Semester {
 
@@ -10,9 +11,9 @@ public final class Semester {
 
     public Semester(String name, LocalDate start, LocalDate end) {
 
-        if(start.isAfter(end)){
+        if (start.isAfter(end)) {
             throw new IllegalStateException("start cannot be after end");
-        } else if (name.length()<=0) {
+        } else if (name.length() <= 0) {
             throw new IllegalArgumentException("name must contain at least one letter");
         }
         this.name = name;
@@ -30,5 +31,18 @@ public final class Semester {
 
     public LocalDate getEnd() {
         return end;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Semester semester = (Semester) o;
+        return name.equals(semester.name) && start.equals(semester.start) && end.equals(semester.end);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, start, end);
     }
 }

@@ -20,7 +20,7 @@ class EntryTest {
         Semester semester = new Semester("5. Semester", LocalDate.now(), LocalDate.now());
         Lecture lecture = new Lecture("ASE", semester, 10, 20);
         assertThrows(IllegalStateException.class,
-                () -> new Entry(start, EntryType.PRESENCE, lecture).finishEntry(end, "details"));
+                () -> new Entry(start, EntryType.LECTURE, lecture).finishEntry(end, "details"));
 
     }
 
@@ -30,12 +30,12 @@ class EntryTest {
         LocalDate now = LocalDate.now();
         Semester semester = new Semester("5. Semester", now, now);
         Lecture lecture = new Lecture("ASE", semester, 50, 10);
-        Entry entry = new Entry(startEnd, EntryType.STUDY, lecture);
+        Entry entry = new Entry(startEnd, EntryType.SELFSTUDY, lecture);
         entry.finishEntry(startEnd, "more information");
 
         assertEquals(entry.getStart(), startEnd);
         assertEquals(entry.getEnd(), startEnd);
-        assertEquals(entry.getType(), EntryType.STUDY);
+        assertEquals(entry.getType(), EntryType.SELFSTUDY);
         assertEquals(entry.getDetails(), "more information");
         assertEquals(entry.getLecture(), lecture);
     }
@@ -47,7 +47,7 @@ class EntryTest {
         LocalDateTime end = LocalDateTime.of(LocalDate.of(2022, 10, 10), LocalTime.of(11, 0, 0, 0));
         Semester semester = new Semester("5. Semester", now, now);
         Lecture lecture = new Lecture("ASE", semester, 50, 10);
-        Entry entry = new Entry(start, EntryType.STUDY, lecture);
+        Entry entry = new Entry(start, EntryType.SELFSTUDY, lecture);
         entry.finishEntry(end, "more information");
         assertEquals(entry.calculateDuration(), Duration.ofHours(1));
 

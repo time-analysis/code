@@ -1,26 +1,40 @@
 package useCases;
 
+import Interfaces.DataPluginInterface;
+import ressourceModels.EntryRessource;
+import ressourceModels.LectureResource;
+import ressourceModels.SemesterRessource;
+
 import java.io.*;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class DataPlugin implements DataPluginInterface {
     private String entryFileName;
     private String lectureFileName;
+    private String semesterFileName;
 
-    public DataPlugin(String entryFileName, String lectureFileName) {
+    public DataPlugin(String entryFileName, String lectureFileName, String semesterFileName) {
         this.entryFileName = entryFileName;
         this.lectureFileName = lectureFileName;
+        this.semesterFileName = semesterFileName;
     }
 
-    public boolean persistEntry(Map<String, String> data) {
+    //todo check if files exists, dont allow comma as input
+    @Override
+    public boolean persistEntry(EntryRessource entryRessource) {
 
         String csvEntry = String.format(
                 "%s,%s,%s,%s,%s"
-                , data.get("Start")
-                , data.get("End")
-                , data.get("Type")
-                , data.get("Details")
-                , data.get("Lecture"));
+                , entryRessource.getLecture()
+                , entryRessource.getStart()
+                , entryRessource.getEnd()
+                , entryRessource.getType()
+                , entryRessource.getDetails()
+        );
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(entryFileName, true))) {
             writer.write(csvEntry);
             writer.newLine();
@@ -32,13 +46,13 @@ public class DataPlugin implements DataPluginInterface {
     }
 
     @Override
-    public void persistNewLecture(Map<String, String> lectureMap) {
+    public void persistLecture(LectureResource lectureResource) {
         String csvLecture = String.format(
                 "%s,%s,%s,%s"
-                , lectureMap.get("name")
-                , lectureMap.get("lectureTime")
-                , lectureMap.get("selfStudyTime")
-                , lectureMap.get("semesterName"));
+                , lectureResource.getName()
+                , lectureResource.getSemester()
+                , lectureResource.getLectureTime()
+                , lectureResource.getSelfStudyTime());
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(lectureFileName, true))) {
             writer.write(csvLecture);
             writer.newLine();
@@ -46,5 +60,105 @@ public class DataPlugin implements DataPluginInterface {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void persistSemester(SemesterRessource semester) {
+        String csvSemester = String.format(
+                "%s,%s,%s"
+                , semester.getName()
+                , semester.getStart()
+                , semester.getEnd());
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(semesterFileName, true))) {
+            writer.write(csvSemester);
+            writer.newLine();
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public Optional<SemesterRessource> getSemesterByName(String semesterName) {
+        SemesterRessource semesterResource = null;
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(semesterFileName))) {
+            List<String> lines = bufferedReader.lines().collect(Collectors.toList());
+            for (String line : lines) {
+                String[] split = line.split(",");
+                String name = split[0];
+                if (name.equals(semesterName)) {
+                    String start = split[1];
+                    String end = split[2];
+                    semesterResource = new SemesterRessource(name, start, end);
+                }
+            }
+            if (Objects.isNull(semesterResource)) {
+                return Optional.empty();
+            } else {
+                return Optional.of(semesterResource);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Optional<LectureResource> getLectureByName(String lectureName) {
+        LectureResource lectureResource = null;
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(lectureFileName))) {
+            List<String> lines = bufferedReader.lines().collect(Collectors.toList());
+            for (String line : lines) {
+                String[] split = line.split(",");
+                String name = split[0];
+                if (name.equals(lectureName)) {
+                    String semester = split[1];
+                    int lectureTime = Integer.parseInt(split[2]);
+                    int selfStudyTime = Integer.parseInt(split[3]);
+                    lectureResource = new LectureResource(name, semester, lectureTime, selfStudyTime);
+                }
+            }
+            if (Objects.isNull(lectureResource)) {
+                return Optional.empty();
+            } else {
+                return Optional.of(lectureResource);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<LectureResource> getLectures() {
+        List<LectureResource> lectureList = new ArrayList<>();
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(lectureFileName))) {
+            bufferedReader.lines().forEach(line -> {
+                String[] split = line.split(",");
+                String name = split[0];
+                String semester = split[1];
+                int lectureTime = Integer.parseInt(split[2]);
+                int selfStudyTime = Integer.parseInt(split[3]);
+                lectureList.add(new LectureResource(name, semester, lectureTime, selfStudyTime));
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return lectureList;
+    }
+
+    @Override
+    public List<SemesterRessource> getSemesters() {
+        List<SemesterRessource> semesterList = new ArrayList<>();
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(semesterFileName))) {
+            bufferedReader.lines().forEach(line -> {
+                String[] split = line.split(",");
+                String name = split[0];
+                String start = split[1];
+                String end = split[2];
+                semesterList.add(new SemesterRessource(name, start, end));
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return semesterList;
     }
 }

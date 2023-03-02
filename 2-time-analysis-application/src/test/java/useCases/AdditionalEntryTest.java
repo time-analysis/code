@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import Interfaces.DataAdapterInterface;
 import org.junit.jupiter.api.Test;
 
 import de.models.Entry;
@@ -19,7 +20,7 @@ class AdditionalEntryTest {
     void EntryIsAddedToLecture() {
         Semester semester = new Semester("5. Semester", LocalDate.now(), LocalDate.now());
         Lecture lecture = new Lecture("ASE", semester, 0, 0);
-        Entry e = new Entry(LocalDateTime.of(2022, 10, 9, 0, 0), EntryType.PRESENCE, lecture);
+        Entry e = new Entry(LocalDateTime.of(2022, 10, 9, 0, 0), EntryType.LECTURE, lecture);
 
         AdditionalEntry ae = new AdditionalEntry(mock);
         ae.addEntry(e, lecture);
@@ -31,5 +32,5 @@ class AdditionalEntryTest {
         assertEquals(e.getLecture(), lecture);
 
     }
-    
+
 }
