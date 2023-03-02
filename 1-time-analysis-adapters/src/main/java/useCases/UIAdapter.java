@@ -20,10 +20,8 @@ import java.util.Map;
 public class UIAdapter implements UIAdapterInterface {
 
     private DataPluginInterface dataPlugin;
-    private UIPluginInterface uiPlugin;
 
-    public UIAdapter(UIPluginInterface uiPlugin, DataPluginInterface dataPlugin) {
-        this.uiPlugin = uiPlugin;
+    public UIAdapter(DataPluginInterface dataPlugin) {
         this.dataPlugin = dataPlugin;
     }
     

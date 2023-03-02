@@ -1,8 +1,11 @@
+import Interfaces.DataAdapterInterface;
 import Interfaces.DataPluginInterface;
+import Interfaces.UIAdapterInterface;
 import Interfaces.UIPluginInterface;
 import de.models.EntryType;
 import ressourceModels.EntryRessource;
 import ressourceModels.LectureResource;
+import ressourceModels.SemesterRessource;
 import useCases.*;
 
 import java.time.LocalDateTime;
@@ -11,13 +14,15 @@ import java.util.*;
 public class UITerminalPlugin implements UIPluginInterface {
 
     private DataPluginInterface dataPlugin;
-    private UIAdapter uiAdapter;
+    private UIAdapterInterface uiAdapter;
+    private DataAdapterInterface dataAdapter;
     private Scanner scanner;
 
-    public UITerminalPlugin(DataPluginInterface dataPlugin) {
+    public UITerminalPlugin(DataPluginInterface dataPlugin, DataAdapterInterface dataAdapter,UIAdapterInterface uiAdapter) {
         this.dataPlugin = dataPlugin;
-        this.uiAdapter = new UIAdapter(this, this.dataPlugin);//todo im konstruktor reingeben??
+        this.uiAdapter = uiAdapter;
         this.scanner = new Scanner(System.in);
+        this.dataAdapter = dataAdapter;
     }
 
     @Override
@@ -31,12 +36,14 @@ public class UITerminalPlugin implements UIPluginInterface {
         String start = scanner.nextLine();
 
         if (start.equals("n")) {
-            start = uiAdapter.formatLocalDateTime(LocalDateTime.now());
+            //start = uiAdapter.formatLocalDateTime(LocalDateTime.now()); //todo needed?
+            start = LocalDateTime.now().toString();
         }
         System.out.println("End time (press \"n\" to use current time)");
         String end = scanner.nextLine();
         if (end.equals("n")) {
-            end = uiAdapter.formatLocalDateTime(LocalDateTime.now());
+            //end = uiAdapter.formatLocalDateTime(LocalDateTime.now()); //Todo needed?
+            end = LocalDateTime.now().toString();
         }
         System.out.println("Type of study");
         int counter = 0;
@@ -70,7 +77,7 @@ public class UITerminalPlugin implements UIPluginInterface {
         }
 
         EntryRessource entryRessource = new EntryRessource(start, end, EntryType.values()[Integer.parseInt(typeIndex)].name(), details, lectures.get(Integer.parseInt(lectureIndex)).getName());
-        AdditionalEntry additionalEntry = new AdditionalEntry();
+        AdditionalEntry additionalEntry = new AdditionalEntry(dataAdapter,dataPlugin);
         additionalEntry.addEntry(this.uiAdapter.mapEntryRessourceToEntry(entryRessource), this.uiAdapter.mapLectureRessourceToLecture(lectures.get(Integer.parseInt(lectureIndex))));
     }
 
@@ -88,7 +95,7 @@ public class UITerminalPlugin implements UIPluginInterface {
         selfStudyTime = scanner.nextLine();
 
         LectureResource lectureResource = new LectureResource(name, semester, Integer.parseInt(lectureTime), Integer.parseInt(selfStudyTime));
-        AdditionalLecture additionalLecture = new AdditionalLecture(dataAdapter, dataPlugin, uiAdapter);
+        AdditionalLecture additionalLecture = new AdditionalLecture(dataAdapter, dataPlugin, this);
         additionalLecture.addLecture(this.uiAdapter.mapLectureRessourceToLecture(lectureResource));
     }
 
@@ -109,7 +116,7 @@ public class UITerminalPlugin implements UIPluginInterface {
 
     public void showMainMenu() {
         //TODO Semester auswaehlen?
-        System.out.println("Options:\n1>Create new Lecture\n2>Create new Entry");
+        System.out.println("Options:\n1>Create new Lecture\n2>Create new Entry\n3>Create new Semester");
         String option = scanner.nextLine();
         switch (option) {
             case "1":
@@ -135,7 +142,8 @@ public class UITerminalPlugin implements UIPluginInterface {
         String end = scanner.nextLine();
 
         AdditionalSemester additionalSemester = new AdditionalSemester();
-        additionalSemester.addSemester(this.data);
+        SemesterRessource semesterRessource = new SemesterRessource(name,start,end);
+        additionalSemester.addSemester(dataAdapter.mapSemesterRessourceToSemester(semesterRessource));
     }
 
 
