@@ -13,6 +13,7 @@ public class AdditionalLecture {
     public AdditionalLecture(DataAdapterInterface dataAdapter, DataPluginInterface dataPlugin, UIPluginInterface uiPlugin) {
         this.dataAdapter = dataAdapter;
         this.dataPlugin = dataPlugin;
+        this.uiPlugin = uiPlugin;
     }
 
     public void addLecture(Lecture lecture) {

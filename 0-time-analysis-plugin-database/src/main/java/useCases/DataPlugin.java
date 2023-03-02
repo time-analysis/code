@@ -23,6 +23,7 @@ public class DataPlugin implements DataPluginInterface {
         this.semesterFileName = semesterFileName;
     }
 
+    //todo check if files exists
     @Override
     public boolean persistEntry(EntryRessource entryRessource) {
 
@@ -133,9 +134,9 @@ public class DataPlugin implements DataPluginInterface {
             bufferedReader.lines().forEach(line -> {
                 String[] split = line.split(",");
                 String name = split[0];
-                String start= split[1];
+                String start = split[1];
                 String end = split[2];
-                semesterList.add(new SemesterRessource(name,start,end));
+                semesterList.add(new SemesterRessource(name, start, end));
             });
         } catch (IOException e) {
             throw new RuntimeException(e);
