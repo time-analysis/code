@@ -18,7 +18,7 @@ public class UITerminalPlugin implements UIPluginInterface {
     private DataAdapterInterface dataAdapter;
     private Scanner scanner;
 
-    public UITerminalPlugin(DataPluginInterface dataPlugin, DataAdapterInterface dataAdapter,UIAdapterInterface uiAdapter) {
+    public UITerminalPlugin(DataPluginInterface dataPlugin, DataAdapterInterface dataAdapter, UIAdapterInterface uiAdapter) {
         this.dataPlugin = dataPlugin;
         this.uiAdapter = uiAdapter;
         this.scanner = new Scanner(System.in);
@@ -36,14 +36,12 @@ public class UITerminalPlugin implements UIPluginInterface {
         String start = scanner.nextLine();
 
         if (start.equals("n")) {
-            //start = uiAdapter.formatLocalDateTime(LocalDateTime.now()); //todo needed?
-            start = LocalDateTime.now().toString();
+            start = uiAdapter.formatLocalDateTime(LocalDateTime.now());
         }
         System.out.println("End time (press \"n\" to use current time)");
         String end = scanner.nextLine();
         if (end.equals("n")) {
-            //end = uiAdapter.formatLocalDateTime(LocalDateTime.now()); //Todo needed?
-            end = LocalDateTime.now().toString();
+            end = uiAdapter.formatLocalDateTime(LocalDateTime.now());
         }
         System.out.println("Type of study");
         int counter = 0;
@@ -77,7 +75,7 @@ public class UITerminalPlugin implements UIPluginInterface {
         }
 
         EntryRessource entryRessource = new EntryRessource(start, end, EntryType.values()[Integer.parseInt(typeIndex)].name(), details, lectures.get(Integer.parseInt(lectureIndex)).getName());
-        AdditionalEntry additionalEntry = new AdditionalEntry(dataAdapter,dataPlugin);
+        AdditionalEntry additionalEntry = new AdditionalEntry(dataAdapter, dataPlugin);
         additionalEntry.addEntry(this.uiAdapter.mapEntryRessourceToEntry(entryRessource), this.uiAdapter.mapLectureRessourceToLecture(lectures.get(Integer.parseInt(lectureIndex))));
     }
 
@@ -87,14 +85,25 @@ public class UITerminalPlugin implements UIPluginInterface {
         String name, semester, lectureTime, selfStudyTime;
         System.out.println("Name of the lecture:");
         name = scanner.nextLine();
-        System.out.println("choose the semester"); //todo liste von semestern ausgeben
-        semester = scanner.nextLine();
+        System.out.println("choose the semester");
+        int counter = 0;
+        List<SemesterRessource> semesterList = uiAdapter.getAllSemesters();
+        for (SemesterRessource s : semesterList) {
+            System.out.println(counter + ">" + s.getName());
+            counter++;
+        }
+        String semesterIndex = scanner.nextLine();
+        while (!isInputValidNumber(semesterIndex, semesterList.size())) {
+            System.out.println("invalid input, try again!");
+            semesterIndex = scanner.nextLine();
+        }
+        String semesterName = semesterList.get(Integer.parseInt(semesterIndex)).getName();
         System.out.println("enter the official lecture time");
         lectureTime = scanner.nextLine();
         System.out.println("enter the ammount of time you are supposed to study on your own");
         selfStudyTime = scanner.nextLine();
 
-        LectureResource lectureResource = new LectureResource(name, semester, Integer.parseInt(lectureTime), Integer.parseInt(selfStudyTime));
+        LectureResource lectureResource = new LectureResource(name, semesterName, Integer.parseInt(lectureTime), Integer.parseInt(selfStudyTime));
         AdditionalLecture additionalLecture = new AdditionalLecture(dataAdapter, dataPlugin, this);
         additionalLecture.addLecture(this.uiAdapter.mapLectureRessourceToLecture(lectureResource));
     }
@@ -127,6 +136,7 @@ public class UITerminalPlugin implements UIPluginInterface {
                 break;
             case "3":
                 addSemester();
+                break;
             default:
                 System.out.println(option + " is not a valid option.");
         }
@@ -134,15 +144,15 @@ public class UITerminalPlugin implements UIPluginInterface {
     }
 
     private void addSemester() {
-        System.out.println("Name of the semester:");//todo show list of semester
+        System.out.println("name of semester:");
         String name = scanner.nextLine();
         System.out.println("start date");
         String start = scanner.nextLine();
         System.out.println("end date");
         String end = scanner.nextLine();
 
-        AdditionalSemester additionalSemester = new AdditionalSemester(dataAdapter,dataPlugin,this);
-        SemesterRessource semesterRessource = new SemesterRessource(name,start,end);
+        AdditionalSemester additionalSemester = new AdditionalSemester(dataAdapter, dataPlugin, this);
+        SemesterRessource semesterRessource = new SemesterRessource(name, start, end);
         additionalSemester.addSemester(dataAdapter.mapSemesterRessourceToSemester(semesterRessource));
     }
 
@@ -158,6 +168,5 @@ public class UITerminalPlugin implements UIPluginInterface {
         int inputAsInt = Integer.parseInt(input);
         return inputAsInt < expectedRange && inputAsInt >= 0;
     }
-
 
 }
