@@ -80,8 +80,26 @@ public class DataPlugin implements DataPluginInterface {
 
     @Override
     public Optional<SemesterRessource> getSemesterByName(String semesterName) {
-        //todo implement
-        return Optional.empty();
+        SemesterRessource semesterResource = null;
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(semesterFileName))) {
+            List<String> lines = bufferedReader.lines().collect(Collectors.toList());
+            for (String line : lines) {
+                String[] split = line.split(",");
+                String name = split[0];
+                if (name.equals(semesterName)) {
+                    String start = split[1];
+                    String end = split[2];
+                    semesterResource = new SemesterRessource(name, start, end);
+                }
+            }
+            if (Objects.isNull(semesterResource)) {
+                return Optional.empty();
+            } else {
+                return Optional.of(semesterResource);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
