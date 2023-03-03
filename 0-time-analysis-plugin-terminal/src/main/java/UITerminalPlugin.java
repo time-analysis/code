@@ -158,7 +158,6 @@ public class UITerminalPlugin implements UIPluginInterface {
 
 
     private boolean isInputValidNumber(String input, int expectedRange) {
-        //todo ist das hier richtig oder gehört das in den adapter oder woanders hin??
         try {
             Integer.parseInt(input);
         } catch (Exception e) {

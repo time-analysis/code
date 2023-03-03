@@ -18,4 +18,7 @@ public interface DataAdapterInterface {
     Semester mapSemesterRessourceToSemester(SemesterRessource semesterRessource);
 
     Lecture mapLectureRessourceToLecture(LectureResource lectureResource);
+
+    Entry mapEntryRessourceToEntry(EntryRessource entryRessource);
+    //todo merge with uiAdapter?
 }
