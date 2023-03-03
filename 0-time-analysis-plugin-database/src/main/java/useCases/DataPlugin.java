@@ -23,7 +23,7 @@ public class DataPlugin implements DataPluginInterface {
         this.semesterFileName = semesterFileName;
     }
 
-    //todo check if files exists, dont allow comma as input
+    //todo check if files exists, dont allow comma as input, check for dupliate lecture and duplicate Semester (name has to be unique)
     @Override
     public boolean persistEntry(EntryRessource entryRessource) {
 
