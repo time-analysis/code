@@ -10,6 +10,7 @@ import java.util.Optional;
 import Interfaces.DataAdapterInterface;
 import Interfaces.DataPluginInterface;
 import de.models.Entry;
+import de.models.EntryType;
 import de.models.Lecture;
 import de.models.Semester;
 import ressourceModels.EntryRessource;
@@ -73,9 +74,32 @@ public class DataAdapter implements DataAdapterInterface {
         return new Lecture(name, semester, lectureTime, selfStudyTime);
     }
 
+    @Override
+    public Entry mapEntryRessourceToEntry(EntryRessource entryRessource) {
+        String details = entryRessource.getDetails();
+        LocalDateTime start = stringToLocalDateTime(entryRessource.getStart());
+        LocalDateTime end = stringToLocalDateTime(entryRessource.getEnd());
+        EntryType type = EntryType.valueOf(entryRessource.getType());
+        Lecture lecture = null;
+        Optional<LectureResource> lectureResourceOptional = this.dataPlugin.getLectureByName(entryRessource.getLecture());
+        if (lectureResourceOptional.isPresent()) {
+            lecture = mapLectureRessourceToLecture(lectureResourceOptional.get());
+        } else {
+            //todo handle error
+        }
+        Entry entry = new Entry(start, type, lecture);
+        entry.finishEntry(end, details);
+        return entry;
+    }
+
     private LocalDate stringToDatetime(String time) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return LocalDate.parse(time, formatter);
+    }
+
+    private LocalDateTime stringToLocalDateTime(String time) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return LocalDateTime.parse(time, formatter);
     }
 
 }

@@ -22,12 +22,13 @@ public class Analysis {
     }
 
     public void getTimeSpentForLecture(Lecture lecture) {
-        List<EntryRessource> entryRessourceList = dataPlugin.getEntrysByLecture(this.dataAdapter.mapLectureToLectureRessource(lecture));
+        List<EntryRessource> entryRessourceList = dataPlugin.getEntrysByLectureName(this.dataAdapter.mapLectureToLectureRessource(lecture).getName());
         List<Entry> entryList = new ArrayList<Entry>();
         entryRessourceList.forEach(entryRessource -> entryList.add(this.dataAdapter.mapEntryRessourceToEntry(entryRessource)));
         Duration selfStudyTime, lectureTime;
         selfStudyTime = entryList.stream().filter(entry -> entry.getType().equals(EntryType.SELFSTUDY)).map(Entry::calculateDuration).reduce(Duration::plus).get(); //todo wo gehören solche filtermethoden hin? wo zieht man die grenze zum plugin?
         lectureTime = entryList.stream().filter(entry -> entry.getType().equals(EntryType.LECTURE)).map(Entry::calculateDuration).reduce(Duration::plus).get();
+        //todo wie brauche ich hierfür eigene RückgabeObjekte?
     }
 
     public void getPresenceTime() {

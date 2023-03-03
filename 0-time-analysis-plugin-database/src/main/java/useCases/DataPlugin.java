@@ -161,4 +161,14 @@ public class DataPlugin implements DataPluginInterface {
         }
         return semesterList;
     }
+
+    @Override
+    public List<EntryRessource> getEntrysByLectureName(String lectureResource) {
+        return null;
+    }
+
+    @Override
+    public List<EntryRessource> getEntrys() {
+        return null;
+    }
 }

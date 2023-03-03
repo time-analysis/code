@@ -23,7 +23,7 @@ public interface DataPluginInterface {
 
     List<SemesterRessource> getSemesters();
 
-    List<EntryRessource> getEntrysByLecture(LectureResource mapLectureToLectureRessource);
+    List<EntryRessource> getEntrysByLectureName(String lectureResource);
 
     List<EntryRessource> getEntrys();
     //Todo make use of optional
