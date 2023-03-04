@@ -1,6 +1,7 @@
 package useCases;
 
 import Interfaces.DataPluginInterface;
+import Interfaces.UIPluginInterface;
 import ressourceModels.EntryRessource;
 import ressourceModels.LectureResource;
 import ressourceModels.SemesterRessource;
@@ -23,15 +24,15 @@ public class DataPlugin implements DataPluginInterface {
         this.semesterFileName = semesterFileName;
         File semesterFile = new File(semesterFileName);
         File lectureFile = new File(lectureFileName);
-        if(!semesterFile.exists()||!semesterFile.isFile()){
+        if (!semesterFile.exists() || !semesterFile.isFile()) {
             System.out.println("No semesters found, start by creating a semester."); //todo use uiplugin to display
-        }else if(!lectureFile.exists()||!lectureFile.isFile()){
+        } else if (!lectureFile.exists() || !lectureFile.isFile()) {
             System.out.println("No lectures found. Lectures are required to created an Entry."); //todo use uiplugin to display
         }
 
     }
 
-    //check for dupliate lecture and duplicate Semester (name has to be unique)
+    //todo check for dupliate lecture and duplicate Semester (name has to be unique)
     @Override
     public boolean persistEntry(EntryRessource entryRessource) {
 
@@ -174,16 +175,16 @@ public class DataPlugin implements DataPluginInterface {
     public List<EntryRessource> getEntrysByLectureName(String lectureResource) {
 
         List<EntryRessource> EntryList = new ArrayList<>();
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(semesterFileName))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(entryFileName))) {
             bufferedReader.lines().forEach(line -> {
                 String[] split = line.split(",");
                 String lecture = split[0];
-                if(lecture.equals(lectureResource)){
+                if (lecture.equals(lectureResource)) {
                     String start = split[1];
                     String end = split[2];
                     String type = split[3];
                     String details = split[4];
-                    EntryList.add(new EntryRessource(lecture, start, end,type,details));
+                    EntryList.add(new EntryRessource(lecture, start, end, type, details));
                 }
 
             });
@@ -196,7 +197,7 @@ public class DataPlugin implements DataPluginInterface {
     @Override
     public List<EntryRessource> getEntrys() {
         List<EntryRessource> EntryList = new ArrayList<>();
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(semesterFileName))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(entryFileName))) {
             bufferedReader.lines().forEach(line -> {
                 String[] split = line.split(",");
                 String lecture = split[0];
@@ -204,18 +205,19 @@ public class DataPlugin implements DataPluginInterface {
                 String end = split[2];
                 String type = split[3];
                 String details = split[4];
-                EntryList.add(new EntryRessource(lecture, start, end,type,details));
+                EntryList.add(new EntryRessource(start, end, type, details, lecture));
             });
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return EntryList;
     }
-    private String sanitizeInputForCSVFormat(String input){
+
+    private String sanitizeInputForCSVFormat(String input) {
         String toReturn = input;
-        if(input.contains(",")){
+        if (input.contains(",")) {
             System.out.println("The letter \",\" is not allowed as input. It will be removed"); //todo use uiplugin
-            toReturn = toReturn.replace(",","");
+            toReturn = toReturn.replace(",", "");
         }
         return toReturn;
     }
