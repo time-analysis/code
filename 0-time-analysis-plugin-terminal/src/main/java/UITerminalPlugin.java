@@ -110,12 +110,18 @@ public class UITerminalPlugin implements UIPluginInterface {
 
     @Override
     public void displayMessage(String message) {
-        System.out.println(message);
+        System.out.println("[INFO] " + message);
     }
 
     @Override
     public void displayError(String errorMessage) {
-        System.out.println(errorMessage);
+        System.out.println("[ERROR] " +errorMessage);
+    }
+
+    @Override
+    public void displayWarning(String warningMessage) {
+        System.out.println("[WARNING] " + warningMessage);
+
     }
 
     public void start() {

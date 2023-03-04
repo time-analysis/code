@@ -21,9 +21,17 @@ public class DataPlugin implements DataPluginInterface {
         this.entryFileName = entryFileName;
         this.lectureFileName = lectureFileName;
         this.semesterFileName = semesterFileName;
+        File semesterFile = new File(semesterFileName);
+        File lectureFile = new File(lectureFileName);
+        if(!semesterFile.exists()||!semesterFile.isFile()){
+            System.out.println("No semesters found, start by creating a semester."); //use uiplugin to display
+        }else if(!lectureFile.exists()||!lectureFile.isFile()){
+            System.out.println("No lectures found. Lectures are required to created an Entry."); //use uiplugin to display
+        }
+
     }
 
-    //todo check if files exists, dont allow comma as input, check for dupliate lecture and duplicate Semester (name has to be unique)
+    //todo dont allow comma as input, check for dupliate lecture and duplicate Semester (name has to be unique)
     @Override
     public boolean persistEntry(EntryRessource entryRessource) {
 
