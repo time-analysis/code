@@ -164,11 +164,43 @@ public class DataPlugin implements DataPluginInterface {
 
     @Override
     public List<EntryRessource> getEntrysByLectureName(String lectureResource) {
-        return null;
+
+        List<EntryRessource> EntryList = new ArrayList<>();
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(semesterFileName))) {
+            bufferedReader.lines().forEach(line -> {
+                String[] split = line.split(",");
+                String lecture = split[0];
+                if(lecture.equals(lectureResource)){
+                    String start = split[1];
+                    String end = split[2];
+                    String type = split[3];
+                    String details = split[4];
+                    EntryList.add(new EntryRessource(lecture, start, end,type,details));
+                }
+
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return EntryList;
     }
 
     @Override
     public List<EntryRessource> getEntrys() {
-        return null;
+        List<EntryRessource> EntryList = new ArrayList<>();
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(semesterFileName))) {
+            bufferedReader.lines().forEach(line -> {
+                String[] split = line.split(",");
+                String lecture = split[0];
+                String start = split[1];
+                String end = split[2];
+                String type = split[3];
+                String details = split[4];
+                EntryList.add(new EntryRessource(lecture, start, end,type,details));
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return EntryList;
     }
 }
