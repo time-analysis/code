@@ -3,8 +3,6 @@ package useCases;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import Interfaces.DataAdapterInterface;
@@ -26,8 +24,8 @@ public class DataAdapter implements DataAdapterInterface {
     }
 
     public EntryRessource mapEntryToEntryRessource(Entry entry) {
-        String start = entry.getStart().toString();
-        String end = entry.getEnd().toString();
+        String start = LocalDateTimeToString(entry.getStart());
+        String end = LocalDateTimeToString(entry.getEnd());
         String type = entry.getType().name();
         String lecture = entry.getLecture().getName();
         String details = entry.getDetails();
@@ -46,8 +44,8 @@ public class DataAdapter implements DataAdapterInterface {
     @Override
     public SemesterRessource mapSemesterToSemesterRessource(Semester semester) {
         String name = semester.getName();
-        String start = semester.getStart().toString();
-        String end = semester.getEnd().toString();
+        String start = LocalDateToString(semester.getStart());
+        String end = LocalDateToString(semester.getEnd());
         return new SemesterRessource(name, start, end);
     }
 
@@ -95,6 +93,16 @@ public class DataAdapter implements DataAdapterInterface {
     private LocalDate stringToDatetime(String time) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return LocalDate.parse(time, formatter);
+    }
+
+    private String LocalDateToString(LocalDate time) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return time.format(formatter);
+    }
+
+    private String LocalDateTimeToString(LocalDateTime time) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return time.format(formatter);
     }
 
     private LocalDateTime stringToLocalDateTime(String time) {
