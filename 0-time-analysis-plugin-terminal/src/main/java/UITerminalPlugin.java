@@ -115,7 +115,7 @@ public class UITerminalPlugin implements UIPluginInterface {
 
     @Override
     public void displayError(String errorMessage) {
-        System.out.println("[ERROR] " +errorMessage);
+        System.out.println("[ERROR] " + errorMessage);
     }
 
     @Override
@@ -130,8 +130,7 @@ public class UITerminalPlugin implements UIPluginInterface {
     }
 
     public void showMainMenu() {
-        //TODO Semester auswaehlen?
-        System.out.println("Options:\n1>Create new Lecture\n2>Create new Entry\n3>Create new Semester");
+        System.out.println("Options:\n1>Create new Lecture\n2>Create new Entry\n3>Create new Semester\n4>see time spent for a Lecture\n5>see how much time was spent listening to lectures\n6>see how much time was spent studying on your own\n7>see how much time was spent in a semester");
         String option = scanner.nextLine();
         switch (option) {
             case "1":
@@ -143,10 +142,67 @@ public class UITerminalPlugin implements UIPluginInterface {
             case "3":
                 addSemester();
                 break;
+            case "4":
+                getTimePerLecture();
+                break;
+            case "5":
+                getPresenceTime();
+                break;
+            case "6":
+                getSelfStudyTime();
+                break;
+            case "7":
+                getTimePerSemester();
             default:
                 System.out.println(option + " is not a valid option.");
         }
         showMainMenu();
+    }
+
+    private void getTimePerSemester() {
+        System.out.println("choose the semester");
+        int counter = 0;
+        List<SemesterRessource> semesterList = uiAdapter.getAllSemesters();
+        for (SemesterRessource s : semesterList) {
+            System.out.println(counter + ">" + s.getName());
+            counter++;
+        }
+        String semesterIndex = scanner.nextLine();
+        while (!isInputValidNumber(semesterIndex, semesterList.size())) {
+            System.out.println("invalid input, try again!");
+            semesterIndex = scanner.nextLine();
+        }
+        Analysis analysis = new Analysis(dataAdapter, dataPlugin);
+        analysis.getTimePerSemester(dataAdapter.mapSemesterRessourceToSemester(semesterList.get(Integer.parseInt(semesterIndex))));
+    }
+
+    private void getSelfStudyTime() {
+        Analysis analysis = new Analysis(dataAdapter, dataPlugin);
+        analysis.getStudyTime();
+    }
+
+    private void getPresenceTime() {
+        Analysis analysis = new Analysis(dataAdapter, dataPlugin);
+        analysis.getPresenceTime();
+    }
+
+    private void getTimePerLecture() {
+        Analysis analysis = new Analysis(dataAdapter, dataPlugin);
+        System.out.println("choose a Lecture");
+        List<LectureResource> lectures = uiAdapter.getAllLecturesOfCurrentSemester();
+        int counter = 0;
+        for (LectureResource l : lectures) {
+            System.out.println(counter + ">" + l.getName());
+            counter++;
+        }
+
+        String lectureIndex = scanner.nextLine();
+        while (!isInputValidNumber(lectureIndex, lectures.size())) {
+            System.out.println("invalid input, try again!");
+            lectureIndex = scanner.nextLine();
+        }
+
+        analysis.getTimeSpentForLecture(dataAdapter.mapLectureRessourceToLecture(lectures.get(Integer.parseInt(lectureIndex))));
     }
 
     private void addSemester() {
