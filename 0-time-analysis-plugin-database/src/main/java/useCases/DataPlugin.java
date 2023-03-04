@@ -24,24 +24,24 @@ public class DataPlugin implements DataPluginInterface {
         File semesterFile = new File(semesterFileName);
         File lectureFile = new File(lectureFileName);
         if(!semesterFile.exists()||!semesterFile.isFile()){
-            System.out.println("No semesters found, start by creating a semester."); //use uiplugin to display
+            System.out.println("No semesters found, start by creating a semester."); //todo use uiplugin to display
         }else if(!lectureFile.exists()||!lectureFile.isFile()){
-            System.out.println("No lectures found. Lectures are required to created an Entry."); //use uiplugin to display
+            System.out.println("No lectures found. Lectures are required to created an Entry."); //todo use uiplugin to display
         }
 
     }
 
-    //todo dont allow comma as input, check for dupliate lecture and duplicate Semester (name has to be unique)
+    //check for dupliate lecture and duplicate Semester (name has to be unique)
     @Override
     public boolean persistEntry(EntryRessource entryRessource) {
 
         String csvEntry = String.format(
                 "%s,%s,%s,%s,%s"
-                , entryRessource.getLecture()
-                , entryRessource.getStart()
-                , entryRessource.getEnd()
-                , entryRessource.getType()
-                , entryRessource.getDetails()
+                , sanitizeInputForCSVFormat(entryRessource.getLecture())
+                , sanitizeInputForCSVFormat(entryRessource.getStart())
+                , sanitizeInputForCSVFormat(entryRessource.getEnd())
+                , sanitizeInputForCSVFormat(entryRessource.getType())
+                , sanitizeInputForCSVFormat(entryRessource.getDetails())
         );
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(entryFileName, true))) {
             writer.write(csvEntry);
@@ -57,8 +57,8 @@ public class DataPlugin implements DataPluginInterface {
     public void persistLecture(LectureResource lectureResource) {
         String csvLecture = String.format(
                 "%s,%s,%s,%s"
-                , lectureResource.getName()
-                , lectureResource.getSemester()
+                , sanitizeInputForCSVFormat(lectureResource.getName())
+                , sanitizeInputForCSVFormat(lectureResource.getSemester())
                 , lectureResource.getLectureTime()
                 , lectureResource.getSelfStudyTime());
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(lectureFileName, true))) {
@@ -74,9 +74,9 @@ public class DataPlugin implements DataPluginInterface {
     public void persistSemester(SemesterRessource semester) {
         String csvSemester = String.format(
                 "%s,%s,%s"
-                , semester.getName()
-                , semester.getStart()
-                , semester.getEnd());
+                , sanitizeInputForCSVFormat(semester.getName())
+                , sanitizeInputForCSVFormat(semester.getStart())
+                , sanitizeInputForCSVFormat(semester.getEnd()));
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(semesterFileName, true))) {
             writer.write(csvSemester);
             writer.newLine();
@@ -210,5 +210,13 @@ public class DataPlugin implements DataPluginInterface {
             throw new RuntimeException(e);
         }
         return EntryList;
+    }
+    private String sanitizeInputForCSVFormat(String input){
+        String toReturn = input;
+        if(input.contains(",")){
+            System.out.println("The letter \",\" is not allowed as input. It will be removed"); //todo use uiplugin
+            toReturn = toReturn.replace(",","");
+        }
+        return toReturn;
     }
 }
