@@ -101,7 +101,7 @@ public class DataAdapter implements DataAdapterInterface {
     }
 
     private String LocalDateTimeToString(LocalDateTime time) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return time.format(formatter);
     }
 

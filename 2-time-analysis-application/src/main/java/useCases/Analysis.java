@@ -9,6 +9,7 @@ import de.models.Semester;
 import ressourceModels.EntryRessource;
 
 import java.time.Duration;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,26 +32,28 @@ public class Analysis {
         //todo wie brauche ich hierfür eigene RückgabeObjekte?
     }
 
-    public void getPresenceTime() {
+    public Duration getPresenceTime() {
         List<EntryRessource> entryRessourceList = dataPlugin.getEntrys();
         List<Entry> entryList = new ArrayList<>();
         entryRessourceList.forEach(entryRessource -> entryList.add(this.dataAdapter.mapEntryRessourceToEntry(entryRessource)));
         Duration presenceTime = entryList.stream().filter(entry -> entry.getType().equals(EntryType.LECTURE)).map(entry -> entry.calculateDuration()).reduce(Duration::plus).get();
-
+        return presenceTime;
     }
 
-    public void getStudyTime() {
+    public Duration getStudyTime() {
         List<EntryRessource> entryRessourceList = dataPlugin.getEntrys();
         List<Entry> entryList = new ArrayList<>();
         entryRessourceList.forEach(entryRessource -> entryList.add(this.dataAdapter.mapEntryRessourceToEntry(entryRessource)));
-        Duration presenceTime = entryList.stream().filter(entry -> entry.getType().equals(EntryType.SELFSTUDY)).map(entry -> entry.calculateDuration()).reduce(Duration::plus).get();
+        Duration studyTime = entryList.stream().filter(entry -> entry.getType().equals(EntryType.SELFSTUDY)).map(entry -> entry.calculateDuration()).reduce(Duration::plus).get();
+        return studyTime;
     }
 
-    public void getTimePerSemester(Semester semester) {
+    public Duration getTimePerSemester(Semester semester) {
         List<EntryRessource> entryRessourceList = dataPlugin.getEntrys();
         List<Entry> entryList = new ArrayList<>();
         entryRessourceList.forEach(entryRessource -> entryList.add(this.dataAdapter.mapEntryRessourceToEntry(entryRessource)));
-        Duration presenceTime = entryList.stream().filter(entry -> entry.getLecture().getSemester().getName().equals(semester.getName())).map(entry -> entry.calculateDuration()).reduce(Duration::plus).get();
+        Duration timePerSemester = entryList.stream().filter(entry -> entry.getLecture().getSemester().getName().equals(semester.getName())).map(entry -> entry.calculateDuration()).reduce(Duration::plus).get();
+        return timePerSemester; //todo reicht java.duration oder braucht man ein eigenes objekt?
     }
 
     public void compareTimeTargetToActual() {

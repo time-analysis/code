@@ -6,6 +6,7 @@ import ressourceModels.EntryRessource;
 import ressourceModels.LectureResource;
 import ressourceModels.SemesterRessource;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface UIAdapterInterface {
     List<SemesterRessource> getAllSemesters();
 
     String formatLocalDateTime(LocalDateTime time);
+
+    String formatDuration(Duration duration);
 }

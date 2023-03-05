@@ -8,6 +8,7 @@ import ressourceModels.LectureResource;
 import ressourceModels.SemesterRessource;
 import useCases.*;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -153,6 +154,7 @@ public class UITerminalPlugin implements UIPluginInterface {
                 break;
             case "7":
                 getTimePerSemester();
+                break;
             default:
                 System.out.println(option + " is not a valid option.");
         }
@@ -173,17 +175,20 @@ public class UITerminalPlugin implements UIPluginInterface {
             semesterIndex = scanner.nextLine();
         }
         Analysis analysis = new Analysis(dataAdapter, dataPlugin);
-        analysis.getTimePerSemester(dataAdapter.mapSemesterRessourceToSemester(semesterList.get(Integer.parseInt(semesterIndex))));
+        Duration duration = analysis.getTimePerSemester(dataAdapter.mapSemesterRessourceToSemester(semesterList.get(Integer.parseInt(semesterIndex))));
+        System.out.println(uiAdapter.formatDuration(duration));
     }
 
     private void getSelfStudyTime() {
         Analysis analysis = new Analysis(dataAdapter, dataPlugin);
-        analysis.getStudyTime();
+        Duration duration = analysis.getStudyTime();
+        System.out.println(uiAdapter.formatDuration(duration));
     }
 
     private void getPresenceTime() {
         Analysis analysis = new Analysis(dataAdapter, dataPlugin);
-        analysis.getPresenceTime();
+        Duration duration = analysis.getPresenceTime();
+        System.out.println(uiAdapter.formatDuration(duration));
     }
 
     private void getTimePerLecture() {

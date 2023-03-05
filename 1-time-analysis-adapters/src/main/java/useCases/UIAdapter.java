@@ -12,6 +12,7 @@ import ressourceModels.EntryRessource;
 import ressourceModels.LectureResource;
 import ressourceModels.SemesterRessource;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -25,7 +26,7 @@ public class UIAdapter implements UIAdapterInterface {
     public UIAdapter(DataPluginInterface dataPlugin) {
         this.dataPlugin = dataPlugin;
     }
-    
+
 
     public Lecture mapLectureRessourceToLecture(LectureResource lectureResource) {
         String name = lectureResource.getName();
@@ -51,12 +52,18 @@ public class UIAdapter implements UIAdapterInterface {
         //return List.of("BWL", "Evo-Alg"); //todo zugriff auf dataadapter oder auf (neuen) usecase??
         return dataPlugin.getLectures();
     }
-    public  List<SemesterRessource> getAllSemesters(){
+
+    public List<SemesterRessource> getAllSemesters() {
         return dataPlugin.getSemesters();
     }
 
     public String formatLocalDateTime(LocalDateTime time) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return time.format(formatter);
+    }
+
+    @Override
+    public String formatDuration(Duration duration) {
+        return String.format("%s Days %s Hours %s Minutes %s Seconds", duration.toDaysPart(), duration.toHoursPart(), duration.toMinutesPart(), duration.toSecondsPart());
     }
 }
