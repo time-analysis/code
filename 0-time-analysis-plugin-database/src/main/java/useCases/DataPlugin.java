@@ -89,26 +89,8 @@ public class DataPlugin implements DataPluginInterface {
 
     @Override
     public Optional<SemesterRessource> getSemesterByName(String semesterName) {
-        SemesterRessource semesterResource = null;
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(semesterFileName))) {
-            List<String> lines = bufferedReader.lines().collect(Collectors.toList());
-            for (String line : lines) {
-                String[] split = line.split(",");
-                String name = split[0];
-                if (name.equals(semesterName)) {
-                    String start = split[1];
-                    String end = split[2];
-                    semesterResource = new SemesterRessource(name, start, end);
-                }
-            }
-            if (Objects.isNull(semesterResource)) {
-                return Optional.empty();
-            } else {
-                return Optional.of(semesterResource);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        List<SemesterRessource> semesters = getSemesters();
+        return semesters.stream().filter(semester -> semester.getName().equals(semesterName)).findAny();
     }
 
     @Override
@@ -156,15 +138,9 @@ public class DataPlugin implements DataPluginInterface {
 
     @Override
     public List<SemesterRessource> getSemesters() {
-        List<SemesterRessource> semesterList = new ArrayList<>();
+        List<SemesterRessource> semesterList;
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(semesterFileName))) {
-            bufferedReader.lines().forEach(line -> {
-                String[] split = line.split(",");
-                String name = split[0];
-                String start = split[1];
-                String end = split[2];
-                semesterList.add(new SemesterRessource(name, start, end));
-            });
+            semesterList = bufferedReader.lines().map(this::parseStringToSemesterRessource).collect(Collectors.toList());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -220,5 +196,21 @@ public class DataPlugin implements DataPluginInterface {
             toReturn = toReturn.replace(",", "");
         }
         return toReturn;
+    }
+
+    private LectureResource parseStringToLectureRessource(String lectureCSVInput) {
+
+    }
+
+    private EntryRessource parseStringToEntryRessource(String entryCSVInput) {
+
+    }
+
+    private SemesterRessource parseStringToSemesterRessource(String semesterCSVInput) {
+        String[] split = semesterCSVInput.split(",");
+        String name = split[0];
+        String start = split[1];
+        String end = split[2];
+        return new SemesterRessource(name, start, end);
     }
 }
