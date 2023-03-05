@@ -121,44 +121,18 @@ public class DataPlugin implements DataPluginInterface {
 
     @Override
     public List<EntryRessource> getEntrysByLectureName(String lectureResource) {
-
-        List<EntryRessource> EntryList = new ArrayList<>();
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(entryFileName))) {
-            bufferedReader.lines().forEach(line -> {
-                String[] split = line.split(",");
-                String lecture = split[0];
-                if (lecture.equals(lectureResource)) {
-                    String start = split[1];
-                    String end = split[2];
-                    String type = split[3];
-                    String details = split[4];
-                    EntryList.add(new EntryRessource(start, end, type, details, lecture));
-                }
-
-            });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return EntryList;
+        return getEntrys().stream().filter(entry -> entry.getLecture().equals(lectureResource)).collect(Collectors.toList());
     }
 
     @Override
     public List<EntryRessource> getEntrys() {
-        List<EntryRessource> EntryList = new ArrayList<>();
+        List<EntryRessource> entryList;
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(entryFileName))) {
-            bufferedReader.lines().forEach(line -> {
-                String[] split = line.split(",");
-                String lecture = split[0];
-                String start = split[1];
-                String end = split[2];
-                String type = split[3];
-                String details = split[4];
-                EntryList.add(new EntryRessource(start, end, type, details, lecture));
-            });
+            entryList = bufferedReader.lines().map(this::parseStringToEntryRessource).collect(Collectors.toList());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return EntryList;
+        return entryList;
     }
 
     private String sanitizeInputForCSVFormat(String input) {
@@ -180,7 +154,13 @@ public class DataPlugin implements DataPluginInterface {
     }
 
     private EntryRessource parseStringToEntryRessource(String entryCSVInput) {
-
+        String[] split = entryCSVInput.split(",");
+        String lecture = split[0];
+        String start = split[1];
+        String end = split[2];
+        String type = split[3];
+        String details = split[4];
+        return new EntryRessource(start, end, type, details, lecture);
     }
 
     private SemesterRessource parseStringToSemesterRessource(String semesterCSVInput) {
