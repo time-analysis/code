@@ -184,7 +184,7 @@ public class DataPlugin implements DataPluginInterface {
                     String end = split[2];
                     String type = split[3];
                     String details = split[4];
-                    EntryList.add(new EntryRessource(lecture, start, end, type, details));
+                    EntryList.add(new EntryRessource(start, end, type, details, lecture));
                 }
 
             });
