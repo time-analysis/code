@@ -89,47 +89,19 @@ public class DataPlugin implements DataPluginInterface {
 
     @Override
     public Optional<SemesterRessource> getSemesterByName(String semesterName) {
-        List<SemesterRessource> semesters = getSemesters();
-        return semesters.stream().filter(semester -> semester.getName().equals(semesterName)).findAny();
+        return getSemesters().stream().filter(semester -> semester.getName().equals(semesterName)).findAny();
     }
 
     @Override
     public Optional<LectureResource> getLectureByName(String lectureName) {
-        LectureResource lectureResource = null;
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(lectureFileName))) {
-            List<String> lines = bufferedReader.lines().collect(Collectors.toList());
-            for (String line : lines) {
-                String[] split = line.split(",");
-                String name = split[0];
-                if (name.equals(lectureName)) {
-                    String semester = split[1];
-                    int lectureTime = Integer.parseInt(split[2]);
-                    int selfStudyTime = Integer.parseInt(split[3]);
-                    lectureResource = new LectureResource(name, semester, lectureTime, selfStudyTime);
-                }
-            }
-            if (Objects.isNull(lectureResource)) {
-                return Optional.empty();
-            } else {
-                return Optional.of(lectureResource);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return getLectures().stream().filter(lecture -> lecture.getName().equals(lectureName)).findAny();
     }
 
     @Override
     public List<LectureResource> getLectures() {
-        List<LectureResource> lectureList = new ArrayList<>();
+        List<LectureResource> lectureList;
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(lectureFileName))) {
-            bufferedReader.lines().forEach(line -> {
-                String[] split = line.split(",");
-                String name = split[0];
-                String semester = split[1];
-                int lectureTime = Integer.parseInt(split[2]);
-                int selfStudyTime = Integer.parseInt(split[3]);
-                lectureList.add(new LectureResource(name, semester, lectureTime, selfStudyTime));
-            });
+            lectureList = bufferedReader.lines().map(this::parseStringToLectureRessource).collect(Collectors.toList());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -199,7 +171,12 @@ public class DataPlugin implements DataPluginInterface {
     }
 
     private LectureResource parseStringToLectureRessource(String lectureCSVInput) {
-
+        String[] split = lectureCSVInput.split(",");
+        String name = split[0];
+        String semester = split[1];
+        int lectureTime = Integer.parseInt(split[2]);
+        int selfStudyTime = Integer.parseInt(split[3]);
+        return new LectureResource(name, semester, lectureTime, selfStudyTime);
     }
 
     private EntryRessource parseStringToEntryRessource(String entryCSVInput) {
