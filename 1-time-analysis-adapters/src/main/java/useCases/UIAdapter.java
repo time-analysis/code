@@ -42,7 +42,7 @@ public class UIAdapter implements UIAdapterInterface {
         LocalDateTime start = LocalDateTime.parse(entryRessource.getStart(), formatter);
         LocalDateTime end = LocalDateTime.parse(entryRessource.getEnd(), formatter);
 
-        Lecture lecture = new Lecture(entryRessource.getLecture(), new Semester("MOCKSEMESTER", LocalDate.now(), LocalDate.now()), 1, 1);
+        Lecture lecture = new Lecture(entryRessource.getLecture(), new Semester("MOCKSEMESTER", LocalDate.now(), LocalDate.now()), 1, 1); //todo remove
         Entry entry = new Entry(start, EntryType.valueOf(entryRessource.getType()), lecture);
         entry.finishEntry(end, entryRessource.getDetails());
         return entry;

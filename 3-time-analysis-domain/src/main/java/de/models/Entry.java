@@ -15,7 +15,7 @@ public class Entry {
     public Entry(LocalDateTime start, EntryType type, Lecture lecture) {
         this.start = start;
         this.type = type;
-        this.lecture = lecture;
+        this.lecture = lecture; //todo nullcheck for lecture?
     }
 
     public LocalDateTime getStart() {
