@@ -108,37 +108,32 @@ public class UITerminalPlugin implements UIPluginInterface {
     }
 
     public void start() {
-        System.out.println("\n" + "  _______ _                                       _           _     \n" + " |__   __(_)                    /\\               | |         (_)    \n" + "    | |   _ _ __ ___   ___     /  \\   _ __   __ _| |_   _ ___ _ ___ \n" + "    | |  | | '_ ` _ \\ / _ \\   / /\\ \\ | '_ \\ / _` | | | | / __| / __|\n" + "    | |  | | | | | | |  __/  / ____ \\| | | | (_| | | |_| \\__ \\ \\__ \\\n" + "    |_|  |_|_| |_| |_|\\___| /_/    \\_\\_| |_|\\__,_|_|\\__, |___/_|___/\n" + "                                                     __/ |          \n" + "                                                    |___/           \n");
+        System.out.println(getAsciiArt());
         showMainMenu();
     }
 
+    private String getAsciiArt() {
+        return "\n" + "  _______ _                                       _           _     \n" + " |__   __(_)                    /\\               | |         (_)    \n" + "    | |   _ _ __ ___   ___     /  \\   _ __   __ _| |_   _ ___ _ ___ \n" + "    | |  | | '_ ` _ \\ / _ \\   / /\\ \\ | '_ \\ / _` | | | | / __| / __|\n" + "    | |  | | | | | | |  __/  / ____ \\| | | | (_| | | |_| \\__ \\ \\__ \\\n" + "    |_|  |_|_| |_| |_|\\___| /_/    \\_\\_| |_|\\__,_|_|\\__, |___/_|___/\n" + "                                                     __/ |          \n" + "                                                    |___/           \n";
+    }
+
     public void showMainMenu() {
-        System.out.println("Options:\n1>Create new Lecture\n2>Create new Entry\n3>Create new Semester\n4>see time spent for a Lecture\n5>see how much time was spent listening to lectures\n6>see how much time was spent studying on your own\n7>see how much time was spent in a semester");
+        Map<String, ActionAndDesciption> commands = new HashMap<>();
+        commands.put("1", new ActionAndDesciption(this::addLecture, "Create new Lecture"));
+        commands.put("2", new ActionAndDesciption(this::addEntryByTimeStamp, "Create new Entry"));
+        commands.put("3", new ActionAndDesciption(this::addSemester, "Create new Semester"));
+        commands.put("4", new ActionAndDesciption(this::getTimePerLecture, "see how much time was spent for one specific Lecture"));
+        commands.put("5", new ActionAndDesciption(this::getPresenceTime, "see how much time was spent listening to lectures"));
+        commands.put("6", new ActionAndDesciption(this::getSelfStudyTime, "see how much time was spent studying on your own"));
+        commands.put("7", new ActionAndDesciption(this::getTimePerSemester, "see how much time was spent for one specific semester"));
+        commands.forEach((key, value) -> {
+            System.out.println(key + "> " + value.getDesciption());
+        });
         String option = scanner.nextLine();
-        switch (option) {
-            case "1":
-                addLecture();
-                break;
-            case "2":
-                addEntryByTimeStamp();
-                break;
-            case "3":
-                addSemester();
-                break;
-            case "4":
-                getTimePerLecture();
-                break;
-            case "5":
-                getPresenceTime();
-                break;
-            case "6":
-                getSelfStudyTime();
-                break;
-            case "7":
-                getTimePerSemester();
-                break;
-            default:
-                System.out.println(option + " is not a valid option.");
+        ActionAndDesciption actionAndDesciption = commands.get(option);
+        if (Objects.isNull(actionAndDesciption)) {
+            System.out.println(option + " is not a valid option.");
+        } else {
+            actionAndDesciption.getAction().run();
         }
         showMainMenu();
     }
