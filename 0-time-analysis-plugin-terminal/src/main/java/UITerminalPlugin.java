@@ -60,51 +60,33 @@ public class UITerminalPlugin implements UIPluginInterface {
 
         System.out.println("Details of study");
         String details = scanner.nextLine();
-        //show list of lectures
-        System.out.println("Lecture");
+
         List<LectureResource> lectures = uiAdapter.getAllLecturesOfCurrentSemester();
-        counter = 0;
-        for (LectureResource l : lectures) {
-            System.out.println(counter + ">" + l.getName());
-            counter++;
-        }
 
-        String lectureIndex = scanner.nextLine();
-        while (!isInputValidNumber(lectureIndex, lectures.size())) {
-            System.out.println("invalid input, try again!");
-            lectureIndex = scanner.nextLine();
-        }
+        LectureResource lecture = getLectureRessourceFromNumberedList(lectures);
 
-        EntryRessource entryRessource = new EntryRessource(start, end, EntryType.values()[Integer.parseInt(typeIndex)].name(), details, lectures.get(Integer.parseInt(lectureIndex)).getName());
+        EntryRessource entryRessource = new EntryRessource(start, end, EntryType.values()[Integer.parseInt(typeIndex)].name(), details, lecture.getName());
         AdditionalEntry additionalEntry = new AdditionalEntry(dataAdapter, dataPlugin);
-        additionalEntry.addEntry(this.uiAdapter.mapEntryRessourceToEntry(entryRessource), this.uiAdapter.mapLectureRessourceToLecture(lectures.get(Integer.parseInt(lectureIndex))));
+        additionalEntry.addEntry(this.uiAdapter.mapEntryRessourceToEntry(entryRessource), this.uiAdapter.mapLectureRessourceToLecture(lecture));
     }
 
     @Override
     public void addLecture() {
         //strings einlesen:   name, semester, lectureTime, selfStudyTime
-        String name, semester, lectureTime, selfStudyTime;
+        String name, lectureTime, selfStudyTime;
         System.out.println("Name of the lecture:");
         name = scanner.nextLine();
         System.out.println("choose the semester");
-        int counter = 0;
+
         List<SemesterRessource> semesterList = uiAdapter.getAllSemesters();
-        for (SemesterRessource s : semesterList) {
-            System.out.println(counter + ">" + s.getName());
-            counter++;
-        }
-        String semesterIndex = scanner.nextLine();
-        while (!isInputValidNumber(semesterIndex, semesterList.size())) {
-            System.out.println("invalid input, try again!");
-            semesterIndex = scanner.nextLine();
-        }
-        String semesterName = semesterList.get(Integer.parseInt(semesterIndex)).getName();
+        SemesterRessource semester = getSemesterRessourceFromNumberedList(semesterList);
+
         System.out.println("enter the official lecture time");
         lectureTime = scanner.nextLine();
         System.out.println("enter the ammount of time you are supposed to study on your own");
         selfStudyTime = scanner.nextLine();
 
-        LectureResource lectureResource = new LectureResource(name, semesterName, Integer.parseInt(lectureTime), Integer.parseInt(selfStudyTime));
+        LectureResource lectureResource = new LectureResource(name, semester.getName(), Integer.parseInt(lectureTime), Integer.parseInt(selfStudyTime));
         AdditionalLecture additionalLecture = new AdditionalLecture(dataAdapter, dataPlugin, this);
         additionalLecture.addLecture(this.uiAdapter.mapLectureRessourceToLecture(lectureResource));
     }
@@ -162,20 +144,11 @@ public class UITerminalPlugin implements UIPluginInterface {
     }
 
     private void getTimePerSemester() {
-        System.out.println("choose the semester");
-        int counter = 0;
+
         List<SemesterRessource> semesterList = uiAdapter.getAllSemesters();
-        for (SemesterRessource s : semesterList) {
-            System.out.println(counter + ">" + s.getName());
-            counter++;
-        }
-        String semesterIndex = scanner.nextLine();
-        while (!isInputValidNumber(semesterIndex, semesterList.size())) {
-            System.out.println("invalid input, try again!");
-            semesterIndex = scanner.nextLine();
-        }
+        SemesterRessource semester = getSemesterRessourceFromNumberedList(semesterList);
         Analysis analysis = new Analysis(dataAdapter, dataPlugin);
-        Duration duration = analysis.getTimePerSemester(dataAdapter.mapSemesterRessourceToSemester(semesterList.get(Integer.parseInt(semesterIndex))));
+        Duration duration = analysis.getTimePerSemester(dataAdapter.mapSemesterRessourceToSemester(semester));
         System.out.println(uiAdapter.formatDuration(duration));
     }
 
@@ -193,21 +166,10 @@ public class UITerminalPlugin implements UIPluginInterface {
 
     private void getTimePerLecture() {
         Analysis analysis = new Analysis(dataAdapter, dataPlugin);
-        System.out.println("choose a Lecture");
         List<LectureResource> lectures = uiAdapter.getAllLecturesOfCurrentSemester();
-        int counter = 0;
-        for (LectureResource l : lectures) {
-            System.out.println(counter + ">" + l.getName());
-            counter++;
-        }
+        LectureResource lecture = getLectureRessourceFromNumberedList(lectures);
 
-        String lectureIndex = scanner.nextLine();
-        while (!isInputValidNumber(lectureIndex, lectures.size())) {
-            System.out.println("invalid input, try again!");
-            lectureIndex = scanner.nextLine();
-        }
-
-        analysis.getTimeSpentForLecture(dataAdapter.mapLectureRessourceToLecture(lectures.get(Integer.parseInt(lectureIndex))));
+        analysis.getTimeSpentForLecture(dataAdapter.mapLectureRessourceToLecture(lecture));
     }
 
     private void addSemester() {
@@ -233,6 +195,52 @@ public class UITerminalPlugin implements UIPluginInterface {
         }
         int inputAsInt = Integer.parseInt(input);
         return inputAsInt < expectedRange && inputAsInt >= 0;
+    }
+
+    private String getListOfSemestersAsNumberedList(List<SemesterRessource> semesters) {
+        String listAsString = "";
+        if (semesters.isEmpty()) {
+            return "No semesters found. Please create a semester";
+        }
+        for (int i = 0; i < semesters.size(); i++) {
+            listAsString = listAsString.concat("\n" + i + "> " + semesters.get(i).getName());
+        }
+        return listAsString;
+    }
+
+    private SemesterRessource getSemesterRessourceFromNumberedList(List<SemesterRessource> semesters) {
+        System.out.println("choose a semester from the list");
+        System.out.println(getListOfSemestersAsNumberedList(semesters));
+
+        String lectureIndex = scanner.nextLine();
+        while (!isInputValidNumber(lectureIndex, semesters.size())) {
+            System.out.println("invalid input, try again!");
+            lectureIndex = scanner.nextLine();
+        }
+        return semesters.get(Integer.parseInt(lectureIndex));
+    }
+
+    private String getListOfLecturesAsNumberedList(List<LectureResource> lectures) {
+        String listAsString = "";
+        if (lectures.isEmpty()) {
+            return "No lectures found. Please create a lecture";
+        }
+        for (int i = 0; i < lectures.size(); i++) {
+            listAsString = listAsString.concat("\n" + i + "> " + lectures.get(i).getName());
+        }
+        return listAsString;
+    }
+
+    private LectureResource getLectureRessourceFromNumberedList(List<LectureResource> lectures) {
+        System.out.println("choose a lecture from the list");
+        System.out.println(getListOfLecturesAsNumberedList(lectures));
+
+        String lectureIndex = scanner.nextLine();
+        while (!isInputValidNumber(lectureIndex, lectures.size())) {
+            System.out.println("invalid input, try again!");
+            lectureIndex = scanner.nextLine();
+        }
+        return lectures.get(Integer.parseInt(lectureIndex));
     }
 
 }
