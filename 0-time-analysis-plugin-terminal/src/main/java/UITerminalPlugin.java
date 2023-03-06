@@ -64,7 +64,7 @@ public class UITerminalPlugin implements UIPluginInterface {
         String details = scanner.nextLine();
 
         GetLectures getLectureUseCase = new GetLectures(dataAdapter, dataPlugin);
-        List<LectureResource> lectures = getLectureUseCase.getLectures().stream().map(lecture -> this.dataAdapter.mapLectureToLectureRessource(lecture)).collect(Collectors.toList());
+        List<LectureResource> lectures = getLectureUseCase.getLectures().stream().map(lecture -> this.uiAdapter.mapLectureToLectureRessource(lecture)).collect(Collectors.toList());
         LectureResource lecture = getLectureRessourceFromNumberedList(lectures);
 
         EntryRessource entryRessource = new EntryRessource(start, end, EntryType.values()[Integer.parseInt(typeIndex)].name(), details, lecture.getName());
@@ -80,7 +80,7 @@ public class UITerminalPlugin implements UIPluginInterface {
         name = scanner.nextLine();
         System.out.println("choose the semester");
         GetSemesters getSemestersUseCase = new GetSemesters(dataAdapter, dataPlugin);
-        List<SemesterRessource> semesterList = getSemestersUseCase.getSemesters().stream().map(semesterRessource -> this.dataAdapter.mapSemesterToSemesterRessource(semesterRessource)).collect(Collectors.toList());
+        List<SemesterRessource> semesterList = getSemestersUseCase.getSemesters().stream().map(semesterRessource -> this.uiAdapter.mapSemesterToSemesterRessource(semesterRessource)).collect(Collectors.toList());
         SemesterRessource semester = getSemesterRessourceFromNumberedList(semesterList);
 
         System.out.println("enter the official lecture time");
@@ -143,10 +143,10 @@ public class UITerminalPlugin implements UIPluginInterface {
     private void getTimePerSemester() {
 
         GetSemesters getSemestersUseCase = new GetSemesters(dataAdapter, dataPlugin);
-        List<SemesterRessource> semesterList = getSemestersUseCase.getSemesters().stream().map(semesterRessource -> this.dataAdapter.mapSemesterToSemesterRessource(semesterRessource)).collect(Collectors.toList());
+        List<SemesterRessource> semesterList = getSemestersUseCase.getSemesters().stream().map(semesterRessource -> this.uiAdapter.mapSemesterToSemesterRessource(semesterRessource)).collect(Collectors.toList());
         SemesterRessource semester = getSemesterRessourceFromNumberedList(semesterList);
         Analysis analysis = new Analysis(dataAdapter, dataPlugin);
-        Duration duration = analysis.getTimePerSemester(dataAdapter.mapSemesterRessourceToSemester(semester));
+        Duration duration = analysis.getTimePerSemester(uiAdapter.mapSemesterRessourceToSemester(semester));
         System.out.println(uiAdapter.formatDuration(duration));
     }
 
@@ -165,10 +165,10 @@ public class UITerminalPlugin implements UIPluginInterface {
     private void getTimePerLecture() {
         Analysis analysis = new Analysis(dataAdapter, dataPlugin);
         GetLectures getLectureUseCase = new GetLectures(dataAdapter, dataPlugin);
-        List<LectureResource> lectures = getLectureUseCase.getLectures().stream().map(lecture -> this.dataAdapter.mapLectureToLectureRessource(lecture)).collect(Collectors.toList());
+        List<LectureResource> lectures = getLectureUseCase.getLectures().stream().map(lecture -> this.uiAdapter.mapLectureToLectureRessource(lecture)).collect(Collectors.toList());
         LectureResource lecture = getLectureRessourceFromNumberedList(lectures);
 
-        analysis.getTimeSpentForLecture(dataAdapter.mapLectureRessourceToLecture(lecture));
+        analysis.getTimeSpentForLecture(uiAdapter.mapLectureRessourceToLecture(lecture));
     }
 
     private void addSemester() {
@@ -181,7 +181,7 @@ public class UITerminalPlugin implements UIPluginInterface {
 
         AdditionalSemester additionalSemester = new AdditionalSemester(dataAdapter, dataPlugin, this);
         SemesterRessource semesterRessource = new SemesterRessource(name, start, end);
-        additionalSemester.addSemester(dataAdapter.mapSemesterRessourceToSemester(semesterRessource));
+        additionalSemester.addSemester(uiAdapter.mapSemesterRessourceToSemester(semesterRessource));
     }
 
 

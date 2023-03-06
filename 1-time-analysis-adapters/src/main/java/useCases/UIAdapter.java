@@ -21,40 +21,20 @@ import java.util.Map;
 
 public class UIAdapter implements UIAdapterInterface {
 
-    private DataPluginInterface dataPlugin;
+
+    private BaseAdapter baseAdapter;
 
     public UIAdapter(DataPluginInterface dataPlugin) {
-        this.dataPlugin = dataPlugin;
+        this.baseAdapter = new BaseAdapter(dataPlugin);
     }
 
 
     public Lecture mapLectureRessourceToLecture(LectureResource lectureResource) {
-        String name = lectureResource.getName();
-        int lectureTime = lectureResource.getLectureTime();
-        int selfStudyTime = lectureResource.getSelfStudyTime();
-        String semester = lectureResource.getSemester(); //todo wie kommt man hier vom index des Semester an das SemesterObjekt
-        Semester TEMPSEMESTER = new Semester(semester, LocalDate.now(), LocalDate.now()); //todo entfernen, "echtes" Semester hohlen
-        return new Lecture(name, TEMPSEMESTER, lectureTime, selfStudyTime);
+        return baseAdapter.mapLectureRessourceToLecture(lectureResource);
     }
 
     public Entry mapEntryRessourceToEntry(EntryRessource entryRessource) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"); //example for correct date: 2023-01-31 09:05
-        LocalDateTime start = LocalDateTime.parse(entryRessource.getStart(), formatter);
-        LocalDateTime end = LocalDateTime.parse(entryRessource.getEnd(), formatter);
-
-        Lecture lecture = new Lecture(entryRessource.getLecture(), new Semester("MOCKSEMESTER", LocalDate.now(), LocalDate.now()), 1, 1); //todo remove
-        Entry entry = new Entry(start, EntryType.valueOf(entryRessource.getType()), lecture);
-        entry.finishEntry(end, entryRessource.getDetails());
-        return entry;
-    }
-
-    public List<LectureResource> getAllLecturesOfCurrentSemester() {
-        //return List.of("BWL", "Evo-Alg"); //todo zugriff auf dataadapter oder auf (neuen) usecase??
-        return dataPlugin.getLectures();
-    }
-
-    public List<SemesterRessource> getAllSemesters() {
-        return dataPlugin.getSemesters();
+        return baseAdapter.mapEntryRessourceToEntry(entryRessource);
     }
 
     public String formatLocalDateTime(LocalDateTime time) {
@@ -65,5 +45,20 @@ public class UIAdapter implements UIAdapterInterface {
     @Override
     public String formatDuration(Duration duration) {
         return String.format("%s Days %s Hours %s Minutes %s Seconds", duration.toDaysPart(), duration.toHoursPart(), duration.toMinutesPart(), duration.toSecondsPart());
+    }
+
+    @Override
+    public Semester mapSemesterRessourceToSemester(SemesterRessource semesterRessource) {
+        return baseAdapter.mapSemesterRessourceToSemester(semesterRessource);
+    }
+
+    @Override
+    public LectureResource mapLectureToLectureRessource(Lecture lecture) {
+        return baseAdapter.mapLectureToLectureRessource(lecture);
+    }
+
+    @Override
+    public SemesterRessource mapSemesterToSemesterRessource(Semester semester) {
+        return baseAdapter.mapSemesterToSemesterRessource(semester);
     }
 }

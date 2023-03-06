@@ -2,6 +2,7 @@ package Interfaces;
 
 import de.models.Entry;
 import de.models.Lecture;
+import de.models.Semester;
 import ressourceModels.EntryRessource;
 import ressourceModels.LectureResource;
 import ressourceModels.SemesterRessource;
@@ -15,12 +16,14 @@ public interface UIAdapterInterface {
     Lecture mapLectureRessourceToLecture(LectureResource lectureResource);
 
     Entry mapEntryRessourceToEntry(EntryRessource entryRessource);
-
-    List<LectureResource> getAllLecturesOfCurrentSemester();
-
-    List<SemesterRessource> getAllSemesters();
-
+    
     String formatLocalDateTime(LocalDateTime time);
 
     String formatDuration(Duration duration);
+
+    Semester mapSemesterRessourceToSemester(SemesterRessource semesterRessource);
+
+    LectureResource mapLectureToLectureRessource(Lecture lecture);
+
+    SemesterRessource mapSemesterToSemesterRessource(Semester semester);
 }

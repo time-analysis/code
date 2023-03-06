@@ -20,5 +20,4 @@ public interface DataAdapterInterface {
     Lecture mapLectureRessourceToLecture(LectureResource lectureResource);
 
     Entry mapEntryRessourceToEntry(EntryRessource entryRessource);
-    //todo merge with uiAdapter?
 }
