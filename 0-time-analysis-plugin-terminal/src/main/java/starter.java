@@ -1,12 +1,9 @@
 import Interfaces.DataAdapterInterface;
 import Interfaces.DataPluginInterface;
 import Interfaces.UIAdapterInterface;
-import Interfaces.UIPluginInterface;
 import useCases.DataAdapter;
 import useCases.DataPlugin;
 import useCases.UIAdapter;
-
-import java.time.LocalDate;
 
 public class starter {
     public static void main(String[] args) {
