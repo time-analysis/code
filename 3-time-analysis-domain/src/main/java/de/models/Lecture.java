@@ -12,13 +12,15 @@ public final class Lecture {
 
     public Lecture(String name, Semester semester, int lectureTime, int selfStudyTime) {
         super();
+        if (Objects.isNull(name)) throw new IllegalStateException("name can not be null");
         if (name.length() == 0) {
-            throw new IllegalArgumentException("Name einer Vorlesung darf nicht leer sein!");
+            throw new IllegalArgumentException("Name of a lecture can not be empty");
         }
         this.name = name;
+        if (Objects.isNull(semester)) throw new IllegalStateException("semester can not be null");
         this.semester = semester;
         if (lectureTime < 0 || selfStudyTime < 0) {
-            throw new IllegalArgumentException("Zeit darf nicht kleiner Null sein!");
+            throw new IllegalArgumentException("Time can not be less then zero");
         }
         this.lectureTime = lectureTime;
         this.selfStudyTime = selfStudyTime;

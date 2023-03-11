@@ -11,9 +11,12 @@ public final class Semester {
 
     public Semester(String name, LocalDate start, LocalDate end) {
 
+        if (Objects.isNull(name)) throw new IllegalStateException("name can not be null");
+        if (Objects.isNull(start)) throw new IllegalStateException("start can not be null");
+        if (Objects.isNull(end)) throw new IllegalStateException("end can not be null");
         if (start.isAfter(end)) {
             throw new IllegalStateException("start cannot be after end");
-        } else if (name.length() <= 0) {
+        } else if (name.length() == 0) {
             throw new IllegalArgumentException("name must contain at least one letter");
         }
         this.name = name;

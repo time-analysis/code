@@ -13,9 +13,12 @@ public class Entry {
     private Lecture lecture;
 
     public Entry(LocalDateTime start, EntryType type, Lecture lecture) {
+        if (Objects.isNull(start)) throw new IllegalStateException("start can not be null");
+        if (Objects.isNull(type)) throw new IllegalStateException("type can not be null");
+        if (Objects.isNull(lecture)) throw new IllegalStateException("lecture can not be null");
         this.start = start;
         this.type = type;
-        this.lecture = lecture; //todo nullcheck for lecture?
+        this.lecture = lecture;
     }
 
     public LocalDateTime getStart() {
