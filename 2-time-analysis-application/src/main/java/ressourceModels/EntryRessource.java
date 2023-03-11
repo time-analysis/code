@@ -1,6 +1,6 @@
 package ressourceModels;
 
-public class EntryRessource {
+public class EntryRessource implements listeable {
     private String start;
     private String end;
     private String type;
@@ -73,4 +73,11 @@ public class EntryRessource {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String getDisplayName() {
+        return String.format("Entry of type %s started at %s for lecture %s",type,start,lecture);
+    }
+
+
 }

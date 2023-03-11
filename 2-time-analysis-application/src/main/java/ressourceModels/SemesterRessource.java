@@ -1,6 +1,6 @@
 package ressourceModels;
 
-public class SemesterRessource {
+public class SemesterRessource implements  listeable {
     private String name;
     private String start;
     private String end;
@@ -33,5 +33,10 @@ public class SemesterRessource {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return name;
     }
 }

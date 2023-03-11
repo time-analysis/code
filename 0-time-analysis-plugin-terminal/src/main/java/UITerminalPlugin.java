@@ -8,6 +8,7 @@ import de.models.EntryType;
 import ressourceModels.EntryRessource;
 import ressourceModels.LectureResource;
 import ressourceModels.SemesterRessource;
+import ressourceModels.listeable;
 import useCases.*;
 
 import java.time.Duration;
@@ -120,7 +121,7 @@ public class UITerminalPlugin implements UIPluginInterface {
 
         GetSemesters getSemestersUseCase = new GetSemesters(dataAdapter, dataPlugin);
         List<SemesterRessource> semesterList = uiAdapter.mapSemesterListToSemesterRessourceList(getSemestersUseCase.getSemesters());
-        SemesterRessource semester = getSemesterRessourceFromNumberedList(semesterList);
+        SemesterRessource semester = getObjectFromNumberedList(semesterList);
         Analysis analysis = new Analysis(dataAdapter, dataPlugin);
         Duration duration = analysis.getTimePerSemester(uiAdapter.mapSemesterRessourceToSemester(semester));
         System.out.println(uiAdapter.formatDuration(duration));
@@ -142,7 +143,7 @@ public class UITerminalPlugin implements UIPluginInterface {
         Analysis analysis = new Analysis(dataAdapter, dataPlugin);
         GetLectures getLectureUseCase = new GetLectures(dataAdapter, dataPlugin);
         List<LectureResource> lectures = uiAdapter.mapLectureListToLectureListRessource(getLectureUseCase.getLectures());
-        LectureResource lecture = getLectureRessourceFromNumberedList(lectures);
+        LectureResource lecture = getObjectFromNumberedList(lectures);
 
         SelfStudyTimeAndLectureTime time = analysis.getTimeSpentForLecture(lecture.getName());
         System.out.println("Planned SelfStudyTime: " + lecture.getSelfStudyTime() + " | Actual selfStudyTime: " + time.getSelfStudyTime());
@@ -163,7 +164,7 @@ public class UITerminalPlugin implements UIPluginInterface {
     private void getUnfinishedEntries() {
         GetEntries getEntries = new GetEntries(dataAdapter, dataPlugin);
         List<EntryRessource> unfinishedEntries = dataAdapter.mapEntryListToEntryRessourceList(getEntries.getUnfinishedEntries());
-        EntryRessource entryRessource = getEntryRessourceFromNumberedList(unfinishedEntries);
+        EntryRessource entryRessource = getObjectFromNumberedList(unfinishedEntries);
     }
 
 
@@ -194,14 +195,14 @@ public class UITerminalPlugin implements UIPluginInterface {
     private LectureResource getLectureForEntry() {
         GetLectures getLectureUseCase = new GetLectures(dataAdapter, dataPlugin);
         List<LectureResource> lectures = uiAdapter.mapLectureListToLectureListRessource(getLectureUseCase.getLectures());
-        return getLectureRessourceFromNumberedList(lectures);
+        return getObjectFromNumberedList(lectures);
     }
 
 
     private SemesterRessource getSemesterForLecture() {
         GetSemesters getSemestersUseCase = new GetSemesters(dataAdapter, dataPlugin);
         List<SemesterRessource> semesterList = uiAdapter.mapSemesterListToSemesterRessourceList(getSemestersUseCase.getSemesters());
-        return getSemesterRessourceFromNumberedList(semesterList);
+        return getObjectFromNumberedList(semesterList);
     }
 
 
@@ -236,75 +237,30 @@ public class UITerminalPlugin implements UIPluginInterface {
         int inputAsInt = Integer.parseInt(input);
         return inputAsInt < expectedRange && inputAsInt >= 0;
     }
-    //todo vielleicht diese listings generisch machen, zb alle ressource ein listeable interface implementieren lassn
 
-    private String getListOfEntriesAsNumberedList(List<EntryRessource> entryRessourceList) {
-        String listAsString = "";
-        if (entryRessourceList.isEmpty()) {
-            return "No entries found";
+
+    private <T extends listeable> T getObjectFromNumberedList(List<T> list) {
+        if(list.isEmpty()){
+            System.out.println("no items found");
+        }else{
+            System.out.println("choose an item from the list");
         }
-        for (int i = 0; i < entryRessourceList.size(); i++) {
-            listAsString = listAsString.concat("\n" + i + "> " + entryRessourceList.get(i).getType() + "started at " + entryRessourceList.get(i).getStart());
-        }
-        return listAsString;
-    }
+        System.out.println(getListOfObjectsAsNumberedList(list));
 
-    private EntryRessource getEntryRessourceFromNumberedList(List<EntryRessource> entryRessourceList) {
-        System.out.println("choose an entry from the list");
-        System.out.println(getListOfEntriesAsNumberedList(entryRessourceList));
-
-        String lectureIndex = scanner.nextLine();
-        while (!isInputValidNumber(lectureIndex, entryRessourceList.size())) {
+        String index = scanner.nextLine();
+        while (!isInputValidNumber(index, list.size())) {
             System.out.println("invalid input, try again!");
-            lectureIndex = scanner.nextLine();
+            index = scanner.nextLine();
         }
-        return entryRessourceList.get(Integer.parseInt(lectureIndex));
+        return list.get(Integer.parseInt(index));
     }
 
-    private String getListOfSemestersAsNumberedList(List<SemesterRessource> semesters) {
-        String listAsString = "";
-        if (semesters.isEmpty()) {
-            return "No semesters found. Please create a semester";
+    private <T extends listeable> String getListOfObjectsAsNumberedList(List<T> list) {
+        String toReturn = "";
+        for (int i = 0; i < list.size(); i++) {
+            toReturn = toReturn.concat(i + ">" + list.get(i).getDisplayName() + "\n");
         }
-        for (int i = 0; i < semesters.size(); i++) {
-            listAsString = listAsString.concat("\n" + i + "> " + semesters.get(i).getName());
-        }
-        return listAsString;
-    }
-
-    private SemesterRessource getSemesterRessourceFromNumberedList(List<SemesterRessource> semesters) {
-        System.out.println("choose a semester from the list");
-        System.out.println(getListOfSemestersAsNumberedList(semesters));
-
-        String lectureIndex = scanner.nextLine();
-        while (!isInputValidNumber(lectureIndex, semesters.size())) {
-            System.out.println("invalid input, try again!");
-            lectureIndex = scanner.nextLine();
-        }
-        return semesters.get(Integer.parseInt(lectureIndex));
-    }
-
-    private String getListOfLecturesAsNumberedList(List<LectureResource> lectures) {
-        String listAsString = "";
-        if (lectures.isEmpty()) {
-            return "No lectures found. Please create a lecture";
-        }
-        for (int i = 0; i < lectures.size(); i++) {
-            listAsString = listAsString.concat("\n" + i + "> " + lectures.get(i).getName());
-        }
-        return listAsString;
-    }
-
-    private LectureResource getLectureRessourceFromNumberedList(List<LectureResource> lectures) {
-        System.out.println("choose a lecture from the list");
-        System.out.println(getListOfLecturesAsNumberedList(lectures));
-
-        String lectureIndex = scanner.nextLine();
-        while (!isInputValidNumber(lectureIndex, lectures.size())) {
-            System.out.println("invalid input, try again!");
-            lectureIndex = scanner.nextLine();
-        }
-        return lectures.get(Integer.parseInt(lectureIndex));
+        return toReturn;
     }
 
     private String getEntryTypeFromNumberedList(EntryType[] entryTypes) {
@@ -327,5 +283,4 @@ public class UITerminalPlugin implements UIPluginInterface {
         }
         return toReturn;
     }
-
 }

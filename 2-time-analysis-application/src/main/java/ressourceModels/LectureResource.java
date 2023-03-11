@@ -1,6 +1,6 @@
 package ressourceModels;
 
-public class LectureResource {
+public class LectureResource implements listeable{
     private String name;
     private String semester;
     private int lectureTime;
@@ -46,5 +46,10 @@ public class LectureResource {
 
     public void setSelfStudyTime(int selfStudyTime) {
         this.selfStudyTime = selfStudyTime;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return name;
     }
 }
