@@ -6,9 +6,7 @@ import ressourceModels.EntryRessource;
 
 import java.io.*;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

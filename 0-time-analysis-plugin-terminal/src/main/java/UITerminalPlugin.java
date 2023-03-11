@@ -194,8 +194,8 @@ public class UITerminalPlugin implements UIPluginInterface {
         List<AnalysisResultForLecture> results = analysis.compareTimeTargetToActual();
         for (AnalysisResultForLecture l : results) {
             System.out.println(l.getLecture().getName());
-            System.out.println("Planned SelfStudyTime: " + l.getLecture().getSelfStudyTime() + " | Actual selfStudyTime: " + uiAdapter.formatDuration(l.getSelfStudyTimeAndLectureTime().getSelfStudyTime()));
-            System.out.println("Planned lectureTime: " + l.getLecture().getLectureTime() + " | Actual lectureTime: " + uiAdapter.formatDuration(l.getSelfStudyTimeAndLectureTime().getLectureTime()));
+            System.out.println("Planned SelfStudyTime: " + l.getLecture().getSelfStudyTime() + " Hours | Actual selfStudyTime: " + uiAdapter.formatDuration(l.getSelfStudyTimeAndLectureTime().getSelfStudyTime()));
+            System.out.println("Planned lectureTime: " + l.getLecture().getLectureTime() + " Hours | Actual lectureTime: " + uiAdapter.formatDuration(l.getSelfStudyTimeAndLectureTime().getLectureTime()));
         }
     }
 
