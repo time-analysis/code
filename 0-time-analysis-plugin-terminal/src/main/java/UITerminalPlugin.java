@@ -121,7 +121,7 @@ public class UITerminalPlugin implements UIPluginInterface {
 
         GetSemesters getSemestersUseCase = new GetSemesters(dataAdapter, dataPlugin);
         List<SemesterRessource> semesterList = uiAdapter.mapSemesterListToSemesterRessourceList(getSemestersUseCase.getSemesters());
-        SemesterRessource semester = getObjectFromNumberedList(semesterList);
+        SemesterRessource semester = getObjectFromNumberedList(semesterList,"no semesters found. Start by creating a semester");
         Analysis analysis = new Analysis(dataAdapter, dataPlugin);
         Duration duration = analysis.getTimePerSemester(uiAdapter.mapSemesterRessourceToSemester(semester));
         System.out.println(uiAdapter.formatDuration(duration));
@@ -143,11 +143,11 @@ public class UITerminalPlugin implements UIPluginInterface {
         Analysis analysis = new Analysis(dataAdapter, dataPlugin);
         GetLectures getLectureUseCase = new GetLectures(dataAdapter, dataPlugin);
         List<LectureResource> lectures = uiAdapter.mapLectureListToLectureListRessource(getLectureUseCase.getLectures());
-        LectureResource lecture = getObjectFromNumberedList(lectures);
+        LectureResource lecture = getObjectFromNumberedList(lectures,"no lectures found. Start by creating a lecture");
 
         SelfStudyTimeAndLectureTime time = analysis.getTimeSpentForLecture(lecture.getName());
-        System.out.println("Planned SelfStudyTime: " + lecture.getSelfStudyTime() + " | Actual selfStudyTime: " + time.getSelfStudyTime());
-        System.out.println("Planned lectureTime: " + lecture.getLectureTime() + " | Actual lectureTime: " + time.getLectureTime());
+        System.out.println("Planned SelfStudyTime: " + lecture.getSelfStudyTime() + " Hours | Actual selfStudyTime: " + uiAdapter.formatDuration(time.getSelfStudyTime()));
+        System.out.println("Planned lectureTime: " + lecture.getLectureTime() + " Hours | Actual lectureTime: " + uiAdapter.formatDuration(time.getLectureTime()));
     }
 
 
@@ -164,7 +164,7 @@ public class UITerminalPlugin implements UIPluginInterface {
     private void getUnfinishedEntries() {
         GetEntries getEntries = new GetEntries(dataAdapter, dataPlugin);
         List<EntryRessource> unfinishedEntries = dataAdapter.mapEntryListToEntryRessourceList(getEntries.getUnfinishedEntries());
-        EntryRessource entryRessource = getObjectFromNumberedList(unfinishedEntries);
+        EntryRessource entryRessource = getObjectFromNumberedList(unfinishedEntries,"no unfinished entries found");
     }
 
 
@@ -195,14 +195,14 @@ public class UITerminalPlugin implements UIPluginInterface {
     private LectureResource getLectureForEntry() {
         GetLectures getLectureUseCase = new GetLectures(dataAdapter, dataPlugin);
         List<LectureResource> lectures = uiAdapter.mapLectureListToLectureListRessource(getLectureUseCase.getLectures());
-        return getObjectFromNumberedList(lectures);
+        return getObjectFromNumberedList(lectures,"no lectures found. Start by creating a lecture");
     }
 
 
     private SemesterRessource getSemesterForLecture() {
         GetSemesters getSemestersUseCase = new GetSemesters(dataAdapter, dataPlugin);
         List<SemesterRessource> semesterList = uiAdapter.mapSemesterListToSemesterRessourceList(getSemestersUseCase.getSemesters());
-        return getObjectFromNumberedList(semesterList);
+        return getObjectFromNumberedList(semesterList, "no semesters found. Start by creating a semester");
     }
 
 
@@ -239,9 +239,9 @@ public class UITerminalPlugin implements UIPluginInterface {
     }
 
 
-    private <T extends listeable> T getObjectFromNumberedList(List<T> list) {
+    private <T extends listeable> T getObjectFromNumberedList(List<T> list,String listIsEmptyMessage) {
         if(list.isEmpty()){
-            System.out.println("no items found");
+            System.out.println(listIsEmptyMessage);
         }else{
             System.out.println("choose an item from the list");
         }
