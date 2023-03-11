@@ -1,5 +1,6 @@
 package Interfaces;
 
+import FilterCriteria.EntryFilterCriteria;
 import ressourceModels.EntryRessource;
 import ressourceModels.LectureResource;
 import ressourceModels.SemesterRessource;
@@ -23,7 +24,7 @@ public interface DataPluginInterface {
 
     List<SemesterRessource> getSemesters();
 
-    List<EntryRessource> getEntrysByLectureName(String lectureResource);
-
     List<EntryRessource> getEntrys();
+
+    List<EntryRessource> getEntrys(EntryFilterCriteria criteria);
 }

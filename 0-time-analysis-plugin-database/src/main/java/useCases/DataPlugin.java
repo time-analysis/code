@@ -1,17 +1,17 @@
 package useCases;
 
 import Interfaces.DataPluginInterface;
-import Interfaces.UIPluginInterface;
 import ressourceModels.EntryRessource;
 import ressourceModels.LectureResource;
 import ressourceModels.SemesterRessource;
+import FilterCriteria.EntryFilterCriteria;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DataPlugin implements DataPluginInterface {
     private String entryFileName;
@@ -57,7 +57,7 @@ public class DataPlugin implements DataPluginInterface {
     @Override
     public void persistLecture(LectureResource lectureResource) {
         Optional<LectureResource> lectureResourceOptional = getLectureByName(sanitizeInputForCSVFormat(lectureResource.getName()));
-        if(lectureResourceOptional.isPresent()){
+        if (lectureResourceOptional.isPresent()) {
             System.out.println("A lecture with this name already exists");
             return;
         }
@@ -79,7 +79,7 @@ public class DataPlugin implements DataPluginInterface {
     @Override
     public void persistSemester(SemesterRessource semester) {
         Optional<SemesterRessource> semesterRessourceOptional = getSemesterByName(sanitizeInputForCSVFormat(semester.getName()));
-        if(semesterRessourceOptional.isPresent()){
+        if (semesterRessourceOptional.isPresent()) {
             System.out.println("A Semester with this name already exists");
             return;
         }
@@ -130,11 +130,6 @@ public class DataPlugin implements DataPluginInterface {
     }
 
     @Override
-    public List<EntryRessource> getEntrysByLectureName(String lectureResource) {
-        return getEntrys().stream().filter(entry -> entry.getLecture().equals(lectureResource)).collect(Collectors.toList());
-    }
-
-    @Override
     public List<EntryRessource> getEntrys() {
         List<EntryRessource> entryList;
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(entryFileName))) {
@@ -181,5 +176,17 @@ public class DataPlugin implements DataPluginInterface {
         String start = split[1];
         String end = split[2];
         return new SemesterRessource(name, start, end);
+    }
+
+    public List<EntryRessource> getEntrys(EntryFilterCriteria filterCriteria) {
+        List<EntryRessource> entries = getEntrys();
+        Stream<EntryRessource> entryRessourceStream = entries.stream();
+        if (!Objects.isNull(filterCriteria.getEntryType())) {
+            entryRessourceStream = entryRessourceStream.filter(lecture -> lecture.getType().equals(filterCriteria.getEntryType().name()));
+        }
+        if (!Objects.isNull(filterCriteria.getLectureName())) {
+            entryRessourceStream = entryRessourceStream.filter(lecture -> lecture.getLecture().equals(filterCriteria.getLectureName()));
+        }
+        return entryRessourceStream.collect(Collectors.toList());
     }
 }

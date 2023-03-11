@@ -1,7 +1,11 @@
 package useCases;
 
+import FilterCriteria.EntryFilterCriteria;
+import FilterCriteria.EntryFilterCriteriaBuilder;
 import Interfaces.DataAdapterInterface;
 import Interfaces.DataPluginInterface;
+import TransferModels.AnalysisResultForLecture;
+import TransferModels.SelfStudyTimeAndLectureTime;
 import de.models.Entry;
 import de.models.EntryType;
 import de.models.Lecture;
@@ -23,52 +27,52 @@ public class Analysis {
         this.dataPlugin = dataPlugin;
     }
 
-    public void getTimeSpentForLecture(Lecture lecture) {
-        List<EntryRessource> entryRessourceList = dataPlugin.getEntrysByLectureName(this.dataAdapter.mapLectureToLectureRessource(lecture).getName());
-        List<Entry> entryList = new ArrayList<Entry>();
-        entryRessourceList.forEach(entryRessource -> entryList.add(this.dataAdapter.mapEntryRessourceToEntry(entryRessource)));
+    public SelfStudyTimeAndLectureTime getTimeSpentForLecture(String lectureName) {
+        EntryFilterCriteriaBuilder filterCriteriaBuilder = new EntryFilterCriteriaBuilder();
+        EntryFilterCriteria criteriaForSelfStudyTime = filterCriteriaBuilder.withLectureName(lectureName).withType(EntryType.SELFSTUDY).build();
+        EntryFilterCriteria criteriaForLectureTime = filterCriteriaBuilder.withLectureName(lectureName).withType(EntryType.LECTURE).build();
+
+        List<Entry> entryRessourcesWithSelfStudyType = dataPlugin.getEntrys(criteriaForSelfStudyTime).stream().map(dataAdapter::mapEntryRessourceToEntry).collect(Collectors.toList());
+        List<Entry> entryRessourcesWithLectureType = dataPlugin.getEntrys(criteriaForLectureTime).stream().map(dataAdapter::mapEntryRessourceToEntry).collect(Collectors.toList());
+
         Duration selfStudyTime, lectureTime;
-        selfStudyTime = entryList.stream().filter(entry -> entry.getType().equals(EntryType.SELFSTUDY)).map(Entry::calculateDuration).reduce(Duration::plus).get(); //todo wo gehören solche filtermethoden hin? wo zieht man die grenze zum plugin?
-        lectureTime = entryList.stream().filter(entry -> entry.getType().equals(EntryType.LECTURE)).map(Entry::calculateDuration).reduce(Duration::plus).get();
-        //todo wie brauche ich hierfür eigene RückgabeObjekte?
+        lectureTime = entryRessourcesWithLectureType.stream().map(Entry::calculateDuration).reduce(Duration::plus).orElse(Duration.ZERO);
+        selfStudyTime = entryRessourcesWithSelfStudyType.stream().map(Entry::calculateDuration).reduce(Duration::plus).orElse(Duration.ZERO);
+        return new SelfStudyTimeAndLectureTime(selfStudyTime, lectureTime);
     }
 
     public Duration getPresenceTime() {
-        List<EntryRessource> entryRessourceList = dataPlugin.getEntrys();
-        List<Entry> entryList = new ArrayList<>();
-        entryRessourceList.forEach(entryRessource -> entryList.add(this.dataAdapter.mapEntryRessourceToEntry(entryRessource)));
-        Duration presenceTime = entryList.stream().filter(entry -> entry.getType().equals(EntryType.LECTURE)).map(Entry::calculateDuration).reduce(Duration::plus).get();
-        return presenceTime;
+        EntryFilterCriteriaBuilder filterCriteriaBuilder = new EntryFilterCriteriaBuilder();
+        EntryFilterCriteria criteria = filterCriteriaBuilder.withType(EntryType.LECTURE).build();
+
+        List<Entry> entryList = dataPlugin.getEntrys(criteria).stream().map(dataAdapter::mapEntryRessourceToEntry).collect(Collectors.toList());
+
+        return entryList.stream().map(Entry::calculateDuration).reduce(Duration::plus).orElse(Duration.ZERO);
     }
 
     public Duration getStudyTime() {
-        List<EntryRessource> entryRessourceList = dataPlugin.getEntrys();
-        List<Entry> entryList = new ArrayList<>();
-        entryRessourceList.forEach(entryRessource -> entryList.add(this.dataAdapter.mapEntryRessourceToEntry(entryRessource)));
-        Duration studyTime = entryList.stream().filter(entry -> entry.getType().equals(EntryType.SELFSTUDY)).map(Entry::calculateDuration).reduce(Duration::plus).get();
-        return studyTime;
+        EntryFilterCriteriaBuilder filterCriteriaBuilder = new EntryFilterCriteriaBuilder();
+        EntryFilterCriteria criteria = filterCriteriaBuilder.withType(EntryType.SELFSTUDY).build();
+
+        List<Entry> entryList = dataPlugin.getEntrys(criteria).stream().map(dataAdapter::mapEntryRessourceToEntry).collect(Collectors.toList());
+
+        return entryList.stream().map(Entry::calculateDuration).reduce(Duration::plus).orElse(Duration.ZERO);
     }
 
     public Duration getTimePerSemester(Semester semester) {
         List<EntryRessource> entryRessourceList = dataPlugin.getEntrys();
-        List<Entry> entryList = new ArrayList<>();
-        entryRessourceList.forEach(entryRessource -> entryList.add(this.dataAdapter.mapEntryRessourceToEntry(entryRessource)));
+        List<Entry> entryList = entryRessourceList.stream().map(dataAdapter::mapEntryRessourceToEntry).collect(Collectors.toList());
         Duration timePerSemester = entryList.stream().filter(entry -> entry.getLecture().getSemester().getName().equals(semester.getName())).map(Entry::calculateDuration).reduce(Duration::plus).get();
         return timePerSemester; //todo reicht java.duration oder braucht man ein eigenes objekt?
     }
 
-    public void compareTimeTargetToActual() {
+    public List<AnalysisResultForLecture> compareTimeTargetToActual() {
         List<Lecture> lectures = dataPlugin.getLectures().stream().map(dataAdapter::mapLectureRessourceToLecture).collect(Collectors.toList());
-        List<Entry> entryList = dataPlugin.getEntrys().stream().map(dataAdapter::mapEntryRessourceToEntry).collect(Collectors.toList());
-        for(Lecture l:lectures){
-            Optional<Duration> selfStudyTimeOpt = entryList.stream().filter(entry -> entry.getLecture().getName().equals(l.getName())).filter(entry -> entry.getType().equals(EntryType.SELFSTUDY)).map(Entry::calculateDuration).reduce(Duration::plus);
-            Optional<Duration> lectureTimeOpt =  entryList.stream().filter(entry -> entry.getLecture().getName().equals(l.getName())).filter(entry -> entry.getType().equals(EntryType.LECTURE)).map(Entry::calculateDuration).reduce(Duration::plus);
-            Duration selfStudyTime,lectureTime;
-            selfStudyTime = selfStudyTimeOpt.orElse(Duration.ZERO);
-            lectureTime = lectureTimeOpt.orElse(Duration.ZERO);
-            System.out.println(l.getName());
-            System.out.println("Planned SelfStudyTime: "+ l.getSelfStudyTime() +" | Actual selfStudyTime: " + selfStudyTime.toString());
-            System.out.println("Planned lectureTime: "+ l.getLectureTime() +" | Actual lectureTime: " + lectureTime.toString());
+        List<AnalysisResultForLecture> resultList = new ArrayList<>();
+        for (Lecture lecture : lectures) {
+            SelfStudyTimeAndLectureTime time = getTimeSpentForLecture(lecture.getName());
+            resultList.add(new AnalysisResultForLecture(dataAdapter.mapLectureToLectureRessource(lecture), time));
         }
+        return resultList;
     }
 }

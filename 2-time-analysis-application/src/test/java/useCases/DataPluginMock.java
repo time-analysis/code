@@ -1,5 +1,6 @@
 package useCases;
 
+import FilterCriteria.EntryFilterCriteria;
 import Interfaces.DataPluginInterface;
 import ressourceModels.EntryRessource;
 import ressourceModels.LectureResource;
@@ -45,12 +46,12 @@ public class DataPluginMock implements DataPluginInterface {
     }
 
     @Override
-    public List<EntryRessource> getEntrysByLectureName(String lectureResource) {
+    public List<EntryRessource> getEntrys() {
         return null;
     }
 
     @Override
-    public List<EntryRessource> getEntrys() {
+    public List<EntryRessource> getEntrys(EntryFilterCriteria criteria) {
         return null;
     }
 }
