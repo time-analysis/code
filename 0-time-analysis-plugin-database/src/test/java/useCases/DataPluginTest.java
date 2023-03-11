@@ -1,5 +1,6 @@
 package useCases;
 
+import de.models.EntryStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ressourceModels.EntryRessource;
@@ -46,7 +47,7 @@ class DataPluginTest {
     void writeData() {
         LocalDateTime time = LocalDateTime.now();
 
-        plugin.persistEntry(new EntryRessource(time.toString(), time.toString(), "LECTURE", "weitere Informationen", "Testvorlesung"));
+        plugin.persistEntry(new EntryRessource(time.toString(), time.toString(), "LECTURE", "weitere Informationen", "Testvorlesung", "FINISHED"));
         String assumed = "Testvorlesung," + time + "," + time + ",LECTURE,weitere Informationen";
         String fromFile;
         try {

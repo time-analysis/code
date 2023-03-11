@@ -5,6 +5,8 @@ import Interfaces.DataPluginInterface;
 import de.models.Entry;
 import de.models.Lecture;
 
+import java.time.LocalDateTime;
+
 public class AdditionalEntry {
     private DataAdapterInterface dataAdapter;
     private DataPluginInterface dataPlugin;
@@ -15,9 +17,16 @@ public class AdditionalEntry {
     }
 
     public void addEntry(Entry entry, Lecture lecture) {
-        Entry entryWithLecture = new Entry(entry.getStart(), entry.getType(), lecture);
-        entryWithLecture.finishEntry(entry.getEnd(), entry.getDetails());
+        Entry entryWithLecture = new Entry(entry.getStart(), entry.getEnd(), entry.getType(), lecture, entry.getDetails());
         dataPlugin.persistEntry(dataAdapter.mapEntryToEntryRessource(entryWithLecture));
+    }
+
+    public void startEntry(Entry entry) {
+
+    }
+
+    public void finishEntry(Entry entry, LocalDateTime end, String details) {
+
     }
 
 }

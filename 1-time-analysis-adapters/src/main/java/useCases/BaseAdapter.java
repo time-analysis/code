@@ -32,7 +32,8 @@ public class BaseAdapter {
         String type = entry.getType().name();
         String lecture = entry.getLecture().getName();
         String details = entry.getDetails();
-        return new EntryRessource(start, end, type, details, lecture);
+        String status = entry.getStatus().name();
+        return new EntryRessource(start, end, type, details, lecture, status);
     }
 
 

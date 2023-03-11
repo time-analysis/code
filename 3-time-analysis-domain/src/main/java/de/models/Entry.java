@@ -11,6 +11,7 @@ public class Entry {
     private EntryType type;
     private String details;
     private Lecture lecture;
+    private EntryStatus status;
 
     public Entry(LocalDateTime start, EntryType type, Lecture lecture) {
         if (Objects.isNull(start)) throw new IllegalStateException("start can not be null");
@@ -19,6 +20,12 @@ public class Entry {
         this.start = start;
         this.type = type;
         this.lecture = lecture;
+        this.status = EntryStatus.RUNNING;
+    }
+
+    public Entry(LocalDateTime start, LocalDateTime end, EntryType type, Lecture lecture, String details) {
+        this(start, type, lecture);
+        finishEntry(end, details);
     }
 
     public LocalDateTime getStart() {
@@ -41,11 +48,16 @@ public class Entry {
         return lecture;
     }
 
+    public EntryStatus getStatus() {
+        return status;
+    }
+
     public void finishEntry(LocalDateTime end, String details) {
+        if (Objects.isNull(end)) throw new IllegalStateException("end can not be null");
         if (start.isAfter(end)) {
             throw new IllegalStateException();
         }
-        if (Objects.isNull(this.end)) {
+        if (Objects.isNull(this.end) && status.equals(EntryStatus.RUNNING)) {
             this.end = end;
         } else {
             System.out.println("end is already set!");
@@ -55,7 +67,7 @@ public class Entry {
         } else {
             this.details = details;
         }
-
+        this.status = EntryStatus.FINISHED;
     }
 
     public Duration calculateDuration() {

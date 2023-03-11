@@ -167,7 +167,8 @@ public class DataPlugin implements DataPluginInterface {
         String end = split[2];
         String type = split[3];
         String details = split[4];
-        return new EntryRessource(start, end, type, details, lecture);
+        String status = split[5];
+        return new EntryRessource(start, end, type, details, lecture, status);
     }
 
     private SemesterRessource parseStringToSemesterRessource(String semesterCSVInput) {

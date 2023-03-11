@@ -6,13 +6,15 @@ public class EntryRessource {
     private String type;
     private String details;
     private String lecture;
+    private String status;
 
-    public EntryRessource(String start, String end, String type, String details, String lecture) {
+    public EntryRessource(String start, String end, String type, String details, String lecture, String status) {
         this.start = start;
         this.end = end;
         this.type = type;
         this.details = details;
         this.lecture = lecture;
+        this.status = status;
     }
 
     public EntryRessource() {
@@ -57,5 +59,13 @@ public class EntryRessource {
 
     public void setLecture(String lecture) {
         this.lecture = lecture;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

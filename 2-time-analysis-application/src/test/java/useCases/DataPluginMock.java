@@ -52,6 +52,6 @@ public class DataPluginMock implements DataPluginInterface {
 
     @Override
     public List<EntryRessource> getEntrys(EntryFilterCriteria criteria) {
-        return List.of(new EntryRessource("2023-01-01 10:00", "2023-01-01 12:00", "SELFSTUDY", "details", "meineVL"));
+        return null;
     }
 }
