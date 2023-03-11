@@ -30,68 +30,73 @@ public class UITerminalPlugin implements UIPluginInterface {
 
     @Override
     public void addEntryByTimeStamp() {
-        //get lecture
-        //create entry: start,end, type,details
-        //create entry: start timer, stop timer, type, details
 
+        String start = getStartTimeForEntry();
 
-        System.out.println("Start time (press \"n\" to use current time)");
-        String start = scanner.nextLine();
+        System.out.println("You can either enter a finishing time now or later");
+        System.out.println("1> Finish now\n2> Finish later");
+        String finishOption = scanner.nextLine();
+        String end, details;
+        end = "";
+        details = "";
 
-        if (start.equals("n")) {
-            start = uiAdapter.formatLocalDateTime(LocalDateTime.now());
+        if (Integer.parseInt(finishOption) == 1) {
+            end = getEndTimeForEntry();
+            details = getStringFromInputWithPrompt("Details of study");
         }
+        String entryType = getEntryTypeForEntry();
+        LectureResource lecture = getLectureForEntry();
+
+        EntryRessource entryRessource = new EntryRessource(start, end, entryType, details, lecture.getName(), "FINISHED");
+        AdditionalEntry additionalEntry = new AdditionalEntry(dataAdapter, dataPlugin);
+        additionalEntry.addEntry(this.uiAdapter.mapEntryRessourceToEntry(entryRessource), this.uiAdapter.mapLectureRessourceToLecture(lecture));
+    }
+
+    private String getEndTimeForEntry() {
         System.out.println("End time (press \"n\" to use current time)");
         String end = scanner.nextLine();
         if (end.equals("n")) {
             end = uiAdapter.formatLocalDateTime(LocalDateTime.now());
         }
-        System.out.println("Type of study");
-        int counter = 0;
+        return end;
+    }
+
+    private String getEntryTypeForEntry() {
         GetEntryTypes getEntryTypesUseCase = new GetEntryTypes(dataAdapter, dataPlugin);
-        for (EntryType type : getEntryTypesUseCase.getEntryType()) {
-            System.out.println(counter + ">" + type.toString());
-            counter++;
-        }
+        EntryType[] entryTypes = getEntryTypesUseCase.getEntryType();
+        return getEntryTypeFromNumberedList(entryTypes);
+    }
 
-
-        String typeIndex = scanner.nextLine();
-        while (!isInputValidNumber(typeIndex, EntryType.values().length)) {
-            System.out.println("invalid input, try again!");
-            typeIndex = scanner.nextLine();
-        }
-
-        System.out.println("Details of study");
-        String details = scanner.nextLine();
-
+    private LectureResource getLectureForEntry() {
         GetLectures getLectureUseCase = new GetLectures(dataAdapter, dataPlugin);
         List<LectureResource> lectures = uiAdapter.mapLectureListToLectureListRessource(getLectureUseCase.getLectures());
-        LectureResource lecture = getLectureRessourceFromNumberedList(lectures);
-
-        EntryRessource entryRessource = new EntryRessource(start, end, EntryType.values()[Integer.parseInt(typeIndex)].name(), details, lecture.getName());
-        AdditionalEntry additionalEntry = new AdditionalEntry(dataAdapter, dataPlugin);
-        additionalEntry.addEntry(this.uiAdapter.mapEntryRessourceToEntry(entryRessource), this.uiAdapter.mapLectureRessourceToLecture(lecture));
+        return getLectureRessourceFromNumberedList(lectures);
     }
 
     @Override
     public void addLecture() {
         //strings einlesen:   name, semester, lectureTime, selfStudyTime
         String name, lectureTime, selfStudyTime;
-        System.out.println("Name of the lecture:");
-        name = scanner.nextLine();
-        System.out.println("choose the semester");
-        GetSemesters getSemestersUseCase = new GetSemesters(dataAdapter, dataPlugin);
-        List<SemesterRessource> semesterList = uiAdapter.mapSemesterListToSemesterRessourceList(getSemestersUseCase.getSemesters());
-        SemesterRessource semester = getSemesterRessourceFromNumberedList(semesterList);
-
-        System.out.println("enter the official lecture time");
-        lectureTime = scanner.nextLine();
-        System.out.println("enter the ammount of time you are supposed to study on your own");
-        selfStudyTime = scanner.nextLine();
+        name = getStringFromInputWithPrompt("Name of the lecture:");
+        lectureTime = getStringFromInputWithPrompt("enter the official lecture time");
+        selfStudyTime = getStringFromInputWithPrompt("enter the ammount of time you are supposed to study on your own");
+        SemesterRessource semester = getSemesterForLecture();
 
         LectureResource lectureResource = new LectureResource(name, semester.getName(), Integer.parseInt(lectureTime), Integer.parseInt(selfStudyTime));
         AdditionalLecture additionalLecture = new AdditionalLecture(dataAdapter, dataPlugin);
         additionalLecture.addLecture(this.uiAdapter.mapLectureRessourceToLecture(lectureResource));
+    }
+
+    private SemesterRessource getSemesterForLecture() {
+        GetSemesters getSemestersUseCase = new GetSemesters(dataAdapter, dataPlugin);
+        List<SemesterRessource> semesterList = uiAdapter.mapSemesterListToSemesterRessourceList(getSemestersUseCase.getSemesters());
+        return getSemesterRessourceFromNumberedList(semesterList);
+    }
+
+
+    private String getStringFromInputWithPrompt(String prompt) {
+        System.out.println(prompt);
+        return scanner.nextLine();
     }
 
     @Override
@@ -176,13 +181,10 @@ public class UITerminalPlugin implements UIPluginInterface {
     }
 
     private void addSemester() {
-        System.out.println("name of semester:");
-        String name = scanner.nextLine();
-        System.out.println("start date");
-        String start = scanner.nextLine();
-        System.out.println("end date");
-        String end = scanner.nextLine();
 
+        String name = getStringFromInputWithPrompt("name of semester:");
+        String start = getStringFromInputWithPrompt("start date for semester:");
+        String end = getStringFromInputWithPrompt("end date for semester:");
         AdditionalSemester additionalSemester = new AdditionalSemester(dataAdapter, dataPlugin);
         SemesterRessource semesterRessource = new SemesterRessource(name, start, end);
         additionalSemester.addSemester(uiAdapter.mapSemesterRessourceToSemester(semesterRessource));
@@ -196,6 +198,15 @@ public class UITerminalPlugin implements UIPluginInterface {
             System.out.println("Planned SelfStudyTime: " + l.getLecture().getSelfStudyTime() + " Hours | Actual selfStudyTime: " + uiAdapter.formatDuration(l.getSelfStudyTimeAndLectureTime().getSelfStudyTime()));
             System.out.println("Planned lectureTime: " + l.getLecture().getLectureTime() + " Hours | Actual lectureTime: " + uiAdapter.formatDuration(l.getSelfStudyTimeAndLectureTime().getLectureTime()));
         }
+    }
+
+    private String getStartTimeForEntry() {
+        System.out.println("Start time (press \"n\" to use current time)");
+        String start = scanner.nextLine();
+        if (start.equals("n")) {
+            start = uiAdapter.formatLocalDateTime(LocalDateTime.now());
+        }
+        return start;
     }
 
 
@@ -254,6 +265,27 @@ public class UITerminalPlugin implements UIPluginInterface {
             lectureIndex = scanner.nextLine();
         }
         return lectures.get(Integer.parseInt(lectureIndex));
+    }
+
+    private String getEntryTypeFromNumberedList(EntryType[] entryTypes) {
+        System.out.println("choose a study type");
+        System.out.println(getListOfEntrysAsNumberedList(entryTypes));
+
+        String entryIndex = scanner.nextLine();
+        while (!isInputValidNumber(entryIndex, entryTypes.length)) {
+            System.out.println("invalid input, try again!");
+            entryIndex = scanner.nextLine();
+        }
+        return entryTypes[Integer.parseInt(entryIndex)].name();
+    }
+
+    private String getListOfEntrysAsNumberedList(EntryType[] entryTypes) {
+        String toReturn = "";
+        for (int i = 0; i < entryTypes.length; i++) {
+            toReturn = toReturn.concat(i + ">" + entryTypes[i].toString() + "\n");
+
+        }
+        return toReturn;
     }
 
 }
