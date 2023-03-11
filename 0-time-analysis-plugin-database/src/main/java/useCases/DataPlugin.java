@@ -37,12 +37,13 @@ public class DataPlugin implements DataPluginInterface {
     public boolean persistEntry(EntryRessource entryRessource) {
 
         String csvEntry = String.format(
-                "%s,%s,%s,%s,%s"
+                "%s,%s,%s,%s,%s,%s"
                 , sanitizeInputForCSVFormat(entryRessource.getLecture())
                 , sanitizeInputForCSVFormat(entryRessource.getStart())
                 , sanitizeInputForCSVFormat(entryRessource.getEnd())
                 , sanitizeInputForCSVFormat(entryRessource.getType())
                 , sanitizeInputForCSVFormat(entryRessource.getDetails())
+                , entryRessource.getStatus()
         );
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(entryFileName, true))) {
             writer.write(csvEntry);
