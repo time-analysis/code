@@ -14,9 +14,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class DataAdapterMock implements DataAdapterInterface {
+    List<Entry> entryList;
+
+    public void setEntryListToReturnWhenMapEntryRessourceListToEntryListIsCalled(List<Entry> entryList) {
+        this.entryList = entryList;
+    }
+
     @Override
     public EntryRessource mapEntryToEntryRessource(Entry entry) {
-        //do nothing for now, pretend to map data...
         return null;
     }
 
@@ -42,10 +47,36 @@ public class DataAdapterMock implements DataAdapterInterface {
 
     @Override
     public Entry mapEntryRessourceToEntry(EntryRessource entryRessource) {
-        Semester semester = new Semester("meinSemester", LocalDate.now(), LocalDate.now());
-        Lecture lecture = new Lecture("MeineVL", semester, 10, 10);
-        Entry entry = new Entry(LocalDateTime.of(2023, 1, 1, 10, 0), EntryType.SELFSTUDY, lecture);
-        entry.finishEntry(LocalDateTime.of(2023, 1, 1, 12, 0), "details");
-        return entry;
+        return null;
+    }
+
+    @Override
+    public List<Entry> mapEntryRessourceListToEntryList(List<EntryRessource> entryRessourceList) {
+        return this.entryList;
+    }
+
+    @Override
+    public List<Lecture> mapLectureRessourceListToLectureList(List<LectureResource> lectureResourceList) {
+        return null;
+    }
+
+    @Override
+    public List<Semester> mapSemesterRessourceListToSemesterList(List<SemesterRessource> semesterRessourceList) {
+        return null;
+    }
+
+    @Override
+    public List<EntryRessource> mapEntryListToEntryRessourceList(List<Entry> entryList) {
+        return null;
+    }
+
+    @Override
+    public List<LectureResource> mapLectureListToLectureListRessource(List<Lecture> lectureList) {
+        return null;
+    }
+
+    @Override
+    public List<SemesterRessource> mapSemesterListToSemesterRessourceList(List<Semester> semesterList) {
+        return null;
     }
 }
