@@ -189,6 +189,9 @@ public class DataPlugin implements DataPluginInterface {
         if (!Objects.isNull(filterCriteria.getLectureName())) {
             entryRessourceStream = entryRessourceStream.filter(entry -> entry.getLecture().equals(filterCriteria.getLectureName()));
         }
+        if (!Objects.isNull(filterCriteria.getEntryStatus())) {
+            entryRessourceStream = entryRessourceStream.filter(entry -> entry.getStatus().equals(filterCriteria.getEntryStatus().name()));
+        }
         return entryRessourceStream.collect(Collectors.toList());
     }
 }

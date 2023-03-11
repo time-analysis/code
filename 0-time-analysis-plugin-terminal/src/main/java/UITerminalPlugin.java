@@ -47,6 +47,7 @@ public class UITerminalPlugin implements UIPluginInterface {
         commands.put("6", new ActionAndDesciption(this::getSelfStudyTime, "see how much time was spent studying on your own"));
         commands.put("7", new ActionAndDesciption(this::getTimePerSemester, "see how much time was spent for one specific semester"));
         commands.put("8", new ActionAndDesciption(this::compareTime, "compare planned time to the the time that was actually spend"));
+        commands.put("9", new ActionAndDesciption(this::getUnfinishedEntries, "view unifinished Entries"));
         commands.forEach((key, value) -> {
             System.out.println(key + "> " + value.getDesciption());
         });
@@ -68,20 +69,27 @@ public class UITerminalPlugin implements UIPluginInterface {
         System.out.println("You can either enter a finishing time now or later");
         System.out.println("1> Finish now\n2> Finish later");
         String finishOption = scanner.nextLine();
-        String end, details;
-        end = "";
-        details = "";
 
         if (Integer.parseInt(finishOption) == 1) {
-            end = getEndTimeForEntry();
-            details = getStringFromInputWithPrompt("Details of study");
-        }
-        String entryType = getEntryTypeForEntry();
-        LectureResource lecture = getLectureForEntry();
+            String end = getEndTimeForEntry();
+            String details = getStringFromInputWithPrompt("Details of study");
+            String entryType = getEntryTypeForEntry();
+            LectureResource lecture = getLectureForEntry();
 
-        EntryRessource entryRessource = new EntryRessource(start, end, entryType, details, lecture.getName(), "FINISHED");
-        AdditionalEntry additionalEntry = new AdditionalEntry(dataAdapter, dataPlugin);
-        additionalEntry.addEntry(this.uiAdapter.mapEntryRessourceToEntry(entryRessource), this.uiAdapter.mapLectureRessourceToLecture(lecture));
+            EntryRessource entryRessource = new EntryRessource(start, end, entryType, details, lecture.getName(), "FINISHED");
+            AdditionalEntry additionalEntry = new AdditionalEntry(dataAdapter, dataPlugin);
+            additionalEntry.addEntry(this.uiAdapter.mapEntryRessourceToEntry(entryRessource), this.uiAdapter.mapLectureRessourceToLecture(lecture));
+        } else if (Integer.parseInt(finishOption) == 2) {
+            String entryType = getEntryTypeForEntry();
+            LectureResource lecture = getLectureForEntry();
+
+            EntryRessource entryRessource = new EntryRessource(start, entryType, lecture.getName());
+            AdditionalEntry additionalEntry = new AdditionalEntry(dataAdapter, dataPlugin);
+            additionalEntry.startEntry(this.uiAdapter.mapEntryRessourceToEntry(entryRessource));
+        } else {
+            System.out.println("invalid Input");
+        }
+
     }
 
     @Override
@@ -152,6 +160,13 @@ public class UITerminalPlugin implements UIPluginInterface {
         }
     }
 
+    private void getUnfinishedEntries() {
+        GetEntries getEntries = new GetEntries(dataAdapter, dataPlugin);
+        List<EntryRessource> unfinishedEntries = dataAdapter.mapEntryListToEntryRessourceList(getEntries.getUnfinishedEntries());
+        EntryRessource entryRessource = getEntryRessourceFromNumberedList(unfinishedEntries);
+    }
+
+
     private String getStartTimeForEntry() {
         System.out.println("Start time (press \"n\" to use current time)");
         String start = scanner.nextLine();
@@ -220,6 +235,30 @@ public class UITerminalPlugin implements UIPluginInterface {
         }
         int inputAsInt = Integer.parseInt(input);
         return inputAsInt < expectedRange && inputAsInt >= 0;
+    }
+    //todo vielleicht diese listings generisch machen, zb alle ressource ein listeable interface implementieren lassn
+
+    private String getListOfEntriesAsNumberedList(List<EntryRessource> entryRessourceList) {
+        String listAsString = "";
+        if (entryRessourceList.isEmpty()) {
+            return "No entries found";
+        }
+        for (int i = 0; i < entryRessourceList.size(); i++) {
+            listAsString = listAsString.concat("\n" + i + "> " + entryRessourceList.get(i).getType() + "started at " + entryRessourceList.get(i).getStart());
+        }
+        return listAsString;
+    }
+
+    private EntryRessource getEntryRessourceFromNumberedList(List<EntryRessource> entryRessourceList) {
+        System.out.println("choose an entry from the list");
+        System.out.println(getListOfEntriesAsNumberedList(entryRessourceList));
+
+        String lectureIndex = scanner.nextLine();
+        while (!isInputValidNumber(lectureIndex, entryRessourceList.size())) {
+            System.out.println("invalid input, try again!");
+            lectureIndex = scanner.nextLine();
+        }
+        return entryRessourceList.get(Integer.parseInt(lectureIndex));
     }
 
     private String getListOfSemestersAsNumberedList(List<SemesterRessource> semesters) {

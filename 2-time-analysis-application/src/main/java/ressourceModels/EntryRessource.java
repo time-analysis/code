@@ -9,12 +9,17 @@ public class EntryRessource {
     private String status;
 
     public EntryRessource(String start, String end, String type, String details, String lecture, String status) {
-        this.start = start;
+        this(start, type, lecture);
         this.end = end;
-        this.type = type;
         this.details = details;
-        this.lecture = lecture;
         this.status = status;
+    }
+
+    public EntryRessource(String start, String type, String lecture) {
+        this.start = start;
+        this.type = type;
+        this.lecture = lecture;
+
     }
 
     public EntryRessource() {
