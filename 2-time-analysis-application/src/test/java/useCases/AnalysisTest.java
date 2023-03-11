@@ -33,4 +33,14 @@ public class AnalysisTest {
 
         assertEquals(selfStudyTime, Duration.ofHours(2));
     }
+
+    @Test
+    public void selfStudyTimeIsZeroWhenNoStudyTimeIsGiven() {
+        Analysis analysis = new Analysis(dataAdapter, dataPlugin);
+        dataAdapter.setEntryListToReturnWhenMapEntryRessourceListToEntryListIsCalled(List.of());
+
+        Duration selfStudyTime = analysis.getStudyTime();
+
+        assertEquals(selfStudyTime, Duration.ofHours(0));
+    }
 }
