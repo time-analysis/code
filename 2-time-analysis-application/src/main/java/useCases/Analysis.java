@@ -62,7 +62,7 @@ public class Analysis {
     public Duration getTimePerSemester(Semester semester) {
         List<EntryRessource> entryRessourceList = dataPlugin.getEntrys();
         List<Entry> entryList = entryRessourceList.stream().map(dataAdapter::mapEntryRessourceToEntry).collect(Collectors.toList());
-        Duration timePerSemester = entryList.stream().filter(entry -> entry.getLecture().getSemester().getName().equals(semester.getName())).map(Entry::calculateDuration).reduce(Duration::plus).get();
+        Duration timePerSemester = entryList.stream().filter(entry -> entry.getLecture().getSemester().getName().equals(semester.getName())).map(Entry::calculateDuration).reduce(Duration::plus).orElse(Duration.ZERO);
         return timePerSemester; //todo reicht java.duration oder braucht man ein eigenes objekt?
     }
 
