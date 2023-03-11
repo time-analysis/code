@@ -9,14 +9,13 @@ import ressourceModels.SemesterRessource;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public interface UIAdapterInterface {
 
     Lecture mapLectureRessourceToLecture(LectureResource lectureResource);
 
     Entry mapEntryRessourceToEntry(EntryRessource entryRessource);
-    
+
     String formatLocalDateTime(LocalDateTime time);
 
     String formatDuration(Duration duration);

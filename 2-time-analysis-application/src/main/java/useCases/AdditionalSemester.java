@@ -2,12 +2,7 @@ package useCases;
 
 import Interfaces.DataAdapterInterface;
 import Interfaces.DataPluginInterface;
-import Interfaces.UIPluginInterface;
 import de.models.Semester;
-import ressourceModels.LectureResource;
-import ressourceModels.SemesterRessource;
-
-import java.util.Objects;
 
 public class AdditionalSemester {
 
@@ -20,6 +15,6 @@ public class AdditionalSemester {
     }
 
     public void addSemester(Semester semester) {
-            dataPlugin.persistSemester(dataAdapter.mapSemesterToSemesterRessource(semester));
+        dataPlugin.persistSemester(dataAdapter.mapSemesterToSemesterRessource(semester));
     }
 }

@@ -2,7 +2,6 @@ package useCases;
 
 import Interfaces.DataAdapterInterface;
 import Interfaces.DataPluginInterface;
-import Interfaces.UIPluginInterface;
 import de.models.Lecture;
 
 public class AdditionalLecture {
@@ -15,7 +14,7 @@ public class AdditionalLecture {
     }
 
     public void addLecture(Lecture lecture) {
-            dataPlugin.persistLecture(dataAdapter.mapLectureToLectureRessource(lecture));
+        dataPlugin.persistLecture(dataAdapter.mapLectureToLectureRessource(lecture));
 
     }
 }

@@ -1,10 +1,5 @@
 package ressourceModels;
 
-import de.models.EntryType;
-import de.models.Lecture;
-
-import java.time.LocalDateTime;
-
 public class EntryRessource {
     private String start;
     private String end;

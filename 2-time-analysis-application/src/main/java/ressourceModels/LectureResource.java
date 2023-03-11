@@ -1,7 +1,5 @@
 package ressourceModels;
 
-import de.models.Semester;
-
 public class LectureResource {
     private String name;
     private String semester;

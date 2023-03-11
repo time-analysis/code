@@ -1,14 +1,8 @@
 package useCases;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Optional;
-
 import Interfaces.DataAdapterInterface;
 import Interfaces.DataPluginInterface;
 import de.models.Entry;
-import de.models.EntryType;
 import de.models.Lecture;
 import de.models.Semester;
 import ressourceModels.EntryRessource;
