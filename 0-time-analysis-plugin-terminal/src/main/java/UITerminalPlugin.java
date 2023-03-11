@@ -28,93 +28,6 @@ public class UITerminalPlugin implements UIPluginInterface {
         this.dataAdapter = dataAdapter;
     }
 
-    @Override
-    public void addEntryByTimeStamp() {
-
-        String start = getStartTimeForEntry();
-
-        System.out.println("You can either enter a finishing time now or later");
-        System.out.println("1> Finish now\n2> Finish later");
-        String finishOption = scanner.nextLine();
-        String end, details;
-        end = "";
-        details = "";
-
-        if (Integer.parseInt(finishOption) == 1) {
-            end = getEndTimeForEntry();
-            details = getStringFromInputWithPrompt("Details of study");
-        }
-        String entryType = getEntryTypeForEntry();
-        LectureResource lecture = getLectureForEntry();
-
-        EntryRessource entryRessource = new EntryRessource(start, end, entryType, details, lecture.getName(), "FINISHED");
-        AdditionalEntry additionalEntry = new AdditionalEntry(dataAdapter, dataPlugin);
-        additionalEntry.addEntry(this.uiAdapter.mapEntryRessourceToEntry(entryRessource), this.uiAdapter.mapLectureRessourceToLecture(lecture));
-    }
-
-    private String getEndTimeForEntry() {
-        System.out.println("End time (press \"n\" to use current time)");
-        String end = scanner.nextLine();
-        if (end.equals("n")) {
-            end = uiAdapter.formatLocalDateTime(LocalDateTime.now());
-        }
-        return end;
-    }
-
-    private String getEntryTypeForEntry() {
-        GetEntryTypes getEntryTypesUseCase = new GetEntryTypes(dataAdapter, dataPlugin);
-        EntryType[] entryTypes = getEntryTypesUseCase.getEntryType();
-        return getEntryTypeFromNumberedList(entryTypes);
-    }
-
-    private LectureResource getLectureForEntry() {
-        GetLectures getLectureUseCase = new GetLectures(dataAdapter, dataPlugin);
-        List<LectureResource> lectures = uiAdapter.mapLectureListToLectureListRessource(getLectureUseCase.getLectures());
-        return getLectureRessourceFromNumberedList(lectures);
-    }
-
-    @Override
-    public void addLecture() {
-        //strings einlesen:   name, semester, lectureTime, selfStudyTime
-        String name, lectureTime, selfStudyTime;
-        name = getStringFromInputWithPrompt("Name of the lecture:");
-        lectureTime = getStringFromInputWithPrompt("enter the official lecture time");
-        selfStudyTime = getStringFromInputWithPrompt("enter the ammount of time you are supposed to study on your own");
-        SemesterRessource semester = getSemesterForLecture();
-
-        LectureResource lectureResource = new LectureResource(name, semester.getName(), Integer.parseInt(lectureTime), Integer.parseInt(selfStudyTime));
-        AdditionalLecture additionalLecture = new AdditionalLecture(dataAdapter, dataPlugin);
-        additionalLecture.addLecture(this.uiAdapter.mapLectureRessourceToLecture(lectureResource));
-    }
-
-    private SemesterRessource getSemesterForLecture() {
-        GetSemesters getSemestersUseCase = new GetSemesters(dataAdapter, dataPlugin);
-        List<SemesterRessource> semesterList = uiAdapter.mapSemesterListToSemesterRessourceList(getSemestersUseCase.getSemesters());
-        return getSemesterRessourceFromNumberedList(semesterList);
-    }
-
-
-    private String getStringFromInputWithPrompt(String prompt) {
-        System.out.println(prompt);
-        return scanner.nextLine();
-    }
-
-    @Override
-    public void displayMessage(String message) {
-        System.out.println("[INFO] " + message);
-    }
-
-    @Override
-    public void displayError(String errorMessage) {
-        System.out.println("[ERROR] " + errorMessage);
-    }
-
-    @Override
-    public void displayWarning(String warningMessage) {
-        System.out.println("[WARNING] " + warningMessage);
-
-    }
-
     public void start() {
         System.out.println(getAsciiArt());
         showMainMenu();
@@ -145,6 +58,54 @@ public class UITerminalPlugin implements UIPluginInterface {
             actionAndDesciption.getAction().run();
         }
         showMainMenu();
+    }
+
+    @Override
+    public void addEntryByTimeStamp() {
+
+        String start = getStartTimeForEntry();
+
+        System.out.println("You can either enter a finishing time now or later");
+        System.out.println("1> Finish now\n2> Finish later");
+        String finishOption = scanner.nextLine();
+        String end, details;
+        end = "";
+        details = "";
+
+        if (Integer.parseInt(finishOption) == 1) {
+            end = getEndTimeForEntry();
+            details = getStringFromInputWithPrompt("Details of study");
+        }
+        String entryType = getEntryTypeForEntry();
+        LectureResource lecture = getLectureForEntry();
+
+        EntryRessource entryRessource = new EntryRessource(start, end, entryType, details, lecture.getName(), "FINISHED");
+        AdditionalEntry additionalEntry = new AdditionalEntry(dataAdapter, dataPlugin);
+        additionalEntry.addEntry(this.uiAdapter.mapEntryRessourceToEntry(entryRessource), this.uiAdapter.mapLectureRessourceToLecture(lecture));
+    }
+
+    @Override
+    public void addLecture() {
+        //strings einlesen:   name, semester, lectureTime, selfStudyTime
+        String name, lectureTime, selfStudyTime;
+        name = getStringFromInputWithPrompt("Name of the lecture:");
+        lectureTime = getStringFromInputWithPrompt("enter the official lecture time");
+        selfStudyTime = getStringFromInputWithPrompt("enter the ammount of time you are supposed to study on your own");
+        SemesterRessource semester = getSemesterForLecture();
+
+        LectureResource lectureResource = new LectureResource(name, semester.getName(), Integer.parseInt(lectureTime), Integer.parseInt(selfStudyTime));
+        AdditionalLecture additionalLecture = new AdditionalLecture(dataAdapter, dataPlugin);
+        additionalLecture.addLecture(this.uiAdapter.mapLectureRessourceToLecture(lectureResource));
+    }
+
+    private void addSemester() {
+
+        String name = getStringFromInputWithPrompt("name of semester:");
+        String start = getStringFromInputWithPrompt("start date for semester:");
+        String end = getStringFromInputWithPrompt("end date for semester:");
+        AdditionalSemester additionalSemester = new AdditionalSemester(dataAdapter, dataPlugin);
+        SemesterRessource semesterRessource = new SemesterRessource(name, start, end);
+        additionalSemester.addSemester(uiAdapter.mapSemesterRessourceToSemester(semesterRessource));
     }
 
     private void getTimePerSemester() {
@@ -180,15 +141,6 @@ public class UITerminalPlugin implements UIPluginInterface {
         System.out.println("Planned lectureTime: " + lecture.getLectureTime() + " | Actual lectureTime: " + time.getLectureTime());
     }
 
-    private void addSemester() {
-
-        String name = getStringFromInputWithPrompt("name of semester:");
-        String start = getStringFromInputWithPrompt("start date for semester:");
-        String end = getStringFromInputWithPrompt("end date for semester:");
-        AdditionalSemester additionalSemester = new AdditionalSemester(dataAdapter, dataPlugin);
-        SemesterRessource semesterRessource = new SemesterRessource(name, start, end);
-        additionalSemester.addSemester(uiAdapter.mapSemesterRessourceToSemester(semesterRessource));
-    }
 
     private void compareTime() {
         Analysis analysis = new Analysis(dataAdapter, dataPlugin);
@@ -209,6 +161,55 @@ public class UITerminalPlugin implements UIPluginInterface {
         return start;
     }
 
+    private String getEndTimeForEntry() {
+        System.out.println("End time (press \"n\" to use current time)");
+        String end = scanner.nextLine();
+        if (end.equals("n")) {
+            end = uiAdapter.formatLocalDateTime(LocalDateTime.now());
+        }
+        return end;
+    }
+
+    private String getEntryTypeForEntry() {
+        GetEntryTypes getEntryTypesUseCase = new GetEntryTypes(dataAdapter, dataPlugin);
+        EntryType[] entryTypes = getEntryTypesUseCase.getEntryType();
+        return getEntryTypeFromNumberedList(entryTypes);
+    }
+
+    private LectureResource getLectureForEntry() {
+        GetLectures getLectureUseCase = new GetLectures(dataAdapter, dataPlugin);
+        List<LectureResource> lectures = uiAdapter.mapLectureListToLectureListRessource(getLectureUseCase.getLectures());
+        return getLectureRessourceFromNumberedList(lectures);
+    }
+
+
+    private SemesterRessource getSemesterForLecture() {
+        GetSemesters getSemestersUseCase = new GetSemesters(dataAdapter, dataPlugin);
+        List<SemesterRessource> semesterList = uiAdapter.mapSemesterListToSemesterRessourceList(getSemestersUseCase.getSemesters());
+        return getSemesterRessourceFromNumberedList(semesterList);
+    }
+
+
+    private String getStringFromInputWithPrompt(String prompt) {
+        System.out.println(prompt);
+        return scanner.nextLine();
+    }
+
+    @Override
+    public void displayMessage(String message) {
+        System.out.println("[INFO] " + message);
+    }
+
+    @Override
+    public void displayError(String errorMessage) {
+        System.out.println("[ERROR] " + errorMessage);
+    }
+
+    @Override
+    public void displayWarning(String warningMessage) {
+        System.out.println("[WARNING] " + warningMessage);
+
+    }
 
     private boolean isInputValidNumber(String input, int expectedRange) {
         try {
