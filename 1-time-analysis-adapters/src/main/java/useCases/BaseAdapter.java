@@ -60,7 +60,7 @@ public class BaseAdapter {
     public Lecture mapLectureRessourceToLecture(LectureResource lectureResource) {
         String name = lectureResource.getName();
         Optional<SemesterRessource> s = this.dataPlugin.getSemesterByName(lectureResource.getSemester());
-        Semester semester = null; //todo obacht
+        Semester semester = null;
         if (s.isPresent()) {
             semester = mapSemesterRessourceToSemester(s.get());
         } else {

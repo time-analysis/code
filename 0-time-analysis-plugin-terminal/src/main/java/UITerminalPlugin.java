@@ -89,7 +89,7 @@ public class UITerminalPlugin implements UIPluginInterface {
         selfStudyTime = scanner.nextLine();
 
         LectureResource lectureResource = new LectureResource(name, semester.getName(), Integer.parseInt(lectureTime), Integer.parseInt(selfStudyTime));
-        AdditionalLecture additionalLecture = new AdditionalLecture(dataAdapter, dataPlugin, this);
+        AdditionalLecture additionalLecture = new AdditionalLecture(dataAdapter, dataPlugin);
         additionalLecture.addLecture(this.uiAdapter.mapLectureRessourceToLecture(lectureResource));
     }
 
@@ -127,6 +127,7 @@ public class UITerminalPlugin implements UIPluginInterface {
         commands.put("5", new ActionAndDesciption(this::getPresenceTime, "see how much time was spent listening to lectures"));
         commands.put("6", new ActionAndDesciption(this::getSelfStudyTime, "see how much time was spent studying on your own"));
         commands.put("7", new ActionAndDesciption(this::getTimePerSemester, "see how much time was spent for one specific semester"));
+        commands.put("8",new ActionAndDesciption(this::compareTime,"compare planned time to the the time that was actually spend"));
         commands.forEach((key, value) -> {
             System.out.println(key + "> " + value.getDesciption());
         });
@@ -179,9 +180,13 @@ public class UITerminalPlugin implements UIPluginInterface {
         System.out.println("end date");
         String end = scanner.nextLine();
 
-        AdditionalSemester additionalSemester = new AdditionalSemester(dataAdapter, dataPlugin, this);
+        AdditionalSemester additionalSemester = new AdditionalSemester(dataAdapter, dataPlugin);
         SemesterRessource semesterRessource = new SemesterRessource(name, start, end);
         additionalSemester.addSemester(uiAdapter.mapSemesterRessourceToSemester(semesterRessource));
+    }
+    private void compareTime(){
+        Analysis analysis = new Analysis(dataAdapter,dataPlugin);
+        analysis.compareTimeTargetToActual();
     }
 
 

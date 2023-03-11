@@ -11,6 +11,8 @@ import ressourceModels.EntryRessource;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Analysis {
     private DataAdapterInterface dataAdapter;
@@ -56,6 +58,17 @@ public class Analysis {
     }
 
     public void compareTimeTargetToActual() {
-
+        List<Lecture> lectures = dataPlugin.getLectures().stream().map(dataAdapter::mapLectureRessourceToLecture).collect(Collectors.toList());
+        List<Entry> entryList = dataPlugin.getEntrys().stream().map(dataAdapter::mapEntryRessourceToEntry).collect(Collectors.toList());
+        for(Lecture l:lectures){
+            Optional<Duration> selfStudyTimeOpt = entryList.stream().filter(entry -> entry.getLecture().getName().equals(l.getName())).filter(entry -> entry.getType().equals(EntryType.SELFSTUDY)).map(Entry::calculateDuration).reduce(Duration::plus);
+            Optional<Duration> lectureTimeOpt =  entryList.stream().filter(entry -> entry.getLecture().getName().equals(l.getName())).filter(entry -> entry.getType().equals(EntryType.LECTURE)).map(Entry::calculateDuration).reduce(Duration::plus);
+            Duration selfStudyTime,lectureTime;
+            selfStudyTime = selfStudyTimeOpt.orElse(Duration.ZERO);
+            lectureTime = lectureTimeOpt.orElse(Duration.ZERO);
+            System.out.println(l.getName());
+            System.out.println("Planned SelfStudyTime: "+ l.getSelfStudyTime() +" | Actual selfStudyTime: " + selfStudyTime.toString());
+            System.out.println("Planned lectureTime: "+ l.getLectureTime() +" | Actual lectureTime: " + lectureTime.toString());
+        }
     }
 }

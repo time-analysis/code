@@ -13,12 +13,10 @@ public class AdditionalSemester {
 
     private DataAdapterInterface dataAdapter;
     private DataPluginInterface dataPlugin;
-    private UIPluginInterface uiPlugin;
 
-    public AdditionalSemester(DataAdapterInterface dataAdapter, DataPluginInterface dataPlugin, UIPluginInterface uiPlugin) {
+    public AdditionalSemester(DataAdapterInterface dataAdapter, DataPluginInterface dataPlugin) {
         this.dataAdapter = dataAdapter;
         this.dataPlugin = dataPlugin;
-        this.uiPlugin = uiPlugin;
     }
 
     public void addSemester(Semester semester) {
