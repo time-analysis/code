@@ -9,6 +9,7 @@ import ressourceModels.SemesterRessource;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface UIAdapterInterface {
 
@@ -25,4 +26,16 @@ public interface UIAdapterInterface {
     LectureResource mapLectureToLectureRessource(Lecture lecture);
 
     SemesterRessource mapSemesterToSemesterRessource(Semester semester);
+
+    List<Entry> mapEntryRessourceListToEntryList(List<EntryRessource> entryRessourceList);
+
+    List<Lecture> mapLectureRessourceListToLectureList(List<LectureResource> lectureResourceList);
+
+    List<Semester> mapSemesterRessourceListToSemesterList(List<SemesterRessource> semesterRessourceList);
+
+    List<EntryRessource> mapEntryListToEntryRessourceList(List<Entry> entryList);
+
+    List<LectureResource> mapLectureListToLectureListRessource(List<Lecture> lectureList);
+
+    List<SemesterRessource> mapSemesterListToSemesterRessourceList(List<Semester> semesterList);
 }

@@ -13,7 +13,6 @@ import useCases.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class UITerminalPlugin implements UIPluginInterface {
 
@@ -66,7 +65,7 @@ public class UITerminalPlugin implements UIPluginInterface {
         String details = scanner.nextLine();
 
         GetLectures getLectureUseCase = new GetLectures(dataAdapter, dataPlugin);
-        List<LectureResource> lectures = getLectureUseCase.getLectures().stream().map(lecture -> this.uiAdapter.mapLectureToLectureRessource(lecture)).collect(Collectors.toList());
+        List<LectureResource> lectures = dataAdapter.mapLectureListToLectureListRessource(getLectureUseCase.getLectures());
         LectureResource lecture = getLectureRessourceFromNumberedList(lectures);
 
         EntryRessource entryRessource = new EntryRessource(start, end, EntryType.values()[Integer.parseInt(typeIndex)].name(), details, lecture.getName());
@@ -82,7 +81,7 @@ public class UITerminalPlugin implements UIPluginInterface {
         name = scanner.nextLine();
         System.out.println("choose the semester");
         GetSemesters getSemestersUseCase = new GetSemesters(dataAdapter, dataPlugin);
-        List<SemesterRessource> semesterList = getSemestersUseCase.getSemesters().stream().map(semesterRessource -> this.uiAdapter.mapSemesterToSemesterRessource(semesterRessource)).collect(Collectors.toList());
+        List<SemesterRessource> semesterList = dataAdapter.mapSemesterListToSemesterRessourceList(getSemestersUseCase.getSemesters());
         SemesterRessource semester = getSemesterRessourceFromNumberedList(semesterList);
 
         System.out.println("enter the official lecture time");
@@ -146,7 +145,7 @@ public class UITerminalPlugin implements UIPluginInterface {
     private void getTimePerSemester() {
 
         GetSemesters getSemestersUseCase = new GetSemesters(dataAdapter, dataPlugin);
-        List<SemesterRessource> semesterList = getSemestersUseCase.getSemesters().stream().map(semesterRessource -> this.uiAdapter.mapSemesterToSemesterRessource(semesterRessource)).collect(Collectors.toList());
+        List<SemesterRessource> semesterList = dataAdapter.mapSemesterListToSemesterRessourceList(getSemestersUseCase.getSemesters());
         SemesterRessource semester = getSemesterRessourceFromNumberedList(semesterList);
         Analysis analysis = new Analysis(dataAdapter, dataPlugin);
         Duration duration = analysis.getTimePerSemester(uiAdapter.mapSemesterRessourceToSemester(semester));
@@ -168,7 +167,7 @@ public class UITerminalPlugin implements UIPluginInterface {
     private void getTimePerLecture() {
         Analysis analysis = new Analysis(dataAdapter, dataPlugin);
         GetLectures getLectureUseCase = new GetLectures(dataAdapter, dataPlugin);
-        List<LectureResource> lectures = getLectureUseCase.getLectures().stream().map(lecture -> this.uiAdapter.mapLectureToLectureRessource(lecture)).collect(Collectors.toList());
+        List<LectureResource> lectures = dataAdapter.mapLectureListToLectureListRessource(getLectureUseCase.getLectures());
         LectureResource lecture = getLectureRessourceFromNumberedList(lectures);
 
         SelfStudyTimeAndLectureTime time = analysis.getTimeSpentForLecture(lecture.getName());

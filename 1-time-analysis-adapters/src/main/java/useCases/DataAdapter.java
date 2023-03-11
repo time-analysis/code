@@ -9,6 +9,8 @@ import ressourceModels.EntryRessource;
 import ressourceModels.LectureResource;
 import ressourceModels.SemesterRessource;
 
+import java.util.List;
+
 public class DataAdapter implements DataAdapterInterface {
     private BaseAdapter baseAdapter;
 
@@ -44,6 +46,30 @@ public class DataAdapter implements DataAdapterInterface {
     @Override
     public Entry mapEntryRessourceToEntry(EntryRessource entryRessource) {
         return baseAdapter.mapEntryRessourceToEntry(entryRessource);
+    }
+
+    public List<Entry> mapEntryRessourceListToEntryList(List<EntryRessource> entryRessourceList) {
+        return baseAdapter.mapEntryRessourceListToEntryList(entryRessourceList);
+    }
+
+    public List<Lecture> mapLectureRessourceListToLectureList(List<LectureResource> lectureResourceList) {
+        return baseAdapter.mapLectureRessourceListToLectureList(lectureResourceList);
+    }
+
+    public List<Semester> mapSemesterRessourceListToSemesterList(List<SemesterRessource> semesterRessourceList) {
+        return baseAdapter.mapSemesterRessourceListToSemesterList(semesterRessourceList);
+    }
+
+    public List<EntryRessource> mapEntryListToEntryRessourceList(List<Entry> entryList) {
+        return baseAdapter.mapEntryListToEntryRessourceList(entryList);
+    }
+
+    public List<LectureResource> mapLectureListToLectureListRessource(List<Lecture> lectureList) {
+        return baseAdapter.mapLectureListToLectureListRessource(lectureList);
+    }
+
+    public List<SemesterRessource> mapSemesterListToSemesterRessourceList(List<Semester> semesterList) {
+        return baseAdapter.mapSemesterListToSemesterRessourceList(semesterList);
     }
 
 }

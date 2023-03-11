@@ -5,7 +5,6 @@ import Interfaces.DataPluginInterface;
 import de.models.Semester;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class GetSemesters {
     private DataAdapterInterface dataAdapter;
@@ -17,6 +16,6 @@ public class GetSemesters {
     }
 
     public List<Semester> getSemesters() {
-        return this.dataPlugin.getSemesters().stream().map(semesterRessource -> this.dataAdapter.mapSemesterRessourceToSemester(semesterRessource)).collect(Collectors.toList());
+        return this.dataAdapter.mapSemesterRessourceListToSemesterList(this.dataPlugin.getSemesters());
     }
 }

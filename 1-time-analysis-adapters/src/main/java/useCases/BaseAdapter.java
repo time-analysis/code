@@ -12,7 +12,9 @@ import ressourceModels.SemesterRessource;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class BaseAdapter {
 
@@ -62,6 +64,7 @@ public class BaseAdapter {
     public Lecture mapLectureRessourceToLecture(LectureResource lectureResource) {
         String name = lectureResource.getName();
         Optional<SemesterRessource> s = this.dataPlugin.getSemesterByName(lectureResource.getSemester());
+        //Optional<SemesterRessource> se = new GetLectures(dataAdapter,dataPlugin).getLectures().stream().map(this::mapSemesterToSemesterRessource).collect(Collectors.toList());
         Semester semester = null;
         if (s.isPresent()) {
             semester = mapSemesterRessourceToSemester(s.get());
@@ -89,6 +92,30 @@ public class BaseAdapter {
         Entry entry = new Entry(start, type, lecture);
         entry.finishEntry(end, details);
         return entry;
+    }
+
+    public List<Entry> mapEntryRessourceListToEntryList(List<EntryRessource> entryRessourceList) {
+        return entryRessourceList.stream().map(this::mapEntryRessourceToEntry).collect(Collectors.toList());
+    }
+
+    public List<Lecture> mapLectureRessourceListToLectureList(List<LectureResource> lectureResourceList) {
+        return lectureResourceList.stream().map(this::mapLectureRessourceToLecture).collect(Collectors.toList());
+    }
+
+    public List<Semester> mapSemesterRessourceListToSemesterList(List<SemesterRessource> semesterRessourceList) {
+        return semesterRessourceList.stream().map(this::mapSemesterRessourceToSemester).collect(Collectors.toList());
+    }
+
+    public List<EntryRessource> mapEntryListToEntryRessourceList(List<Entry> entryList) {
+        return entryList.stream().map(this::mapEntryToEntryRessource).collect(Collectors.toList());
+    }
+
+    public List<LectureResource> mapLectureListToLectureListRessource(List<Lecture> lectureList) {
+        return lectureList.stream().map(this::mapLectureToLectureRessource).collect(Collectors.toList());
+    }
+
+    public List<SemesterRessource> mapSemesterListToSemesterRessourceList(List<Semester> semesterList) {
+        return semesterList.stream().map(this::mapSemesterToSemesterRessource).collect(Collectors.toList());
     }
 
     private LocalDate stringToDatetime(String time) {
