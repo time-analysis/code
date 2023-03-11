@@ -17,6 +17,8 @@ import java.util.Optional;
 public class BaseAdapter {
 
     private DataPluginInterface dataPlugin;
+    private String localDateTimeFormatString = "yyyy-MM-dd HH:mm";
+    private String localDateFormatString = "yyyy-MM-dd";
 
     public BaseAdapter(DataPluginInterface dataPlugin) {
         this.dataPlugin = dataPlugin;
@@ -90,22 +92,22 @@ public class BaseAdapter {
     }
 
     private LocalDate stringToDatetime(String time) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(localDateFormatString);
         return LocalDate.parse(time, formatter);
     }
 
     private String LocalDateToString(LocalDate time) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(localDateFormatString);
         return time.format(formatter);
     }
 
     private String LocalDateTimeToString(LocalDateTime time) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(localDateTimeFormatString);
         return time.format(formatter);
     }
 
     private LocalDateTime stringToLocalDateTime(String time) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(localDateTimeFormatString);
         return LocalDateTime.parse(time, formatter);
     }
 }
