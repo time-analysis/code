@@ -22,11 +22,6 @@ public class AdditionalSemester {
     }
 
     public void addSemester(Semester semester) {
-        if (dataPlugin.getSemesterByName(semester.getName()).isPresent()) {
-            uiPlugin.displayError("A Semester with the name  " + semester.getName() + "already exists.");
-        } else {
             dataPlugin.persistSemester(dataAdapter.mapSemesterToSemesterRessource(semester));
-            uiPlugin.displayMessage("Semester created.");
-        }
     }
 }

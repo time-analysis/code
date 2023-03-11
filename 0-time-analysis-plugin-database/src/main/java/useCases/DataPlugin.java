@@ -26,13 +26,13 @@ public class DataPlugin implements DataPluginInterface {
         File lectureFile = new File(lectureFileName);
         if (!semesterFile.exists() || !semesterFile.isFile()) {
             System.out.println("No semesters found, start by creating a semester."); //todo use uiplugin to display
+
         } else if (!lectureFile.exists() || !lectureFile.isFile()) {
             System.out.println("No lectures found. Lectures are required to created an Entry."); //todo use uiplugin to display
         }
 
     }
 
-    //todo check for dupliate lecture and duplicate Semester (name has to be unique)
     @Override
     public boolean persistEntry(EntryRessource entryRessource) {
 
@@ -56,6 +56,11 @@ public class DataPlugin implements DataPluginInterface {
 
     @Override
     public void persistLecture(LectureResource lectureResource) {
+        Optional<LectureResource> lectureResourceOptional = getLectureByName(sanitizeInputForCSVFormat(lectureResource.getName()));
+        if(lectureResourceOptional.isPresent()){
+            System.out.println("A lecture with this name already exists");
+            return;
+        }
         String csvLecture = String.format(
                 "%s,%s,%s,%s"
                 , sanitizeInputForCSVFormat(lectureResource.getName())
@@ -73,6 +78,11 @@ public class DataPlugin implements DataPluginInterface {
 
     @Override
     public void persistSemester(SemesterRessource semester) {
+        Optional<SemesterRessource> semesterRessourceOptional = getSemesterByName(sanitizeInputForCSVFormat(semester.getName()));
+        if(semesterRessourceOptional.isPresent()){
+            System.out.println("A Semester with this name already exists");
+            return;
+        }
         String csvSemester = String.format(
                 "%s,%s,%s"
                 , sanitizeInputForCSVFormat(semester.getName())
@@ -139,6 +149,8 @@ public class DataPlugin implements DataPluginInterface {
         String toReturn = input;
         if (input.contains(",")) {
             System.out.println("The letter \",\" is not allowed as input. It will be removed"); //todo use uiplugin
+            //SendUIMessageUseCase sendMessage = new SendUIMessageUesCase(uiPlugin);
+            //sendMessage.send("no comma allowed");
             toReturn = toReturn.replace(",", "");
         }
         return toReturn;
