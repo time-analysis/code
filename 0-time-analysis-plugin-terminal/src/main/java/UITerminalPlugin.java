@@ -84,7 +84,7 @@ public class UITerminalPlugin implements UIPluginInterface {
             String entryType = getEntryTypeForEntry();
             LectureResource lecture = getLectureForEntry();
 
-            EntryRessource entryRessource = new EntryRessource(start, entryType, lecture.getName());
+            EntryRessource entryRessource = new EntryRessource(start, entryType, lecture.getName(),"RUNNING");
             AdditionalEntry additionalEntry = new AdditionalEntry(dataAdapter, dataPlugin);
             additionalEntry.startEntry(this.uiAdapter.mapEntryRessourceToEntry(entryRessource));
         } else {
@@ -165,6 +165,10 @@ public class UITerminalPlugin implements UIPluginInterface {
         GetEntries getEntries = new GetEntries(dataAdapter, dataPlugin);
         List<EntryRessource> unfinishedEntries = dataAdapter.mapEntryListToEntryRessourceList(getEntries.getUnfinishedEntries());
         EntryRessource entryRessource = getObjectFromNumberedList(unfinishedEntries,"no unfinished entries found");
+        String end = getEndTimeForEntry();
+        String details = getStringFromInputWithPrompt("Details of study");
+        AdditionalEntry additionalEntry = new AdditionalEntry(dataAdapter,dataPlugin);
+        additionalEntry.finishEntry(uiAdapter.mapEntryRessourceToEntry(entryRessource),uiAdapter.stringToLocalDateTime(end),details);
     }
 
 

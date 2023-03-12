@@ -21,6 +21,8 @@ public interface UIAdapterInterface {
 
     String formatDuration(Duration duration);
 
+    LocalDateTime stringToLocalDateTime(String time);
+
     Semester mapSemesterRessourceToSemester(SemesterRessource semesterRessource);
 
     LectureResource mapLectureToLectureRessource(Lecture lecture);

@@ -7,6 +7,9 @@ import ressourceModels.SemesterRessource;
 import FilterCriteria.EntryFilterCriteria;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -143,11 +146,13 @@ public class DataPlugin implements DataPluginInterface {
 
     private String sanitizeInputForCSVFormat(String input) {
         String toReturn = input;
-        if (input.contains(",")) {
-            System.out.println("The letter \",\" is not allowed as input. It will be removed"); //todo use uiplugin
-            //SendUIMessageUseCase sendMessage = new SendUIMessageUesCase(uiPlugin);
-            //sendMessage.send("no comma allowed");
-            toReturn = toReturn.replace(",", "");
+        if(!Objects.isNull(input)){
+            if (input.contains(",")) {
+                System.out.println("The letter \",\" is not allowed as input. It will be removed"); //todo use uiplugin
+                //SendUIMessageUseCase sendMessage = new SendUIMessageUesCase(uiPlugin);
+                //sendMessage.send("no comma allowed");
+                toReturn = toReturn.replace(",", "");
+            }
         }
         return toReturn;
     }
@@ -193,5 +198,26 @@ public class DataPlugin implements DataPluginInterface {
             entryRessourceStream = entryRessourceStream.filter(entry -> entry.getStatus().equals(filterCriteria.getEntryStatus().name()));
         }
         return entryRessourceStream.collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateEntry(EntryRessource entryRessource) {
+        List<EntryRessource> entryList;
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(entryFileName))) {
+            entryList = bufferedReader.lines().map(this::parseStringToEntryRessource).collect(Collectors.toList());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        EntryRessource toReplace = entryList.stream().filter(entry->entry.getStart().equals(entryRessource.getStart())).findFirst().get();//todo better filter
+        entryList.remove(toReplace);
+        entryList.add(entryRessource);
+        try(PrintWriter writer = new PrintWriter(entryFileName)){
+        writer.print("");
+        }catch (FileNotFoundException e){
+            e.printStackTrace();
+        }
+        for(EntryRessource e: entryList){
+            persistEntry(e);
+        }
     }
 }

@@ -1,10 +1,7 @@
 package useCases;
 
 import Interfaces.DataPluginInterface;
-import de.models.Entry;
-import de.models.EntryType;
-import de.models.Lecture;
-import de.models.Semester;
+import de.models.*;
 import ressourceModels.EntryRessource;
 import ressourceModels.LectureResource;
 import ressourceModels.SemesterRessource;
@@ -13,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -79,9 +77,7 @@ public class BaseAdapter {
 
 
     public Entry mapEntryRessourceToEntry(EntryRessource entryRessource) {
-        String details = entryRessource.getDetails();
         LocalDateTime start = stringToLocalDateTime(entryRessource.getStart());
-        LocalDateTime end = stringToLocalDateTime(entryRessource.getEnd());
         EntryType type = EntryType.valueOf(entryRessource.getType());
         Lecture lecture = null;
         Optional<LectureResource> lectureResourceOptional = this.dataPlugin.getLectureByName(entryRessource.getLecture());
@@ -90,9 +86,13 @@ public class BaseAdapter {
         } else {
             //todo handle error
         }
-        Entry entry = new Entry(start, type, lecture);
-        entry.finishEntry(end, details);
-        return entry;
+        if(entryRessource.getStatus().equals(EntryStatus.RUNNING.name())){
+            return new Entry(start, type, lecture);
+        }else{
+        String details = entryRessource.getDetails();
+        LocalDateTime end = stringToLocalDateTime(entryRessource.getEnd());
+        return new Entry(start,end,type,lecture,details);
+        }
     }
 
     public List<Entry> mapEntryRessourceListToEntryList(List<EntryRessource> entryRessourceList) {
@@ -130,11 +130,12 @@ public class BaseAdapter {
     }
 
     private String LocalDateTimeToString(LocalDateTime time) {
+        if(Objects.isNull(time)) return "";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(localDateTimeFormatString);
         return time.format(formatter);
     }
 
-    private LocalDateTime stringToLocalDateTime(String time) {
+    public LocalDateTime stringToLocalDateTime(String time) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(localDateTimeFormatString);
         return LocalDateTime.parse(time, formatter);
     }

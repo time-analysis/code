@@ -27,4 +27,6 @@ public interface DataPluginInterface {
     List<EntryRessource> getEntrys();
 
     List<EntryRessource> getEntrys(EntryFilterCriteria criteria);
+
+    void updateEntry(EntryRessource entryRessource);
 }

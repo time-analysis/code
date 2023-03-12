@@ -22,11 +22,12 @@ public class AdditionalEntry {
     }
 
     public void startEntry(Entry entry) {
-        dataPlugin.persistEntry(dataAdapter.mapEntryToEntryRessource(entry));//todo persist unfished entry
+        dataPlugin.persistEntry(dataAdapter.mapEntryToEntryRessource(entry));
     }
 
     public void finishEntry(Entry entry, LocalDateTime end, String details) {
-
+        entry.finishEntry(end,details);
+        dataPlugin.updateEntry(dataAdapter.mapEntryToEntryRessource(entry));
     }
 
 }

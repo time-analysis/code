@@ -41,6 +41,10 @@ public class UIAdapter implements UIAdapterInterface {
     public String formatDuration(Duration duration) {
         return String.format("%s Days %s Hours %s Minutes %s Seconds", duration.toDaysPart(), duration.toHoursPart(), duration.toMinutesPart(), duration.toSecondsPart());
     }
+    @Override
+    public LocalDateTime stringToLocalDateTime(String time){
+        return baseAdapter.stringToLocalDateTime(time);
+    }
 
     @Override
     public Semester mapSemesterRessourceToSemester(SemesterRessource semesterRessource) {

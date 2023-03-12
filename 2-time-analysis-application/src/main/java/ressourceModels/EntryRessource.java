@@ -9,16 +9,16 @@ public class EntryRessource implements listeable {
     private String status;
 
     public EntryRessource(String start, String end, String type, String details, String lecture, String status) {
-        this(start, type, lecture);
+        this(start, type, lecture, status);
         this.end = end;
         this.details = details;
-        this.status = status;
     }
 
-    public EntryRessource(String start, String type, String lecture) {
+    public EntryRessource(String start, String type, String lecture,String status) {
         this.start = start;
         this.type = type;
         this.lecture = lecture;
+        this.status = status;
 
     }
 
