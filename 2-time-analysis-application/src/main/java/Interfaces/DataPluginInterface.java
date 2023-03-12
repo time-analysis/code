@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface DataPluginInterface {
 
-    boolean persistEntry(EntryRessource entryRessource);
+    void persistEntry(EntryRessource entryRessource);
 
     void persistLecture(LectureResource lectureResource);
 

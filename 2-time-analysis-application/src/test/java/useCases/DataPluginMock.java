@@ -11,8 +11,8 @@ import java.util.Optional;
 
 public class DataPluginMock implements DataPluginInterface {
     @Override
-    public boolean persistEntry(EntryRessource entryRessource) {
-        return false;
+    public void persistEntry(EntryRessource entryRessource) {
+
     }
 
     @Override
@@ -57,6 +57,6 @@ public class DataPluginMock implements DataPluginInterface {
 
     @Override
     public void updateEntry(EntryRessource entryRessource) {
-        
+
     }
 }
