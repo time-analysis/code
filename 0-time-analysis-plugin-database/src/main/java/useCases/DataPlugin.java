@@ -1,9 +1,7 @@
 package useCases;
 
 import Interfaces.DataPluginInterface;
-import ressourceModels.EntryRessource;
-import ressourceModels.LectureResource;
-import ressourceModels.SemesterRessource;
+import ressourceModels.*;
 import FilterCriteria.EntryFilterCriteria;
 
 import java.io.*;
@@ -44,7 +42,7 @@ public class DataPlugin implements DataPluginInterface {
                 , sanitizeInputForCSVFormat(entryRessource.getLecture())
                 , sanitizeInputForCSVFormat(entryRessource.getStart())
                 , sanitizeInputForCSVFormat(entryRessource.getEnd())
-                , sanitizeInputForCSVFormat(entryRessource.getType())
+                , sanitizeInputForCSVFormat(entryRessource.getType().name())
                 , sanitizeInputForCSVFormat(entryRessource.getDetails())
                 , entryRessource.getStatus()
         );
@@ -146,7 +144,7 @@ public class DataPlugin implements DataPluginInterface {
 
     private String sanitizeInputForCSVFormat(String input) {
         String toReturn = input;
-        if(!Objects.isNull(input)){
+        if (!Objects.isNull(input)) {
             if (input.contains(",")) {
                 System.out.println("The letter \",\" is not allowed as input. It will be removed"); //todo use uiplugin
                 //SendUIMessageUseCase sendMessage = new SendUIMessageUesCase(uiPlugin);
@@ -174,7 +172,7 @@ public class DataPlugin implements DataPluginInterface {
         String type = split[3];
         String details = split[4];
         String status = split[5];
-        return new EntryRessource(start, end, type, details, lecture, status);
+        return new EntryRessource(start, end, EntryRessourceType.valueOf(type), details, lecture, EntryRessourceStatus.valueOf(status));
     }
 
     private SemesterRessource parseStringToSemesterRessource(String semesterCSVInput) {
@@ -208,15 +206,15 @@ public class DataPlugin implements DataPluginInterface {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        EntryRessource toReplace = entryList.stream().filter(entry->entry.getStart().equals(entryRessource.getStart())).findFirst().get();//todo better filter
+        EntryRessource toReplace = entryList.stream().filter(entry -> entry.getStart().equals(entryRessource.getStart())).findFirst().get();//todo better filter
         entryList.remove(toReplace);
         entryList.add(entryRessource);
-        try(PrintWriter writer = new PrintWriter(entryFileName)){
-        writer.print("");
-        }catch (FileNotFoundException e){
+        try (PrintWriter writer = new PrintWriter(entryFileName)) {
+            writer.print("");
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        for(EntryRessource e: entryList){
+        for (EntryRessource e : entryList) {
             persistEntry(e);
         }
     }

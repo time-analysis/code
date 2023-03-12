@@ -54,4 +54,9 @@ public class DataPluginMock implements DataPluginInterface {
     public List<EntryRessource> getEntrys(EntryFilterCriteria criteria) {
         return null;
     }
+
+    @Override
+    public void updateEntry(EntryRessource entryRessource) {
+        
+    }
 }

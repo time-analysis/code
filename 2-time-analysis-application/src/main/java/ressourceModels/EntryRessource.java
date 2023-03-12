@@ -3,18 +3,18 @@ package ressourceModels;
 public class EntryRessource implements listeable {
     private String start;
     private String end;
-    private String type;
+    private EntryRessourceType type;
     private String details;
     private String lecture;
-    private String status;
+    private EntryRessourceStatus status;
 
-    public EntryRessource(String start, String end, String type, String details, String lecture, String status) {
+    public EntryRessource(String start, String end, EntryRessourceType type, String details, String lecture, EntryRessourceStatus status) {
         this(start, type, lecture, status);
         this.end = end;
         this.details = details;
     }
 
-    public EntryRessource(String start, String type, String lecture,String status) {
+    public EntryRessource(String start, EntryRessourceType type, String lecture, EntryRessourceStatus status) {
         this.start = start;
         this.type = type;
         this.lecture = lecture;
@@ -42,11 +42,11 @@ public class EntryRessource implements listeable {
         this.end = end;
     }
 
-    public String getType() {
+    public EntryRessourceType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(EntryRessourceType type) {
         this.type = type;
     }
 
@@ -66,17 +66,17 @@ public class EntryRessource implements listeable {
         this.lecture = lecture;
     }
 
-    public String getStatus() {
+    public EntryRessourceStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(EntryRessourceStatus status) {
         this.status = status;
     }
 
     @Override
     public String getDisplayName() {
-        return String.format("Entry of type %s started at %s for lecture %s",type,start,lecture);
+        return String.format("Entry of type %s started at %s for lecture %s", type, start, lecture);
     }
 
 

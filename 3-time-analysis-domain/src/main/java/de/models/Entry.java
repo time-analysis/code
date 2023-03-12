@@ -60,7 +60,7 @@ public class Entry {
         if (Objects.isNull(this.end) && status.equals(EntryStatus.RUNNING)) {
             this.end = end;
         } else {
-            System.out.println("end is already set!");
+            throw new UnsupportedOperationException("Entry is already finished");
         }
         if (details.length() == 0) {
             this.details = "No details available";

@@ -2,7 +2,7 @@ package useCases;
 
 import Interfaces.DataAdapterInterface;
 import Interfaces.DataPluginInterface;
-import de.models.EntryType;
+import ressourceModels.EntryRessourceType;
 
 public class GetEntryTypes {
 
@@ -14,7 +14,7 @@ public class GetEntryTypes {
         this.dataPlugin = dataPlugin;
     }
 
-    public EntryType[] getEntryType() {
-        return EntryType.values();
+    public EntryRessourceType[] getEntryType() {
+        return EntryRessourceType.values();
     }
 }

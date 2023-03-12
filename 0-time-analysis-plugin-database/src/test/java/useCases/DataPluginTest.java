@@ -4,6 +4,8 @@ import de.models.EntryStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ressourceModels.EntryRessource;
+import ressourceModels.EntryRessourceStatus;
+import ressourceModels.EntryRessourceType;
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -47,7 +49,7 @@ class DataPluginTest {
     void writeData() {
         LocalDateTime time = LocalDateTime.now();
 
-        plugin.persistEntry(new EntryRessource(time.toString(), time.toString(), "LECTURE", "weitere Informationen", "Testvorlesung", "FINISHED"));
+        plugin.persistEntry(new EntryRessource(time.toString(), time.toString(), EntryRessourceType.LECTURE, "weitere Informationen", "Testvorlesung", EntryRessourceStatus.FINISHED));
         String assumed = "Testvorlesung," + time + "," + time + ",LECTURE,weitere Informationen";
         String fromFile;
         try {

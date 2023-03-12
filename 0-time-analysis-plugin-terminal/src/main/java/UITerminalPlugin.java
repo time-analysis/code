@@ -5,10 +5,7 @@ import Interfaces.UIPluginInterface;
 import TransferModels.AnalysisResultForLecture;
 import TransferModels.SelfStudyTimeAndLectureTime;
 import de.models.EntryType;
-import ressourceModels.EntryRessource;
-import ressourceModels.LectureResource;
-import ressourceModels.SemesterRessource;
-import ressourceModels.listeable;
+import ressourceModels.*;
 import useCases.*;
 
 import java.time.Duration;
@@ -74,17 +71,17 @@ public class UITerminalPlugin implements UIPluginInterface {
         if (Integer.parseInt(finishOption) == 1) {
             String end = getEndTimeForEntry();
             String details = getStringFromInputWithPrompt("Details of study");
-            String entryType = getEntryTypeForEntry();
+            EntryRessourceType entryType = getEntryTypeForEntry();
             LectureResource lecture = getLectureForEntry();
 
-            EntryRessource entryRessource = new EntryRessource(start, end, entryType, details, lecture.getName(), "FINISHED");
+            EntryRessource entryRessource = new EntryRessource(start, end, entryType, details, lecture.getName(), EntryRessourceStatus.FINISHED);
             AdditionalEntry additionalEntry = new AdditionalEntry(dataAdapter, dataPlugin);
             additionalEntry.addEntry(this.uiAdapter.mapEntryRessourceToEntry(entryRessource), this.uiAdapter.mapLectureRessourceToLecture(lecture));
         } else if (Integer.parseInt(finishOption) == 2) {
-            String entryType = getEntryTypeForEntry();
+            EntryRessourceType entryType = getEntryTypeForEntry();
             LectureResource lecture = getLectureForEntry();
 
-            EntryRessource entryRessource = new EntryRessource(start, entryType, lecture.getName(),"RUNNING");
+            EntryRessource entryRessource = new EntryRessource(start, entryType, lecture.getName(), EntryRessourceStatus.RUNNING);
             AdditionalEntry additionalEntry = new AdditionalEntry(dataAdapter, dataPlugin);
             additionalEntry.startEntry(this.uiAdapter.mapEntryRessourceToEntry(entryRessource));
         } else {
@@ -121,7 +118,7 @@ public class UITerminalPlugin implements UIPluginInterface {
 
         GetSemesters getSemestersUseCase = new GetSemesters(dataAdapter, dataPlugin);
         List<SemesterRessource> semesterList = uiAdapter.mapSemesterListToSemesterRessourceList(getSemestersUseCase.getSemesters());
-        SemesterRessource semester = getObjectFromNumberedList(semesterList,"no semesters found. Start by creating a semester");
+        SemesterRessource semester = getObjectFromNumberedList(semesterList, "no semesters found. Start by creating a semester");
         Analysis analysis = new Analysis(dataAdapter, dataPlugin);
         Duration duration = analysis.getTimePerSemester(uiAdapter.mapSemesterRessourceToSemester(semester));
         System.out.println(uiAdapter.formatDuration(duration));
@@ -143,7 +140,7 @@ public class UITerminalPlugin implements UIPluginInterface {
         Analysis analysis = new Analysis(dataAdapter, dataPlugin);
         GetLectures getLectureUseCase = new GetLectures(dataAdapter, dataPlugin);
         List<LectureResource> lectures = uiAdapter.mapLectureListToLectureListRessource(getLectureUseCase.getLectures());
-        LectureResource lecture = getObjectFromNumberedList(lectures,"no lectures found. Start by creating a lecture");
+        LectureResource lecture = getObjectFromNumberedList(lectures, "no lectures found. Start by creating a lecture");
 
         SelfStudyTimeAndLectureTime time = analysis.getTimeSpentForLecture(lecture.getName());
         System.out.println("Planned SelfStudyTime: " + lecture.getSelfStudyTime() + " Hours | Actual selfStudyTime: " + uiAdapter.formatDuration(time.getSelfStudyTime()));
@@ -164,11 +161,11 @@ public class UITerminalPlugin implements UIPluginInterface {
     private void getUnfinishedEntries() {
         GetEntries getEntries = new GetEntries(dataAdapter, dataPlugin);
         List<EntryRessource> unfinishedEntries = dataAdapter.mapEntryListToEntryRessourceList(getEntries.getUnfinishedEntries());
-        EntryRessource entryRessource = getObjectFromNumberedList(unfinishedEntries,"no unfinished entries found");
+        EntryRessource entryRessource = getObjectFromNumberedList(unfinishedEntries, "no unfinished entries found");
         String end = getEndTimeForEntry();
         String details = getStringFromInputWithPrompt("Details of study");
-        AdditionalEntry additionalEntry = new AdditionalEntry(dataAdapter,dataPlugin);
-        additionalEntry.finishEntry(uiAdapter.mapEntryRessourceToEntry(entryRessource),uiAdapter.stringToLocalDateTime(end),details);
+        AdditionalEntry additionalEntry = new AdditionalEntry(dataAdapter, dataPlugin);
+        additionalEntry.finishEntry(uiAdapter.mapEntryRessourceToEntry(entryRessource), uiAdapter.stringToLocalDateTime(end), details);
     }
 
 
@@ -190,16 +187,16 @@ public class UITerminalPlugin implements UIPluginInterface {
         return end;
     }
 
-    private String getEntryTypeForEntry() {
+    private EntryRessourceType getEntryTypeForEntry() {
         GetEntryTypes getEntryTypesUseCase = new GetEntryTypes(dataAdapter, dataPlugin);
-        EntryType[] entryTypes = getEntryTypesUseCase.getEntryType();
-        return getEntryTypeFromNumberedList(entryTypes);
+        EntryRessourceType[] entryTypes = getEntryTypesUseCase.getEntryType();
+        return getObjectFromNumberedList(List.of(entryTypes), "No types found");
     }
 
     private LectureResource getLectureForEntry() {
         GetLectures getLectureUseCase = new GetLectures(dataAdapter, dataPlugin);
         List<LectureResource> lectures = uiAdapter.mapLectureListToLectureListRessource(getLectureUseCase.getLectures());
-        return getObjectFromNumberedList(lectures,"no lectures found. Start by creating a lecture");
+        return getObjectFromNumberedList(lectures, "no lectures found. Start by creating a lecture");
     }
 
 
@@ -235,7 +232,7 @@ public class UITerminalPlugin implements UIPluginInterface {
         try {
             Integer.parseInt(input);
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
             return false;
         }
         int inputAsInt = Integer.parseInt(input);
@@ -243,10 +240,10 @@ public class UITerminalPlugin implements UIPluginInterface {
     }
 
 
-    private <T extends listeable> T getObjectFromNumberedList(List<T> list,String listIsEmptyMessage) {
-        if(list.isEmpty()){
+    private <T extends listeable> T getObjectFromNumberedList(List<T> list, String listIsEmptyMessage) {
+        if (list.isEmpty()) {
             System.out.println(listIsEmptyMessage);
-        }else{
+        } else {
             System.out.println("choose an item from the list");
         }
         System.out.println(getListOfObjectsAsNumberedList(list));
@@ -267,24 +264,4 @@ public class UITerminalPlugin implements UIPluginInterface {
         return toReturn;
     }
 
-    private String getEntryTypeFromNumberedList(EntryType[] entryTypes) {
-        System.out.println("choose a study type");
-        System.out.println(getListOfEntrysAsNumberedList(entryTypes));
-
-        String entryIndex = scanner.nextLine();
-        while (!isInputValidNumber(entryIndex, entryTypes.length)) {
-            System.out.println("invalid input, try again!");
-            entryIndex = scanner.nextLine();
-        }
-        return entryTypes[Integer.parseInt(entryIndex)].name();
-    }
-
-    private String getListOfEntrysAsNumberedList(EntryType[] entryTypes) {
-        String toReturn = "";
-        for (int i = 0; i < entryTypes.length; i++) {
-            toReturn = toReturn.concat(i + ">" + entryTypes[i].toString() + "\n");
-
-        }
-        return toReturn;
-    }
 }
