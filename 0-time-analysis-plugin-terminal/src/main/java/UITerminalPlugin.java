@@ -44,7 +44,7 @@ public class UITerminalPlugin implements UIPluginInterface {
         commands.put("5", new ActionAndDesciption(this::getPresenceTime, "see how much time was spent listening to lectures"));
         commands.put("6", new ActionAndDesciption(this::getSelfStudyTime, "see how much time was spent studying on your own"));
         commands.put("7", new ActionAndDesciption(this::getTimePerSemester, "see how much time was spent for one specific semester"));
-        commands.put("8", new ActionAndDesciption(this::compareTime, "compare planned time to the the time that was actually spend"));
+        commands.put("8", new ActionAndDesciption(this::comparePlannedTimeToActualSpendTme, "compare planned time to the the time that was actually spend"));
         commands.put("9", new ActionAndDesciption(this::getUnfinishedEntries, "view unfinished Entries"));
         commands.forEach((key, value) -> {
             System.out.println(key + "> " + value.getDesciption());
@@ -148,7 +148,7 @@ public class UITerminalPlugin implements UIPluginInterface {
     }
 
 
-    private void compareTime() {
+    private void comparePlannedTimeToActualSpendTme() {
         Analysis analysis = new Analysis(dataAdapter, dataPlugin);
         List<AnalysisResultForLecture> results = analysis.compareTimeTargetToActual();
         for (AnalysisResultForLecture l : results) {
