@@ -1,13 +1,10 @@
 package useCases;
 
+import FilterCriteria.EntryFilterCriteria;
 import Interfaces.DataPluginInterface;
 import ressourceModels.*;
-import FilterCriteria.EntryFilterCriteria;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -187,13 +184,13 @@ public class DataPlugin implements DataPluginInterface {
         List<EntryRessource> entries = getEntrys();
         Stream<EntryRessource> entryRessourceStream = entries.stream();
         if (!Objects.isNull(filterCriteria.getEntryType())) {
-            entryRessourceStream = entryRessourceStream.filter(entry -> entry.getType().equals(filterCriteria.getEntryType().name()));
+            entryRessourceStream = entryRessourceStream.filter(entry -> entry.getType().name().equals(filterCriteria.getEntryType().name()));
         }
         if (!Objects.isNull(filterCriteria.getLectureName())) {
             entryRessourceStream = entryRessourceStream.filter(entry -> entry.getLecture().equals(filterCriteria.getLectureName()));
         }
         if (!Objects.isNull(filterCriteria.getEntryStatus())) {
-            entryRessourceStream = entryRessourceStream.filter(entry -> entry.getStatus().equals(filterCriteria.getEntryStatus().name()));
+            entryRessourceStream = entryRessourceStream.filter(entry -> entry.getType().name().equals(filterCriteria.getEntryStatus().name()));
         }
         return entryRessourceStream.collect(Collectors.toList());
     }
