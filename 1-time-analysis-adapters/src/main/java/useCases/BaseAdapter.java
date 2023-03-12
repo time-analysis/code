@@ -2,10 +2,9 @@ package useCases;
 
 import Interfaces.DataPluginInterface;
 import de.models.*;
-import ressourceModels.EntryRessource;
-import ressourceModels.LectureResource;
-import ressourceModels.SemesterRessource;
+import ressourceModels.*;
 
+import java.lang.module.FindException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -31,7 +30,7 @@ public class BaseAdapter {
         String lecture = entry.getLecture().getName();
         String details = entry.getDetails();
         String status = entry.getStatus().name();
-        return new EntryRessource(start, end, type, details, lecture, status);
+        return new EntryRessource(start, end, EntryRessourceType.valueOf(entry.getStatus().name()), details, lecture, EntryRessourceStatus.valueOf(entry.getStatus().name()));
     }
 
 
@@ -68,7 +67,7 @@ public class BaseAdapter {
         if (s.isPresent()) {
             semester = mapSemesterRessourceToSemester(s.get());
         } else {
-            //todo handle error
+            throw new FindException("Semester with name " + lectureResource.getSemester() + " was not found");
         }
         int lectureTime = lectureResource.getLectureTime();
         int selfStudyTime = lectureResource.getSelfStudyTime();
@@ -78,20 +77,20 @@ public class BaseAdapter {
 
     public Entry mapEntryRessourceToEntry(EntryRessource entryRessource) {
         LocalDateTime start = stringToLocalDateTime(entryRessource.getStart());
-        EntryType type = EntryType.valueOf(entryRessource.getType());
+        EntryType type = EntryType.valueOf(entryRessource.getType().name());
         Lecture lecture = null;
         Optional<LectureResource> lectureResourceOptional = this.dataPlugin.getLectureByName(entryRessource.getLecture());
         if (lectureResourceOptional.isPresent()) {
             lecture = mapLectureRessourceToLecture(lectureResourceOptional.get());
         } else {
-            //todo handle error
+            throw new FindException("Lecture with name " + entryRessource.getLecture() + " was not found");
         }
-        if(entryRessource.getStatus().equals(EntryStatus.RUNNING.name())){
+        if (entryRessource.getStatus().equals(EntryRessourceStatus.RUNNING)) {
             return new Entry(start, type, lecture);
-        }else{
-        String details = entryRessource.getDetails();
-        LocalDateTime end = stringToLocalDateTime(entryRessource.getEnd());
-        return new Entry(start,end,type,lecture,details);
+        } else {
+            String details = entryRessource.getDetails();
+            LocalDateTime end = stringToLocalDateTime(entryRessource.getEnd());
+            return new Entry(start, end, type, lecture, details);
         }
     }
 
@@ -130,7 +129,7 @@ public class BaseAdapter {
     }
 
     private String LocalDateTimeToString(LocalDateTime time) {
-        if(Objects.isNull(time)) return "";
+        if (Objects.isNull(time)) return "";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(localDateTimeFormatString);
         return time.format(formatter);
     }
