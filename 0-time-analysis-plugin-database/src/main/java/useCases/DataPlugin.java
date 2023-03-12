@@ -32,7 +32,7 @@ public class DataPlugin implements DataPluginInterface {
     }
 
     @Override
-    public boolean persistEntry(EntryRessource entryRessource) {
+    public void persistEntry(EntryRessource entryRessource) {
 
         String csvEntry = String.format(
                 "%s,%s,%s,%s,%s,%s"
@@ -50,7 +50,6 @@ public class DataPlugin implements DataPluginInterface {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return false;
     }
 
     @Override
