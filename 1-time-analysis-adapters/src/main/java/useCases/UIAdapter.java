@@ -5,6 +5,8 @@ import Interfaces.UIAdapterInterface;
 import de.models.Entry;
 import de.models.Lecture;
 import de.models.Semester;
+import repositories.LectureRepositoryInterface;
+import repositories.SemesterRepositoryInterface;
 import ressourceModels.EntryRessource;
 import ressourceModels.LectureResource;
 import ressourceModels.SemesterRessource;
@@ -19,8 +21,8 @@ public class UIAdapter implements UIAdapterInterface {
 
     private BaseAdapter baseAdapter;
 
-    public UIAdapter(DataPluginInterface dataPlugin) {
-        this.baseAdapter = new BaseAdapter(dataPlugin);
+    public UIAdapter(SemesterRepositoryInterface semesterRepository, LectureRepositoryInterface lectureRepository) {
+        this.baseAdapter = new BaseAdapter(semesterRepository, lectureRepository);
     }
 
 
@@ -41,8 +43,9 @@ public class UIAdapter implements UIAdapterInterface {
     public String formatDuration(Duration duration) {
         return String.format("%s Days %s Hours %s Minutes %s Seconds", duration.toDaysPart(), duration.toHoursPart(), duration.toMinutesPart(), duration.toSecondsPart());
     }
+
     @Override
-    public LocalDateTime stringToLocalDateTime(String time){
+    public LocalDateTime stringToLocalDateTime(String time) {
         return baseAdapter.stringToLocalDateTime(time);
     }
 

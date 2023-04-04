@@ -59,7 +59,7 @@ public class Analysis {
     public Duration getTimePerSemester(Semester semester) {
         List<Entry> entryList = dataAdapter.mapEntryRessourceListToEntryList(dataPlugin.getEntrys());
         Duration timePerSemester = entryList.stream().filter(entry -> entry.getLecture().getSemester().getName().equals(semester.getName())).map(Entry::calculateDuration).reduce(Duration::plus).orElse(Duration.ZERO);
-        return timePerSemester; //todo reicht java.duration oder braucht man ein eigenes objekt?
+        return timePerSemester;
     }
 
     public List<AnalysisResultForLecture> compareTimeTargetToActual() {

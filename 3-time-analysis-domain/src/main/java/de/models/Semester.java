@@ -35,17 +35,5 @@ public final class Semester {
     public LocalDate getEnd() {
         return end;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Semester semester = (Semester) o;
-        return name.equals(semester.name) && start.equals(semester.start) && end.equals(semester.end);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, start, end);
-    }
+    
 }

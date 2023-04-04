@@ -41,17 +41,5 @@ public final class Lecture {
     public int getSelfStudyTime() {
         return selfStudyTime;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Lecture lecture = (Lecture) o;
-        return lectureTime == lecture.lectureTime && selfStudyTime == lecture.selfStudyTime && name.equals(lecture.name) && semester.equals(lecture.semester);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, semester, lectureTime, selfStudyTime);
-    }
+    
 }

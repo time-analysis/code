@@ -5,6 +5,8 @@ import Interfaces.DataPluginInterface;
 import de.models.Entry;
 import de.models.Lecture;
 import de.models.Semester;
+import repositories.LectureRepositoryInterface;
+import repositories.SemesterRepositoryInterface;
 import ressourceModels.EntryRessource;
 import ressourceModels.LectureResource;
 import ressourceModels.SemesterRessource;
@@ -14,8 +16,8 @@ import java.util.List;
 public class DataAdapter implements DataAdapterInterface {
     private BaseAdapter baseAdapter;
 
-    public DataAdapter(DataPluginInterface dataPlugin) { //todo darf man einen datenplugin im datenadapter nutzen?
-        this.baseAdapter = new BaseAdapter(dataPlugin);
+    public DataAdapter(SemesterRepositoryInterface semesterRepository, LectureRepositoryInterface lectureRepository) {
+        this.baseAdapter = new BaseAdapter(semesterRepository, lectureRepository);
     }
 
     @Override

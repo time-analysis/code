@@ -15,6 +15,8 @@ public class DataPlugin implements DataPluginInterface {
     private String entryFileName;
     private String lectureFileName;
     private String semesterFileName;
+    private CsvAccessor csvAccessor = new CsvAccessor();
+
 
     public DataPlugin(String entryFileName, String lectureFileName, String semesterFileName) {
         this.entryFileName = entryFileName;
@@ -56,7 +58,7 @@ public class DataPlugin implements DataPluginInterface {
     public void persistLecture(LectureResource lectureResource) {
         Optional<LectureResource> lectureResourceOptional = getLectureByName(sanitizeInputForCSVFormat(lectureResource.getName()));
         if (lectureResourceOptional.isPresent()) {
-            System.out.println("A lecture with this name already exists");
+            System.out.println("A lecture with this name already exists"); //todo remove
             return;
         }
         String csvLecture = String.format(

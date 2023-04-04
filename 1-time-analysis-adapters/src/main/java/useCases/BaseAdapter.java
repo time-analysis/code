@@ -2,6 +2,8 @@ package useCases;
 
 import Interfaces.DataPluginInterface;
 import de.models.*;
+import repositories.LectureRepositoryInterface;
+import repositories.SemesterRepositoryInterface;
 import ressourceModels.*;
 
 import java.lang.module.FindException;
@@ -15,12 +17,14 @@ import java.util.stream.Collectors;
 
 public class BaseAdapter {
 
-    private DataPluginInterface dataPlugin;
     private String localDateTimeFormatString = "yyyy-MM-dd HH:mm";
     private String localDateFormatString = "yyyy-MM-dd";
+    private SemesterRepositoryInterface semesterRepository;
+    private LectureRepositoryInterface lectureRepository;
 
-    public BaseAdapter(DataPluginInterface dataPlugin) {
-        this.dataPlugin = dataPlugin;
+    public BaseAdapter(SemesterRepositoryInterface semesterRepository, LectureRepositoryInterface lectureRepository) {
+        this.semesterRepository = semesterRepository;
+        this.lectureRepository = lectureRepository;
     }
 
     public EntryRessource mapEntryToEntryRessource(Entry entry) {
@@ -30,7 +34,7 @@ public class BaseAdapter {
         String lecture = entry.getLecture().getName();
         String details = entry.getDetails();
         String status = entry.getStatus().name();
-        return new EntryRessource(start, end, EntryRessourceType.valueOf(entry.getStatus().name()), details, lecture, EntryRessourceStatus.valueOf(entry.getStatus().name()));
+        return new EntryRessource(start, end, EntryRessourceType.valueOf(type), details, lecture, EntryRessourceStatus.valueOf(status));
     }
 
 
@@ -61,36 +65,30 @@ public class BaseAdapter {
 
     public Lecture mapLectureRessourceToLecture(LectureResource lectureResource) {
         String name = lectureResource.getName();
-        Optional<SemesterRessource> s = this.dataPlugin.getSemesterByName(lectureResource.getSemester());
-        //Optional<SemesterRessource> se = new GetLectures(dataAdapter,dataPlugin).getLectures().stream().map(this::mapSemesterToSemesterRessource).collect(Collectors.toList());
-        Semester semester = null;
-        if (s.isPresent()) {
-            semester = mapSemesterRessourceToSemester(s.get());
-        } else {
+        //Optional<SemesterRessource> s = this.dataPlugin.getSemesterByName(lectureResource.getSemester()); //hier repository nutzen -> semester
+        Optional<Semester> s = this.semesterRepository.getSemesterByName(lectureResource.getSemester());
+        if (!s.isPresent()) {
             throw new FindException("Semester with name " + lectureResource.getSemester() + " was not found");
         }
         int lectureTime = lectureResource.getLectureTime();
         int selfStudyTime = lectureResource.getSelfStudyTime();
-        return new Lecture(name, semester, lectureTime, selfStudyTime);
+        return new Lecture(name, s.get(), lectureTime, selfStudyTime);
     }
 
 
     public Entry mapEntryRessourceToEntry(EntryRessource entryRessource) {
         LocalDateTime start = stringToLocalDateTime(entryRessource.getStart());
         EntryType type = EntryType.valueOf(entryRessource.getType().name());
-        Lecture lecture = null;
-        Optional<LectureResource> lectureResourceOptional = this.dataPlugin.getLectureByName(entryRessource.getLecture());
-        if (lectureResourceOptional.isPresent()) {
-            lecture = mapLectureRessourceToLecture(lectureResourceOptional.get());
-        } else {
+        Optional<Lecture> lectureOptional = this.lectureRepository.getLectureByName(entryRessource.getLecture());
+        if (!lectureOptional.isPresent()) {
             throw new FindException("Lecture with name " + entryRessource.getLecture() + " was not found");
         }
         if (entryRessource.getStatus().equals(EntryRessourceStatus.RUNNING)) {
-            return new Entry(start, type, lecture);
+            return new Entry(start, type, lectureOptional.get());
         } else {
             String details = entryRessource.getDetails();
             LocalDateTime end = stringToLocalDateTime(entryRessource.getEnd());
-            return new Entry(start, end, type, lecture, details);
+            return new Entry(start, end, type, lectureOptional.get(), details);
         }
     }
 
