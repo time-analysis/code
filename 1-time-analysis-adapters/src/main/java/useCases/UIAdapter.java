@@ -2,9 +2,13 @@ package useCases;
 
 import Interfaces.DataPluginInterface;
 import Interfaces.UIAdapterInterface;
+import TransferModels.AnalysisResultForLecture;
+import TransferModels.SelfStudyTimeAndLectureTime;
 import de.models.Entry;
 import de.models.Lecture;
 import de.models.Semester;
+import renderModels.AnalysisResultForLectureRenderModel;
+import renderModels.SelfStudyTimeAndLectureTimeRenderModel;
 import repositories.LectureRepositoryInterface;
 import repositories.SemesterRepositoryInterface;
 import ressourceModels.EntryRessource;
@@ -15,6 +19,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UIAdapter implements UIAdapterInterface {
 
@@ -86,5 +91,20 @@ public class UIAdapter implements UIAdapterInterface {
 
     public List<SemesterRessource> mapSemesterListToSemesterRessourceList(List<Semester> semesterList) {
         return baseAdapter.mapSemesterListToSemesterRessourceList(semesterList);
+    }
+
+    @Override
+    public SelfStudyTimeAndLectureTimeRenderModel selfStudyTimeAndLectureTimeToRenderModel(SelfStudyTimeAndLectureTime selfStudyTimeAndLectureTime) {
+        return new SelfStudyTimeAndLectureTimeRenderModel(formatDuration(selfStudyTimeAndLectureTime.getSelfStudyTime()),formatDuration(selfStudyTimeAndLectureTime.getLectureTime()));
+    }
+
+    @Override
+    public AnalysisResultForLectureRenderModel analysisResultForLectureToRenderModel(AnalysisResultForLecture analysisResultForLecture) {
+        return new AnalysisResultForLectureRenderModel(analysisResultForLecture.getLecture(),selfStudyTimeAndLectureTimeToRenderModel(analysisResultForLecture.getSelfStudyTimeAndLectureTime()));
+    }
+
+    @Override
+    public List<AnalysisResultForLectureRenderModel> analysisResultForLectureListToModelList(List<AnalysisResultForLecture> analysisResultForLectureList) {
+        return analysisResultForLectureList.stream().map(this::analysisResultForLectureToRenderModel).collect(Collectors.toList());
     }
 }

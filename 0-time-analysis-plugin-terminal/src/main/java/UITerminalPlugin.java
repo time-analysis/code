@@ -2,8 +2,8 @@ import Interfaces.DataAdapterInterface;
 import Interfaces.DataPluginInterface;
 import Interfaces.UIAdapterInterface;
 import Interfaces.UIPluginInterface;
-import TransferModels.AnalysisResultForLecture;
-import TransferModels.SelfStudyTimeAndLectureTime;
+import renderModels.AnalysisResultForLectureRenderModel;
+import renderModels.SelfStudyTimeAndLectureTimeRenderModel;
 import ressourceModels.*;
 import useCases.*;
 
@@ -141,19 +141,19 @@ public class UITerminalPlugin implements UIPluginInterface {
         List<LectureResource> lectures = uiAdapter.mapLectureListToLectureListRessource(getLectureUseCase.getLectures());
         LectureResource lecture = getObjectFromNumberedList(lectures, "no lectures found. Start by creating a lecture");
 
-        SelfStudyTimeAndLectureTime time = analysis.getTimeSpentForLecture(lecture.getName());
-        System.out.println("Planned SelfStudyTime: " + lecture.getSelfStudyTime() + " Hours | Actual selfStudyTime: " + uiAdapter.formatDuration(time.getSelfStudyTime()));
-        System.out.println("Planned lectureTime: " + lecture.getLectureTime() + " Hours | Actual lectureTime: " + uiAdapter.formatDuration(time.getLectureTime()));
+        SelfStudyTimeAndLectureTimeRenderModel time = this.uiAdapter.selfStudyTimeAndLectureTimeToRenderModel(analysis.getTimeSpentForLecture(lecture.getName()));
+        System.out.println("Planned SelfStudyTime: " + lecture.getSelfStudyTime() + " Hours | Actual selfStudyTime: " + time.getSelfStudyTime());
+        System.out.println("Planned lectureTime: " + lecture.getLectureTime() + " Hours | Actual lectureTime: " + time.getLectureTime());
     }
 
 
     private void comparePlannedTimeToActualSpendTime() {
         Analysis analysis = new Analysis(dataAdapter, dataPlugin);
-        List<AnalysisResultForLecture> results = analysis.compareTimeTargetToActual();
-        for (AnalysisResultForLecture l : results) {
-            System.out.println(l.getLecture().getName());
-            System.out.println("Planned SelfStudyTime: " + l.getLecture().getSelfStudyTime() + " Hours | Actual selfStudyTime: " + uiAdapter.formatDuration(l.getSelfStudyTimeAndLectureTime().getSelfStudyTime()));
-            System.out.println("Planned lectureTime: " + l.getLecture().getLectureTime() + " Hours | Actual lectureTime: " + uiAdapter.formatDuration(l.getSelfStudyTimeAndLectureTime().getLectureTime()));
+        List<AnalysisResultForLectureRenderModel> results = this.uiAdapter.analysisResultForLectureListToModelList(analysis.compareTimeTargetToActual());
+        for (AnalysisResultForLectureRenderModel l : results) {
+            System.out.println(l.getLecture());
+            System.out.println("Planned SelfStudyTime: " + l.getLecture().getSelfStudyTime() + " Hours | Actual selfStudyTime: " +l.getSelfStudyTimeAndLectureTime().getSelfStudyTime());
+            System.out.println("Planned lectureTime: " + l.getLecture().getLectureTime() + " Hours | Actual lectureTime: " + l.getSelfStudyTimeAndLectureTime().getLectureTime());
         }
     }
 
