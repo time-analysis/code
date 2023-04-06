@@ -19,6 +19,9 @@ public class DataAdapter implements DataAdapterInterface {
     public DataAdapter(SemesterRepositoryInterface semesterRepository, LectureRepositoryInterface lectureRepository) {
         this.baseAdapter = new BaseAdapter(semesterRepository, lectureRepository);
     }
+    public DataAdapter(){}
+    public void setRepositories(SemesterRepositoryInterface semesterRepository, LectureRepositoryInterface lectureRepository) {
+        this.baseAdapter = new BaseAdapter(semesterRepository, lectureRepository);}
 
     @Override
     public EntryRessource mapEntryToEntryRessource(Entry entry) {
