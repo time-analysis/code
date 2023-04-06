@@ -73,10 +73,9 @@ public class EntryRepository implements EntryRepositoryInterface {
 
     @Override
     public void udpateEntry(Entry entry) {
-        EntryRessource entryRessource = this.dataAdapter.mapEntryToEntryRessource(entry);
         List<Entry> entryList = getEntrys();
 
-        Entry toReplace = entryList.stream().filter(e -> e.getStart().equals(entryRessource.getStart())).findFirst().get();//todo better filter
+        Entry toReplace = entryList.stream().filter(e -> e.getStart().equals(entry.getStart())).findFirst().get();//todo better filter
         entryList.remove(toReplace);
         entryList.add(entry);
         try (PrintWriter writer = new PrintWriter(entryFileName)) {
