@@ -1,20 +1,16 @@
 package useCases;
 
-import Interfaces.DataAdapterInterface;
-import Interfaces.DataPluginInterface;
 import de.models.Lecture;
+import repositories.LectureRepositoryInterface;
 
 public class AdditionalLecture {
-    private DataAdapterInterface dataAdapter;
-    private DataPluginInterface dataPlugin;
+    private LectureRepositoryInterface lectureRepository;
 
-    public AdditionalLecture(DataAdapterInterface dataAdapter, DataPluginInterface dataPlugin) {
-        this.dataAdapter = dataAdapter;
-        this.dataPlugin = dataPlugin;
+    public AdditionalLecture(LectureRepositoryInterface lectureRepository) {
+      this.lectureRepository = lectureRepository;
     }
 
     public void addLecture(Lecture lecture) {
-        dataPlugin.persistLecture(dataAdapter.mapLectureToLectureRessource(lecture));
-
+        lectureRepository.createLecture(lecture);
     }
 }

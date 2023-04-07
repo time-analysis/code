@@ -1,17 +1,17 @@
 package TransferModels;
 
-import ressourceModels.LectureResource;
+import de.models.Lecture;
 
 public class AnalysisResultForLecture {
-    private LectureResource lecture;
+    private Lecture lecture;
     private SelfStudyTimeAndLectureTime selfStudyTimeAndLectureTime;
 
-    public AnalysisResultForLecture(LectureResource lecture, SelfStudyTimeAndLectureTime selfStudyTimeAndLectureTime) {
+    public AnalysisResultForLecture(Lecture lecture, SelfStudyTimeAndLectureTime selfStudyTimeAndLectureTime) {
         this.lecture = lecture;
         this.selfStudyTimeAndLectureTime = selfStudyTimeAndLectureTime;
     }
 
-    public LectureResource getLecture() {
+    public Lecture getLecture() {
         return lecture;
     }
 

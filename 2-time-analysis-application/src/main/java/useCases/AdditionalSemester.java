@@ -1,20 +1,17 @@
 package useCases;
 
-import Interfaces.DataAdapterInterface;
-import Interfaces.DataPluginInterface;
 import de.models.Semester;
+import repositories.SemesterRepositoryInterface;
 
 public class AdditionalSemester {
 
-    private DataAdapterInterface dataAdapter;
-    private DataPluginInterface dataPlugin;
+    private SemesterRepositoryInterface semesterRepository;
 
-    public AdditionalSemester(DataAdapterInterface dataAdapter, DataPluginInterface dataPlugin) {
-        this.dataAdapter = dataAdapter;
-        this.dataPlugin = dataPlugin;
+    public AdditionalSemester(SemesterRepositoryInterface semesterRepository) {
+      this.semesterRepository = semesterRepository;
     }
 
     public void addSemester(Semester semester) {
-        dataPlugin.persistSemester(dataAdapter.mapSemesterToSemesterRessource(semester));
+        semesterRepository.createSemester(semester);
     }
 }

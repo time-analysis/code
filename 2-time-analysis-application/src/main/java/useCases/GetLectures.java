@@ -1,21 +1,18 @@
 package useCases;
 
-import Interfaces.DataAdapterInterface;
-import Interfaces.DataPluginInterface;
 import de.models.Lecture;
+import repositories.LectureRepositoryInterface;
 
 import java.util.List;
 
 public class GetLectures {
-    private DataAdapterInterface dataAdapter;
-    private DataPluginInterface dataPlugin;
+    private LectureRepositoryInterface lectureRepository;
 
-    public GetLectures(DataAdapterInterface dataAdapter, DataPluginInterface dataPlugin) {
-        this.dataAdapter = dataAdapter;
-        this.dataPlugin = dataPlugin;
+    public GetLectures(LectureRepositoryInterface lectureRepository) {
+        this.lectureRepository = lectureRepository;
     }
 
     public List<Lecture> getLectures() {
-        return this.dataAdapter.mapLectureRessourceListToLectureList(this.dataPlugin.getLectures());
+        return lectureRepository.getLectures();
     }
 }

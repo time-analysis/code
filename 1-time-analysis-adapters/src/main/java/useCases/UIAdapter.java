@@ -1,6 +1,5 @@
 package useCases;
 
-import Interfaces.DataPluginInterface;
 import Interfaces.UIAdapterInterface;
 import TransferModels.AnalysisResultForLecture;
 import TransferModels.SelfStudyTimeAndLectureTime;
@@ -100,7 +99,7 @@ public class UIAdapter implements UIAdapterInterface {
 
     @Override
     public AnalysisResultForLectureRenderModel analysisResultForLectureToRenderModel(AnalysisResultForLecture analysisResultForLecture) {
-        return new AnalysisResultForLectureRenderModel(analysisResultForLecture.getLecture(),selfStudyTimeAndLectureTimeToRenderModel(analysisResultForLecture.getSelfStudyTimeAndLectureTime()));
+        return new AnalysisResultForLectureRenderModel(mapLectureToLectureRessource(analysisResultForLecture.getLecture()),selfStudyTimeAndLectureTimeToRenderModel(analysisResultForLecture.getSelfStudyTimeAndLectureTime()));
     }
 
     @Override

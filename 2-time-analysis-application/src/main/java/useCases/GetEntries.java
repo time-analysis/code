@@ -2,25 +2,22 @@ package useCases;
 
 import FilterCriteria.EntryFilterCriteria;
 import FilterCriteria.EntryFilterCriteriaBuilder;
-import Interfaces.DataAdapterInterface;
-import Interfaces.DataPluginInterface;
 import de.models.Entry;
 import de.models.EntryStatus;
+import repositories.EntryRepositoryInterface;
 
 import java.util.List;
 
 public class GetEntries {
-    private DataAdapterInterface dataAdapter;
-    private DataPluginInterface dataPlugin;
+    private  EntryRepositoryInterface entryRepository;
 
-    public GetEntries(DataAdapterInterface dataAdapter, DataPluginInterface dataPlugin) {
-        this.dataAdapter = dataAdapter;
-        this.dataPlugin = dataPlugin;
+    public GetEntries(EntryRepositoryInterface entryRepository) {
+        this.entryRepository  = entryRepository;
     }
 
     public List<Entry> getUnfinishedEntries() {
         EntryFilterCriteriaBuilder entryFilterCriteriaBuilder = new EntryFilterCriteriaBuilder();
         EntryFilterCriteria entryFilterCriteria = entryFilterCriteriaBuilder.withStatus(EntryStatus.RUNNING).build();
-        return dataAdapter.mapEntryRessourceListToEntryList(dataPlugin.getEntrys(entryFilterCriteria));
+        return entryRepository.getEntrys(entryFilterCriteria);
     }
 }
