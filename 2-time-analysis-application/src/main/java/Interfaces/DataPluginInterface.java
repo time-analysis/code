@@ -1,6 +1,6 @@
 package Interfaces;
 
-import FilterCriteria.EntryFilterCriteria;
+import filterCriteria.EntryFilterCriteria;
 import ressourceModels.EntryRessource;
 import ressourceModels.LectureResource;
 import ressourceModels.SemesterRessource;

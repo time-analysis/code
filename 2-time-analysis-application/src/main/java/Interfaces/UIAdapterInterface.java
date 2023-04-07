@@ -1,8 +1,12 @@
 package Interfaces;
 
+import transferModels.AnalysisResultForLecture;
+import transferModels.SelfStudyTimeAndLectureTime;
 import de.models.Entry;
 import de.models.Lecture;
 import de.models.Semester;
+import renderModels.AnalysisResultForLectureRenderModel;
+import renderModels.SelfStudyTimeAndLectureTimeRenderModel;
 import ressourceModels.EntryRessource;
 import ressourceModels.LectureResource;
 import ressourceModels.SemesterRessource;
@@ -40,4 +44,10 @@ public interface UIAdapterInterface {
     List<LectureResource> mapLectureListToLectureListRessource(List<Lecture> lectureList);
 
     List<SemesterRessource> mapSemesterListToSemesterRessourceList(List<Semester> semesterList);
+
+    SelfStudyTimeAndLectureTimeRenderModel selfStudyTimeAndLectureTimeToRenderModel(SelfStudyTimeAndLectureTime selfStudyTimeAndLectureTime);
+
+    AnalysisResultForLectureRenderModel analysisResultForLectureToRenderModel(AnalysisResultForLecture analysisResultForLecture);
+
+    List<AnalysisResultForLectureRenderModel> analysisResultForLectureListToModelList(List<AnalysisResultForLecture> analysisResultForLectureList);
 }

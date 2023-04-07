@@ -1,11 +1,12 @@
-import Interfaces.DataAdapterInterface;
-import Interfaces.DataPluginInterface;
 import Interfaces.UIAdapterInterface;
 import Interfaces.UIPluginInterface;
-import TransferModels.AnalysisResultForLecture;
-import TransferModels.SelfStudyTimeAndLectureTime;
+import renderModels.AnalysisResultForLectureRenderModel;
+import renderModels.SelfStudyTimeAndLectureTimeRenderModel;
+import repositories.EntryRepositoryInterface;
+import repositories.LectureRepositoryInterface;
+import repositories.SemesterRepositoryInterface;
 import ressourceModels.*;
-import useCases.*;
+import usecases.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -13,16 +14,20 @@ import java.util.*;
 
 public class UITerminalPlugin implements UIPluginInterface {
 
-    private DataPluginInterface dataPlugin;
+
     private UIAdapterInterface uiAdapter;
-    private DataAdapterInterface dataAdapter;
+    private SemesterRepositoryInterface semesterRepository;
+    private LectureRepositoryInterface lectureRepository;
+    private EntryRepositoryInterface entryRepository;
     private Scanner scanner;
 
-    public UITerminalPlugin(DataPluginInterface dataPlugin, DataAdapterInterface dataAdapter, UIAdapterInterface uiAdapter) {
-        this.dataPlugin = dataPlugin;
+    public UITerminalPlugin(SemesterRepositoryInterface semesterRepository, LectureRepositoryInterface lectureRepository, EntryRepositoryInterface entryRepository, UIAdapterInterface uiAdapter) {
+
         this.uiAdapter = uiAdapter;
         this.scanner = new Scanner(System.in);
-        this.dataAdapter = dataAdapter;
+        this.semesterRepository = semesterRepository;
+        this.lectureRepository = lectureRepository;
+        this.entryRepository = entryRepository;
     }
 
     public void start() {
@@ -74,14 +79,14 @@ public class UITerminalPlugin implements UIPluginInterface {
             LectureResource lecture = getLectureForEntry();
 
             EntryRessource entryRessource = new EntryRessource(start, end, entryType, details, lecture.getName(), EntryRessourceStatus.FINISHED);
-            AdditionalEntry additionalEntry = new AdditionalEntry(dataAdapter, dataPlugin);
+            AdditionalEntry additionalEntry = new AdditionalEntry(entryRepository);
             additionalEntry.addEntry(this.uiAdapter.mapEntryRessourceToEntry(entryRessource), this.uiAdapter.mapLectureRessourceToLecture(lecture));
         } else if (Integer.parseInt(finishOption) == 2) {
             EntryRessourceType entryType = getEntryTypeForEntry();
             LectureResource lecture = getLectureForEntry();
 
             EntryRessource entryRessource = new EntryRessource(start, entryType, lecture.getName(), EntryRessourceStatus.RUNNING);
-            AdditionalEntry additionalEntry = new AdditionalEntry(dataAdapter, dataPlugin);
+            AdditionalEntry additionalEntry = new AdditionalEntry(entryRepository);
             additionalEntry.startEntry(this.uiAdapter.mapEntryRessourceToEntry(entryRessource));
         } else {
             System.out.println("invalid Input");
@@ -99,7 +104,7 @@ public class UITerminalPlugin implements UIPluginInterface {
         SemesterRessource semester = getSemesterForLecture();
 
         LectureResource lectureResource = new LectureResource(name, semester.getName(), Integer.parseInt(lectureTime), Integer.parseInt(selfStudyTime));
-        AdditionalLecture additionalLecture = new AdditionalLecture(dataAdapter, dataPlugin);
+        AdditionalLecture additionalLecture = new AdditionalLecture(lectureRepository);
         additionalLecture.addLecture(this.uiAdapter.mapLectureRessourceToLecture(lectureResource));
     }
 
@@ -108,62 +113,61 @@ public class UITerminalPlugin implements UIPluginInterface {
         String name = getStringFromInputWithPrompt("name of semester:");
         String start = getStringFromInputWithPrompt("start date for semester:");
         String end = getStringFromInputWithPrompt("end date for semester:");
-        AdditionalSemester additionalSemester = new AdditionalSemester(dataAdapter, dataPlugin);
+        AdditionalSemester additionalSemester = new AdditionalSemester(semesterRepository);
         SemesterRessource semesterRessource = new SemesterRessource(name, start, end);
         additionalSemester.addSemester(uiAdapter.mapSemesterRessourceToSemester(semesterRessource));
     }
 
     private void getTimePerSemester() {
 
-        GetSemesters getSemestersUseCase = new GetSemesters(dataAdapter, dataPlugin);
+        GetSemesters getSemestersUseCase = new GetSemesters(semesterRepository);
         List<SemesterRessource> semesterList = uiAdapter.mapSemesterListToSemesterRessourceList(getSemestersUseCase.getSemesters());
         SemesterRessource semester = getObjectFromNumberedList(semesterList, "no semesters found. Start by creating a semester");
-        Analysis analysis = new Analysis(dataAdapter, dataPlugin);
+        Analysis analysis = new Analysis(entryRepository, lectureRepository);
         Duration duration = analysis.getTimePerSemester(uiAdapter.mapSemesterRessourceToSemester(semester));
         System.out.println(uiAdapter.formatDuration(duration));
     }
 
     private void getSelfStudyTime() {
-        Analysis analysis = new Analysis(dataAdapter, dataPlugin);
+        Analysis analysis = new Analysis(entryRepository, lectureRepository);
         Duration duration = analysis.getStudyTime();
         System.out.println(uiAdapter.formatDuration(duration));
     }
 
     private void getPresenceTime() {
-        Analysis analysis = new Analysis(dataAdapter, dataPlugin);
+        Analysis analysis = new Analysis(entryRepository, lectureRepository);
         Duration duration = analysis.getPresenceTime();
         System.out.println(uiAdapter.formatDuration(duration));
     }
 
     private void getTimePerLecture() {
-        Analysis analysis = new Analysis(dataAdapter, dataPlugin);
-        GetLectures getLectureUseCase = new GetLectures(dataAdapter, dataPlugin);
+        Analysis analysis = new Analysis(entryRepository, lectureRepository);
+        GetLectures getLectureUseCase = new GetLectures(lectureRepository);
         List<LectureResource> lectures = uiAdapter.mapLectureListToLectureListRessource(getLectureUseCase.getLectures());
         LectureResource lecture = getObjectFromNumberedList(lectures, "no lectures found. Start by creating a lecture");
-
-        SelfStudyTimeAndLectureTime time = analysis.getTimeSpentForLecture(lecture.getName());
-        System.out.println("Planned SelfStudyTime: " + lecture.getSelfStudyTime() + " Hours | Actual selfStudyTime: " + uiAdapter.formatDuration(time.getSelfStudyTime()));
-        System.out.println("Planned lectureTime: " + lecture.getLectureTime() + " Hours | Actual lectureTime: " + uiAdapter.formatDuration(time.getLectureTime()));
+        SelfStudyTimeAndLectureTimeRenderModel time = this.uiAdapter.selfStudyTimeAndLectureTimeToRenderModel(analysis.getTimeSpentForLecture(lecture.getName()));
+        System.out.println("Planned SelfStudyTime: " + lecture.getSelfStudyTime() + " Hours | Actual selfStudyTime: " + time.getSelfStudyTime());
+        System.out.println("Planned lectureTime: " + lecture.getLectureTime() + " Hours | Actual lectureTime: " + time.getLectureTime());
     }
 
 
     private void comparePlannedTimeToActualSpendTime() {
-        Analysis analysis = new Analysis(dataAdapter, dataPlugin);
-        List<AnalysisResultForLecture> results = analysis.compareTimeTargetToActual();
-        for (AnalysisResultForLecture l : results) {
+        Analysis analysis = new Analysis(entryRepository, lectureRepository);
+        List<AnalysisResultForLectureRenderModel> results = this.uiAdapter.analysisResultForLectureListToModelList(analysis.compareTimeTargetToActual());
+        for (AnalysisResultForLectureRenderModel l : results) {
             System.out.println(l.getLecture().getName());
-            System.out.println("Planned SelfStudyTime: " + l.getLecture().getSelfStudyTime() + " Hours | Actual selfStudyTime: " + uiAdapter.formatDuration(l.getSelfStudyTimeAndLectureTime().getSelfStudyTime()));
-            System.out.println("Planned lectureTime: " + l.getLecture().getLectureTime() + " Hours | Actual lectureTime: " + uiAdapter.formatDuration(l.getSelfStudyTimeAndLectureTime().getLectureTime()));
+            System.out.println("Planned SelfStudyTime: " + l.getLecture().getSelfStudyTime() + " Hours | Actual selfStudyTime: " + l.getSelfStudyTimeAndLectureTime().getSelfStudyTime());
+            System.out.println("Planned lectureTime: " + l.getLecture().getLectureTime() + " Hours | Actual lectureTime: " + l.getSelfStudyTimeAndLectureTime().getLectureTime());
         }
     }
 
     private void getUnfinishedEntries() {
-        GetEntries getEntries = new GetEntries(dataAdapter, dataPlugin);
-        List<EntryRessource> unfinishedEntries = dataAdapter.mapEntryListToEntryRessourceList(getEntries.getUnfinishedEntries());
+        GetEntries getEntries = new GetEntries(entryRepository);
+        List<EntryRessource> unfinishedEntries = uiAdapter.mapEntryListToEntryRessourceList(getEntries.getUnfinishedEntries());
         EntryRessource entryRessource = getObjectFromNumberedList(unfinishedEntries, "no unfinished entries found");
         String end = getEndTimeForEntry();
         String details = getStringFromInputWithPrompt("Details of study");
-        AdditionalEntry additionalEntry = new AdditionalEntry(dataAdapter, dataPlugin);
+        AdditionalEntry additionalEntry = new AdditionalEntry(entryRepository);
         additionalEntry.finishEntry(uiAdapter.mapEntryRessourceToEntry(entryRessource), uiAdapter.stringToLocalDateTime(end), details);
     }
 
@@ -187,20 +191,20 @@ public class UITerminalPlugin implements UIPluginInterface {
     }
 
     private EntryRessourceType getEntryTypeForEntry() {
-        GetEntryTypes getEntryTypesUseCase = new GetEntryTypes(dataAdapter, dataPlugin);
+        GetEntryTypes getEntryTypesUseCase = new GetEntryTypes();
         EntryRessourceType[] entryTypes = getEntryTypesUseCase.getEntryType();
         return getObjectFromNumberedList(List.of(entryTypes), "No types found");
     }
 
     private LectureResource getLectureForEntry() {
-        GetLectures getLectureUseCase = new GetLectures(dataAdapter, dataPlugin);
+        GetLectures getLectureUseCase = new GetLectures(lectureRepository);
         List<LectureResource> lectures = uiAdapter.mapLectureListToLectureListRessource(getLectureUseCase.getLectures());
         return getObjectFromNumberedList(lectures, "no lectures found. Start by creating a lecture");
     }
 
 
     private SemesterRessource getSemesterForLecture() {
-        GetSemesters getSemestersUseCase = new GetSemesters(dataAdapter, dataPlugin);
+        GetSemesters getSemestersUseCase = new GetSemesters(semesterRepository);
         List<SemesterRessource> semesterList = uiAdapter.mapSemesterListToSemesterRessourceList(getSemestersUseCase.getSemesters());
         return getObjectFromNumberedList(semesterList, "no semesters found. Start by creating a semester");
     }

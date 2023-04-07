@@ -7,6 +7,18 @@ public class EntryRessource implements listeable {
     private String details;
     private String lecture;
     private EntryRessourceStatus status;
+    private String id;
+
+    public EntryRessource(String start, String end, EntryRessourceType type, String details, String lecture, EntryRessourceStatus status, String id) {
+        this(start, type, lecture, status, id);
+        this.end = end;
+        this.details = details;
+    }
+
+    public EntryRessource(String start, EntryRessourceType type, String lecture, EntryRessourceStatus status, String id) {
+        this(start, type, lecture, status);
+        this.id = id;
+    }
 
     public EntryRessource(String start, String end, EntryRessourceType type, String details, String lecture, EntryRessourceStatus status) {
         this(start, type, lecture, status);
@@ -19,12 +31,8 @@ public class EntryRessource implements listeable {
         this.type = type;
         this.lecture = lecture;
         this.status = status;
-
     }
 
-    public EntryRessource() {
-
-    }
 
     public String getStart() {
         return start;
@@ -72,6 +80,10 @@ public class EntryRessource implements listeable {
 
     public void setStatus(EntryRessourceStatus status) {
         this.status = status;
+    }
+
+    public String getId() {
+        return this.id;
     }
 
     @Override
