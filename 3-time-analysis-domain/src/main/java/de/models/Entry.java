@@ -16,18 +16,27 @@ public class Entry {
     private UUID id;
 
     public Entry(LocalDateTime start, EntryType type, Lecture lecture) {
+        this(start, type, lecture, UUID.randomUUID());
+    }
+
+    public Entry(LocalDateTime start, LocalDateTime end, EntryType type, Lecture lecture, String details) {
+        this(start, type, lecture);
+        finishEntry(end, details);
+    }
+
+    public Entry(LocalDateTime start, EntryType type, Lecture lecture, UUID id) {
         if (Objects.isNull(start)) throw new IllegalStateException("start can not be null");
         if (Objects.isNull(type)) throw new IllegalStateException("type can not be null");
         if (Objects.isNull(lecture)) throw new IllegalStateException("lecture can not be null");
         this.start = start;
         this.type = type;
         this.lecture = lecture;
+        this.id = id;
         this.status = EntryStatus.RUNNING;
-        this.id = UUID.randomUUID();
     }
 
-    public Entry(LocalDateTime start, LocalDateTime end, EntryType type, Lecture lecture, String details) {
-        this(start, type, lecture);
+    public Entry(LocalDateTime start, LocalDateTime end, EntryType type, Lecture lecture, String details, UUID id) {
+        this(start, type, lecture, id);
         finishEntry(end, details);
     }
 

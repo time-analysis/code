@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class BaseAdapter {
@@ -82,17 +83,29 @@ public class BaseAdapter {
     public Entry mapEntryRessourceToEntry(EntryRessource entryRessource) {
         LocalDateTime start = stringToLocalDateTime(entryRessource.getStart());
         EntryType type = EntryType.valueOf(entryRessource.getType().name());
+        String uuid = entryRessource.getId();
         Optional<Lecture> lectureOptional = this.lectureRepository.getLectureByName(entryRessource.getLecture());
         if (!lectureOptional.isPresent()) {
             throw new FindException("Lecture with name " + entryRessource.getLecture() + " was not found");
         }
-        if (entryRessource.getStatus().equals(EntryRessourceStatus.RUNNING)) {
-            return new Entry(start, type, lectureOptional.get());
+        if (Objects.isNull(uuid)) {
+            if (entryRessource.getStatus().equals(EntryRessourceStatus.RUNNING)) {
+                return new Entry(start, type, lectureOptional.get());
+            } else {
+                String details = entryRessource.getDetails();
+                LocalDateTime end = stringToLocalDateTime(entryRessource.getEnd());
+                return new Entry(start, end, type, lectureOptional.get(), details);
+            }
         } else {
-            String details = entryRessource.getDetails();
-            LocalDateTime end = stringToLocalDateTime(entryRessource.getEnd());
-            return new Entry(start, end, type, lectureOptional.get(), details);
+            if (entryRessource.getStatus().equals(EntryRessourceStatus.RUNNING)) {
+                return new Entry(start, type, lectureOptional.get(), UUID.fromString(uuid));
+            } else {
+                String details = entryRessource.getDetails();
+                LocalDateTime end = stringToLocalDateTime(entryRessource.getEnd());
+                return new Entry(start, end, type, lectureOptional.get(), details, UUID.fromString(uuid));
+            }
         }
+
     }
 
     public List<Entry> mapEntryRessourceListToEntryList(List<EntryRessource> entryRessourceList) {
