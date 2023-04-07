@@ -66,7 +66,7 @@ public class EntryRepository implements EntryRepositoryInterface {
             entryStream = entryStream.filter(entry -> entry.getLecture().getName().equals(filterCriteria.getLectureName()));
         }
         if (!Objects.isNull(filterCriteria.getEntryStatus())) {
-            entryStream = entryStream.filter(entry -> entry.getType().name().equals(filterCriteria.getEntryStatus().name()));
+            entryStream = entryStream.filter(entry -> entry.getStatus().name().equals(filterCriteria.getEntryStatus().name()));
         }
         return entryStream.collect(Collectors.toList());
     }
