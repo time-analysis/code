@@ -13,7 +13,7 @@ public final class Lecture {
     public Lecture(String name, Semester semester, int lectureTime, int selfStudyTime) {
         super();
         if (Objects.isNull(name)) throw new IllegalStateException("name can not be null");
-        if (name.length() == 0) {
+        if (name.isBlank()) {
             throw new IllegalArgumentException("Name of a lecture can not be empty");
         }
         this.name = name;
@@ -41,5 +41,17 @@ public final class Lecture {
     public int getSelfStudyTime() {
         return selfStudyTime;
     }
-    
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Lecture lecture = (Lecture) o;
+        return name.equals(lecture.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
+    }
 }

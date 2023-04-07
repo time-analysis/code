@@ -1,13 +1,13 @@
 import Interfaces.UIAdapterInterface;
-import Repositories.EntryRepository;
-import Repositories.EntryRepositoryCache;
-import Repositories.LectureRepository;
-import Repositories.SemesterRepository;
+import repositories.EntryRepository;
+import repositories.EntryRepositoryCache;
+import repositories.LectureRepository;
+import repositories.SemesterRepository;
 import repositories.EntryRepositoryInterface;
 import repositories.LectureRepositoryInterface;
 import repositories.SemesterRepositoryInterface;
-import useCases.DataAdapter;
-import useCases.UIAdapter;
+import adapters.DataAdapter;
+import adapters.UIAdapter;
 
 public class starter {
     public static void main(String[] args) {
@@ -17,12 +17,12 @@ public class starter {
         SemesterRepositoryInterface semesterRepository = new SemesterRepository(dataAdapter, "Semesters.csv");
         LectureRepositoryInterface lectureRepository = new LectureRepository(dataAdapter, "Lectures.csv");
 
-        EntryRepositoryInterface entryRepository = new EntryRepository(dataAdapter,"Entries.csv");
+        EntryRepositoryInterface entryRepository = new EntryRepository(dataAdapter, "Entries.csv");
         EntryRepositoryInterface entryRepositoryCache = new EntryRepositoryCache(entryRepository);
 
-        dataAdapter.setRepositories(semesterRepository,lectureRepository);
+        dataAdapter.setRepositories(semesterRepository, lectureRepository);
         UIAdapterInterface uiAdapter = new UIAdapter(semesterRepository, lectureRepository);
-        UITerminalPlugin terminal = new UITerminalPlugin(semesterRepository,lectureRepository,entryRepositoryCache, uiAdapter);
+        UITerminalPlugin terminal = new UITerminalPlugin(semesterRepository, lectureRepository, entryRepositoryCache, uiAdapter);
         terminal.start();
     }
 }

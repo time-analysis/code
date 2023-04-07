@@ -53,4 +53,31 @@ class EntryTest {
         assertEquals(entry.calculateDuration(), Duration.ofHours(1));
 
     }
+
+    @Test
+    void testCalculateDurationFailsIfEntryIsNotFinished() {
+        LocalDate now = LocalDate.now();
+        LocalDateTime start = LocalDateTime.of(LocalDate.of(2022, 10, 10), LocalTime.of(10, 0, 0, 0));
+        Semester semester = new Semester("5. Semester", now, now);
+        Lecture lecture = new Lecture("ASE", semester, 50, 10);
+        Entry entry = new Entry(start, EntryType.SELFSTUDY, lecture);
+
+        UnsupportedOperationException exception = assertThrows(UnsupportedOperationException.class, entry::calculateDuration);
+        assertEquals("Entry needs to be finished in order to be able to calculate Duration", exception.getMessage());
+    }
+
+    @Test
+    void testEntryCanNotBeFinishedTwice() {
+        LocalDate now = LocalDate.now();
+        LocalDateTime start = LocalDateTime.of(LocalDate.of(2022, 10, 10), LocalTime.of(10, 0, 0, 0));
+        LocalDateTime end = LocalDateTime.of(LocalDate.of(2022, 10, 10), LocalTime.of(11, 0, 0, 0));
+        Semester semester = new Semester("5. Semester", now, now);
+        Lecture lecture = new Lecture("ASE", semester, 50, 10);
+        Entry entry = new Entry(start, EntryType.SELFSTUDY, lecture);
+        entry.finishEntry(end, "more information");
+
+        UnsupportedOperationException exception = assertThrows(UnsupportedOperationException.class, () -> entry.finishEntry(end, "too much information"));
+        assertEquals("Entry is already finished", exception.getMessage());
+    }
+
 }

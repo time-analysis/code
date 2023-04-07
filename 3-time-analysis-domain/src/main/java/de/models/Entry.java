@@ -55,7 +55,7 @@ public class Entry {
     public void finishEntry(LocalDateTime end, String details) {
         if (Objects.isNull(end)) throw new IllegalStateException("end can not be null");
         if (start.isAfter(end)) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("start can not be after end");
         }
         if (Objects.isNull(this.end) && status.equals(EntryStatus.RUNNING)) {
             this.end = end;
@@ -71,6 +71,10 @@ public class Entry {
     }
 
     public Duration calculateDuration() {
+        if (Objects.isNull(this.end) || status.equals(EntryStatus.RUNNING)) {
+            throw new UnsupportedOperationException("Entry needs to be finished in order to be able to calculate Duration");
+        }
+
         return Duration.between(start, end);
     }
 }

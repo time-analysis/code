@@ -16,7 +16,7 @@ public final class Semester {
         if (Objects.isNull(end)) throw new IllegalStateException("end can not be null");
         if (start.isAfter(end)) {
             throw new IllegalStateException("start cannot be after end");
-        } else if (name.length() == 0) {
+        } else if (name.isBlank()) {
             throw new IllegalArgumentException("name must contain at least one letter");
         }
         this.name = name;
@@ -35,5 +35,17 @@ public final class Semester {
     public LocalDate getEnd() {
         return end;
     }
-    
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Semester semester = (Semester) o;
+        return name.equals(semester.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
+    }
 }

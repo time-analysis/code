@@ -6,7 +6,7 @@ import repositories.EntryRepositoryInterface;
 import repositories.LectureRepositoryInterface;
 import repositories.SemesterRepositoryInterface;
 import ressourceModels.*;
-import useCases.*;
+import usecases.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -25,7 +25,7 @@ public class UITerminalPlugin implements UIPluginInterface {
 
         this.uiAdapter = uiAdapter;
         this.scanner = new Scanner(System.in);
-        this.semesterRepository =  semesterRepository;
+        this.semesterRepository = semesterRepository;
         this.lectureRepository = lectureRepository;
         this.entryRepository = entryRepository;
     }
@@ -123,25 +123,25 @@ public class UITerminalPlugin implements UIPluginInterface {
         GetSemesters getSemestersUseCase = new GetSemesters(semesterRepository);
         List<SemesterRessource> semesterList = uiAdapter.mapSemesterListToSemesterRessourceList(getSemestersUseCase.getSemesters());
         SemesterRessource semester = getObjectFromNumberedList(semesterList, "no semesters found. Start by creating a semester");
-        Analysis analysis = new Analysis(entryRepository,lectureRepository);
+        Analysis analysis = new Analysis(entryRepository, lectureRepository);
         Duration duration = analysis.getTimePerSemester(uiAdapter.mapSemesterRessourceToSemester(semester));
         System.out.println(uiAdapter.formatDuration(duration));
     }
 
     private void getSelfStudyTime() {
-        Analysis analysis = new Analysis(entryRepository,lectureRepository);
+        Analysis analysis = new Analysis(entryRepository, lectureRepository);
         Duration duration = analysis.getStudyTime();
         System.out.println(uiAdapter.formatDuration(duration));
     }
 
     private void getPresenceTime() {
-        Analysis analysis = new Analysis(entryRepository,lectureRepository);
+        Analysis analysis = new Analysis(entryRepository, lectureRepository);
         Duration duration = analysis.getPresenceTime();
         System.out.println(uiAdapter.formatDuration(duration));
     }
 
     private void getTimePerLecture() {
-        Analysis analysis = new Analysis(entryRepository,lectureRepository);
+        Analysis analysis = new Analysis(entryRepository, lectureRepository);
         GetLectures getLectureUseCase = new GetLectures(lectureRepository);
         List<LectureResource> lectures = uiAdapter.mapLectureListToLectureListRessource(getLectureUseCase.getLectures());
         LectureResource lecture = getObjectFromNumberedList(lectures, "no lectures found. Start by creating a lecture");
@@ -152,11 +152,11 @@ public class UITerminalPlugin implements UIPluginInterface {
 
 
     private void comparePlannedTimeToActualSpendTime() {
-        Analysis analysis = new Analysis(entryRepository,lectureRepository);
+        Analysis analysis = new Analysis(entryRepository, lectureRepository);
         List<AnalysisResultForLectureRenderModel> results = this.uiAdapter.analysisResultForLectureListToModelList(analysis.compareTimeTargetToActual());
         for (AnalysisResultForLectureRenderModel l : results) {
             System.out.println(l.getLecture().getName());
-            System.out.println("Planned SelfStudyTime: " + l.getLecture().getSelfStudyTime() + " Hours | Actual selfStudyTime: " +l.getSelfStudyTimeAndLectureTime().getSelfStudyTime());
+            System.out.println("Planned SelfStudyTime: " + l.getLecture().getSelfStudyTime() + " Hours | Actual selfStudyTime: " + l.getSelfStudyTimeAndLectureTime().getSelfStudyTime());
             System.out.println("Planned lectureTime: " + l.getLecture().getLectureTime() + " Hours | Actual lectureTime: " + l.getSelfStudyTimeAndLectureTime().getLectureTime());
         }
     }

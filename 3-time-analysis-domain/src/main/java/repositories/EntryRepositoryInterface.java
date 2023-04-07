@@ -1,6 +1,6 @@
 package repositories;
 
-import FilterCriteria.EntryFilterCriteria;
+import filterCriteria.EntryFilterCriteria;
 import de.models.Entry;
 
 import java.util.List;
