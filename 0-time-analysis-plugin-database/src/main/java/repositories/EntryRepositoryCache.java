@@ -10,6 +10,7 @@ public class EntryRepositoryCache extends EntryRepositryDecorator {
 
     public EntryRepositoryCache(EntryRepositoryInterface entryRepository) {
         super(entryRepository);
+        //pseudoCache = super.getEntrys(); todo add back in when circ dep is fixed
     }
 
     //getEntry by filtercriteria does not have to be overwritten, since it uses getEntrys() to fetch all Entries intern

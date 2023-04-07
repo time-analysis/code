@@ -50,7 +50,7 @@ public class EntryRepository implements EntryRepositoryInterface {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(entryFileName))) {
             entryList = bufferedReader.lines().map(this::parseStringToEntryRessource).collect(Collectors.toList());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return List.of();
         }
         return this.dataAdapter.mapEntryRessourceListToEntryList(entryList);
     }

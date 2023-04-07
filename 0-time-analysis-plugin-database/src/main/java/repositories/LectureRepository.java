@@ -54,7 +54,7 @@ public class LectureRepository implements LectureRepositoryInterface {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(lectureFileName))) {
             lectureList = bufferedReader.lines().map(this::parseStringToLectureRessource).collect(Collectors.toList());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return List.of();
         }
         return this.dataAdapter.mapLectureRessourceListToLectureList(lectureList);
     }

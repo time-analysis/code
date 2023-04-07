@@ -52,7 +52,7 @@ public class SemesterRepository implements SemesterRepositoryInterface {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(semesterFileName))) {
             semesterList = bufferedReader.lines().map(this::parseStringToSemesterRessource).collect(Collectors.toList());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return List.of();
         }
         return this.dataAdapter.mapSemesterRessourceListToSemesterList(semesterList);
     }
