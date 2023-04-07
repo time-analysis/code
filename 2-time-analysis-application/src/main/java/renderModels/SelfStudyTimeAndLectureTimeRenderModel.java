@@ -1,7 +1,5 @@
 package renderModels;
 
-import java.time.Duration;
-
 public class SelfStudyTimeAndLectureTimeRenderModel {
     private String selfStudyTime;
     private String lectureTime;

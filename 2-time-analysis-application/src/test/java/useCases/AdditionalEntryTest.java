@@ -1,18 +1,17 @@
 package useCases;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 import Interfaces.DataAdapterInterface;
 import Interfaces.DataPluginInterface;
-import org.junit.jupiter.api.Test;
-
 import de.models.Entry;
 import de.models.EntryType;
 import de.models.Lecture;
 import de.models.Semester;
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AdditionalEntryTest {
     DataAdapterInterface dataAdapterMock = new DataAdapterMock();
@@ -24,7 +23,7 @@ class AdditionalEntryTest {
         Lecture lecture = new Lecture("ASE", semester, 0, 0);
         Entry entry = new Entry(LocalDateTime.of(2022, 10, 9, 0, 0), EntryType.LECTURE, lecture);
 
-        AdditionalEntry additionalEntry = new AdditionalEntry(dataAdapterMock, dataPluginMock); //todo mockito?
+        AdditionalEntry additionalEntry = new AdditionalEntry(dataAdapterMock, dataPluginMock);
         String details = "test";
         LocalDateTime end = LocalDateTime.of(2022, 10, 10, 0, 0);
         entry.finishEntry(end, details);

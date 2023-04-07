@@ -1,6 +1,5 @@
 package useCases;
 
-import Interfaces.DataAdapterInterface;
 import Interfaces.DataPluginInterface;
 import de.models.Entry;
 import de.models.EntryType;

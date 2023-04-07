@@ -1,6 +1,5 @@
 package renderModels;
 
-import TransferModels.SelfStudyTimeAndLectureTime;
 import ressourceModels.LectureResource;
 
 public class AnalysisResultForLectureRenderModel {

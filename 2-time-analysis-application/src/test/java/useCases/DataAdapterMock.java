@@ -2,15 +2,12 @@ package useCases;
 
 import Interfaces.DataAdapterInterface;
 import de.models.Entry;
-import de.models.EntryType;
 import de.models.Lecture;
 import de.models.Semester;
 import ressourceModels.EntryRessource;
 import ressourceModels.LectureResource;
 import ressourceModels.SemesterRessource;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class DataAdapterMock implements DataAdapterInterface {

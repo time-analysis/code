@@ -3,7 +3,6 @@ package Repositories;
 import Interfaces.DataAdapterInterface;
 import de.models.Semester;
 import repositories.SemesterRepositoryInterface;
-import ressourceModels.LectureResource;
 import ressourceModels.SemesterRessource;
 
 import java.io.*;

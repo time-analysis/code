@@ -1,6 +1,5 @@
 package useCases;
 
-import de.models.EntryStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ressourceModels.EntryRessource;

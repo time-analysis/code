@@ -1,7 +1,9 @@
 package useCases;
 
-import Interfaces.DataPluginInterface;
-import de.models.*;
+import de.models.Entry;
+import de.models.EntryType;
+import de.models.Lecture;
+import de.models.Semester;
 import repositories.LectureRepositoryInterface;
 import repositories.SemesterRepositoryInterface;
 import ressourceModels.*;
