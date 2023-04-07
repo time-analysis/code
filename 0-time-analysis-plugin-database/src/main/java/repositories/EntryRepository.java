@@ -26,13 +26,14 @@ public class EntryRepository implements EntryRepositoryInterface {
     public void createEntry(Entry entry) {
         EntryRessource entryRessource = this.dataAdapter.mapEntryToEntryRessource(entry);
         String csvEntry = String.format(
-                "%s,%s,%s,%s,%s,%s"
+                "%s,%s,%s,%s,%s,%s,%s"
                 , sanitizeInputForCSVFormat(entryRessource.getLecture())
                 , sanitizeInputForCSVFormat(entryRessource.getStart())
                 , sanitizeInputForCSVFormat(entryRessource.getEnd())
                 , sanitizeInputForCSVFormat(entryRessource.getType().name())
                 , sanitizeInputForCSVFormat(entryRessource.getDetails())
                 , entryRessource.getStatus()
+                , entryRessource.getId()
         );
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(entryFileName, true))) {
             writer.write(csvEntry);
@@ -74,7 +75,7 @@ public class EntryRepository implements EntryRepositoryInterface {
     public void udpateEntry(Entry entry) {
         List<Entry> entryList = getEntrys();
 
-        Entry toReplace = entryList.stream().filter(e -> e.getStart().equals(entry.getStart())).findFirst().get();//todo better filter
+        Entry toReplace = entryList.stream().filter(e -> e.equals(entry)).findFirst().get();
         entryList.remove(toReplace);
         entryList.add(entry);
         try (PrintWriter writer = new PrintWriter(entryFileName)) {
@@ -108,6 +109,7 @@ public class EntryRepository implements EntryRepositoryInterface {
         String type = split[3];
         String details = split[4];
         String status = split[5];
-        return new EntryRessource(start, end, EntryRessourceType.valueOf(type), details, lecture, EntryRessourceStatus.valueOf(status));
+        String id = split[6];
+        return new EntryRessource(start, end, EntryRessourceType.valueOf(type), details, lecture, EntryRessourceStatus.valueOf(status), id);
     }
 }

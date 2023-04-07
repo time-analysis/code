@@ -25,7 +25,7 @@ public class EntryRepositoryCache extends EntryRepositryDecorator {
 
     public void udpateEntry(Entry entry) {
         this.entryRepository.udpateEntry(entry);
-        Entry toReplace = pseudoCache.stream().filter(e -> e.getStart().equals(entry.getStart())).findFirst().get();//todo better filter
+        Entry toReplace = pseudoCache.stream().filter(e -> e.equals(entry)).findFirst().get();
         pseudoCache.remove(toReplace);
         pseudoCache.add(entry);
     }

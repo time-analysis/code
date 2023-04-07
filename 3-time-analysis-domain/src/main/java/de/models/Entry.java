@@ -3,6 +3,7 @@ package de.models;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Entry {
 
@@ -12,6 +13,7 @@ public class Entry {
     private String details;
     private Lecture lecture;
     private EntryStatus status;
+    private UUID id;
 
     public Entry(LocalDateTime start, EntryType type, Lecture lecture) {
         if (Objects.isNull(start)) throw new IllegalStateException("start can not be null");
@@ -21,6 +23,7 @@ public class Entry {
         this.type = type;
         this.lecture = lecture;
         this.status = EntryStatus.RUNNING;
+        this.id = UUID.randomUUID();
     }
 
     public Entry(LocalDateTime start, LocalDateTime end, EntryType type, Lecture lecture, String details) {
@@ -52,6 +55,10 @@ public class Entry {
         return status;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
     public void finishEntry(LocalDateTime end, String details) {
         if (Objects.isNull(end)) throw new IllegalStateException("end can not be null");
         if (start.isAfter(end)) {
@@ -76,5 +83,18 @@ public class Entry {
         }
 
         return Duration.between(start, end);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Entry entry = (Entry) o;
+        return id.equals(entry.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
