@@ -10,6 +10,7 @@ import repositories.EntryRepositoryInterface;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -51,8 +52,8 @@ class DataPluginTest {
     void createEntryWritesEntryToFile() {
         LocalDateTime time = LocalDateTime.now();
 
-        entryRepository.createEntry(new Entry(LocalDateTime.of(2023, 1, 1, 10, 0), LocalDateTime.of(2023, 1, 1, 12, 0), EntryType.LECTURE, new Lecture("Testvorlesung", new Semester("meinSemester", time.toLocalDate(), time.toLocalDate()), 10, 10), "weitere Informationen"));
-        String assumed = "Testvorlesung,2023-01-01 10:00,2023-01-01 12:00,LECTURE,weitere Informationen,FINISHED";
+        entryRepository.createEntry(new Entry(LocalDateTime.of(2023, 1, 1, 10, 0), LocalDateTime.of(2023, 1, 1, 12, 0), EntryType.LECTURE, new Lecture("Testvorlesung", new Semester("meinSemester", time.toLocalDate(), time.toLocalDate()), 10, 10), "weitere Informationen", UUID.fromString("06c7b333-2965-4399-a8fc-d10e0a8806fe")));
+        String assumed = "Testvorlesung,2023-01-01 10:00,2023-01-01 12:00,LECTURE,weitere Informationen,FINISHED,06c7b333-2965-4399-a8fc-d10e0a8806fe";
         String fromFile;
         try {
             fromFile = entryReader.readLine();
