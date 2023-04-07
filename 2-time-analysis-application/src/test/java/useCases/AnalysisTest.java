@@ -1,14 +1,13 @@
 package useCases;
 
-import Interfaces.DataPluginInterface;
+import TransferModels.AnalysisResultForLecture;
+import TransferModels.SelfStudyTimeAndLectureTime;
 import de.models.Entry;
 import de.models.EntryType;
 import de.models.Lecture;
 import de.models.Semester;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import repositories.EntryRepositoryInterface;
-import repositories.LectureRepositoryInterface;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -18,18 +17,18 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AnalysisTest {
-    LectureRepositoryInterface lectureRepository;
+    LectureRepositoryMock lectureRepository;
     EntryRepositoryMock entryRepository;
 
     @BeforeEach
-    public void createMocks(){
+    public void createMocks() {
         this.lectureRepository = new LectureRepositoryMock();
         this.entryRepository = new EntryRepositoryMock();
     }
 
     @Test
     public void selfStudyTimeIsCalculatedCorrectly() {
-        Analysis analysis = new Analysis(entryRepository,lectureRepository);
+        Analysis analysis = new Analysis(entryRepository, lectureRepository);
         Semester semester = new Semester("meinSemester", LocalDate.now(), LocalDate.now());
         Lecture lecture = new Lecture("MeineVL", semester, 10, 10);
         Entry entry = new Entry(LocalDateTime.of(2023, 1, 1, 10, 0), EntryType.SELFSTUDY, lecture);
@@ -40,16 +39,68 @@ public class AnalysisTest {
 
         Duration selfStudyTime = analysis.getStudyTime();
 
-        assertEquals(selfStudyTime, Duration.ofHours(2));
+        assertEquals(Duration.ofHours(2), selfStudyTime);
     }
 
     @Test
     public void selfStudyTimeIsZeroWhenNoStudyTimeIsGiven() {
-        Analysis analysis = new Analysis(entryRepository,lectureRepository);
+        Analysis analysis = new Analysis(entryRepository, lectureRepository);
         entryRepository.addListOfEntryToReturnList(List.of());
 
         Duration selfStudyTime = analysis.getStudyTime();
 
-        assertEquals(selfStudyTime, Duration.ofHours(0));
+        assertEquals(Duration.ofHours(0), selfStudyTime);
+    }
+
+    @Test
+    public void AnalysisResultsAreAssembledCorrectly() {
+        Analysis analysis = new Analysis(entryRepository, lectureRepository);
+        Semester semester = new Semester("meinSemester", LocalDate.now(), LocalDate.now());
+        Lecture lecture1 = new Lecture("DB2", semester, 10, 10);
+        Lecture lecture2 = new Lecture("WebServices", semester, 10, 10);
+        lectureRepository.addListOfLectureToReturnList(List.of(lecture1, lecture2));
+        Entry entryForLecture1 = new Entry(LocalDateTime.of(2023, 1, 1, 10, 0), LocalDateTime.of(2023, 1, 1, 12, 0), EntryType.SELFSTUDY, lecture1, "details");
+        entryRepository.addListOfEntryToReturnList(List.of(entryForLecture1));
+        entryRepository.addListOfEntryToReturnList(List.of());
+        entryRepository.addListOfEntryToReturnList(List.of());
+        entryRepository.addListOfEntryToReturnList(List.of());
+
+        List<AnalysisResultForLecture> resultList = analysis.compareTimeTargetToActual();
+
+        assertEquals(Duration.ofHours(2), resultList.get(0).getSelfStudyTimeAndLectureTime().getSelfStudyTime());
+        assertEquals(Duration.ofHours(0), resultList.get(0).getSelfStudyTimeAndLectureTime().getLectureTime());
+        assertEquals("DB2", resultList.get(0).getLecture().getName());
+
+        assertEquals(Duration.ofHours(0), resultList.get(1).getSelfStudyTimeAndLectureTime().getSelfStudyTime());
+        assertEquals(Duration.ofHours(0), resultList.get(1).getSelfStudyTimeAndLectureTime().getLectureTime());
+        assertEquals("WebServices", resultList.get(1).getLecture().getName());
+    }
+
+    @Test
+    public void TimeSpentForLectureIsCalculatedCorrectly() {
+        Analysis analysis = new Analysis(entryRepository, lectureRepository);
+        Semester semester = new Semester("meinSemester", LocalDate.now(), LocalDate.now());
+        Lecture lecture1 = new Lecture("DB2", semester, 10, 10);
+        Entry entryForLecture1 = new Entry(LocalDateTime.of(2023, 1, 1, 10, 0), LocalDateTime.of(2023, 1, 1, 12, 0), EntryType.SELFSTUDY, lecture1, "details");
+        Entry secondEntryForLecture1 = new Entry(LocalDateTime.of(2023, 1, 1, 8, 0), LocalDateTime.of(2023, 1, 1, 12, 0), EntryType.LECTURE, lecture1, "details");
+        entryRepository.addListOfEntryToReturnList(List.of(entryForLecture1));
+        entryRepository.addListOfEntryToReturnList(List.of(secondEntryForLecture1));
+
+        SelfStudyTimeAndLectureTime result = analysis.getTimeSpentForLecture("DB2");
+
+        assertEquals(Duration.ofHours(2), result.getSelfStudyTime());
+        assertEquals(Duration.ofHours(4), result.getLectureTime());
+    }
+
+    @Test
+    public void TimeSpentForLectureIsZeroWhenNoEntriesAreFound() {
+        Analysis analysis = new Analysis(entryRepository, lectureRepository);
+        entryRepository.addListOfEntryToReturnList(List.of());
+        entryRepository.addListOfEntryToReturnList(List.of());
+
+        SelfStudyTimeAndLectureTime result = analysis.getTimeSpentForLecture("DB2");
+
+        assertEquals(Duration.ofHours(0), result.getSelfStudyTime());
+        assertEquals(Duration.ofHours(0), result.getLectureTime());
     }
 }
