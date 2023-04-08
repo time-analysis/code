@@ -40,7 +40,7 @@ public class UITerminalPlugin implements UIPluginInterface {
     }
 
     public void showMainMenu() {
-        Map<String, ActionAndDesciption> commands = new HashMap<>();
+        Map<String, Command> commands = new HashMap<>();
         commands.put("1", new ActionAndDesciption(this::addLecture, "Create new Lecture"));
         commands.put("2", new ActionAndDesciption(this::addEntryByTimeStamp, "Create new Entry"));
         commands.put("3", new ActionAndDesciption(this::addSemester, "Create new Semester"));
@@ -51,14 +51,14 @@ public class UITerminalPlugin implements UIPluginInterface {
         commands.put("8", new ActionAndDesciption(this::comparePlannedTimeToActualSpendTime, "compare planned time to the the time that was actually spend"));
         commands.put("9", new ActionAndDesciption(this::getUnfinishedEntries, "view unfinished Entries"));
         commands.forEach((key, value) -> {
-            System.out.println(key + "> " + value.getDesciption());
+            System.out.println(key + "> " + value.getDescription());
         });
         String option = scanner.nextLine();
-        ActionAndDesciption actionAndDesciption = commands.get(option);
+        Command actionAndDesciption = commands.get(option);
         if (Objects.isNull(actionAndDesciption)) {
             System.out.println(option + " is not a valid option.");
         } else {
-            actionAndDesciption.getAction().run();
+            actionAndDesciption.run();
         }
         showMainMenu();
     }

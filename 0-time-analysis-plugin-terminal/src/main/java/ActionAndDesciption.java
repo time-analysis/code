@@ -1,4 +1,4 @@
-public class ActionAndDesciption {
+public class ActionAndDesciption implements Command {
     private Runnable action;
     private String desciption;
 
@@ -7,11 +7,14 @@ public class ActionAndDesciption {
         this.desciption = desciption;
     }
 
-    public Runnable getAction() {
-        return action;
+    @Override
+    public void run() {
+        action.run();
     }
 
-    public String getDesciption() {
+    @Override
+    public String getDescription() {
         return desciption;
     }
+
 }
