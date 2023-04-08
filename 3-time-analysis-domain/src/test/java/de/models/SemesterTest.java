@@ -38,4 +38,26 @@ class SemesterTest {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Semester("", start, end));
         assertEquals("name must contain at least one letter", exception.getMessage());
     }
+
+    @Test
+    void throwsErrorIfNameIsNull() {
+        LocalDate end = LocalDate.of(2023, 12, 07);
+        LocalDate start = LocalDate.of(2023, 01, 13);
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> new Semester(null, start, end));
+        assertEquals("name can not be null", exception.getMessage());
+    }
+
+    @Test
+    void throwsErrorIfStartIsNull() {
+        LocalDate end = LocalDate.of(2023, 12, 07);
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> new Semester("dasBesteSemester", null, end));
+        assertEquals("start can not be null", exception.getMessage());
+    }
+
+    @Test
+    void throwsErrorIfEndIsNull() {
+        LocalDate start = LocalDate.of(2023, 01, 13);
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> new Semester("superTollesSemester", start, null));
+        assertEquals("end can not be null", exception.getMessage());
+    }
 }

@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>time-analysis-plugin-terminal</artifactId>
+    <artifactId>0-time-analysis-plugin-terminal</artifactId>
     <dependencies>
         <dependency>
             <groupId>de.ase</groupId>
