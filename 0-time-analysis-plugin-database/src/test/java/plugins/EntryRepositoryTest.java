@@ -17,7 +17,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class DataPluginTest {
+class EntryRepositoryTest {
 
     private final String entryFileName = "EntryTest.csv";
     private final String lectureFileName = "LectureTest.csv";

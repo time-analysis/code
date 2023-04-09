@@ -12,7 +12,9 @@ public class LectureRepositoryMock implements LectureRepositoryInterface {
 
 
     private List<List<Lecture>> inMemoryPersistence = new LinkedList<>();
+    private List<Lecture> createdLectures = new LinkedList<>();
     private Iterator<List<Lecture>> iterator;
+    private boolean wasCreateLectureMethodCalled = false;
 
     public void addListOfLectureToReturnList(List<Lecture> lectures) {
         inMemoryPersistence.add(lectures);
@@ -21,7 +23,16 @@ public class LectureRepositoryMock implements LectureRepositoryInterface {
 
     @Override
     public void createLecture(Lecture lecture) {
+        this.wasCreateLectureMethodCalled = true;
+        createdLectures.add(lecture);
+    }
 
+    public boolean wasCreateLectureMethodCalled() {
+        return wasCreateLectureMethodCalled;
+    }
+
+    public List<Lecture> getCreatedLectures() {
+        return createdLectures;
     }
 
     @Override
