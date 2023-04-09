@@ -1,13 +1,7 @@
 import Interfaces.UIAdapterInterface;
-import repositories.EntryRepository;
-import repositories.EntryRepositoryCache;
-import repositories.LectureRepository;
-import repositories.SemesterRepository;
-import repositories.EntryRepositoryInterface;
-import repositories.LectureRepositoryInterface;
-import repositories.SemesterRepositoryInterface;
 import adapters.DataAdapter;
 import adapters.UIAdapter;
+import repositories.*;
 
 public class starter {
     public static void main(String[] args) {

@@ -1,7 +1,7 @@
 package usecases;
 
-import filterCriteria.EntryFilterCriteria;
 import de.models.Entry;
+import filterCriteria.EntryFilterCriteria;
 import repositories.EntryRepositoryInterface;
 
 import java.util.Iterator;

@@ -1,9 +1,9 @@
 package usecases;
 
-import filterCriteria.EntryFilterCriteria;
-import filterCriteria.EntryFilterCriteriaBuilder;
 import de.models.Entry;
 import de.models.EntryStatus;
+import filterCriteria.EntryFilterCriteria;
+import filterCriteria.EntryFilterCriteriaBuilder;
 import repositories.EntryRepositoryInterface;
 
 import java.util.List;

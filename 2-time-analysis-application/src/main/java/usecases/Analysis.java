@@ -1,15 +1,15 @@
 package usecases;
 
-import filterCriteria.EntryFilterCriteria;
-import filterCriteria.EntryFilterCriteriaBuilder;
-import transferModels.AnalysisResultForLecture;
-import transferModels.SelfStudyTimeAndLectureTime;
 import de.models.Entry;
 import de.models.EntryType;
 import de.models.Lecture;
 import de.models.Semester;
+import filterCriteria.EntryFilterCriteria;
+import filterCriteria.EntryFilterCriteriaBuilder;
 import repositories.EntryRepositoryInterface;
 import repositories.LectureRepositoryInterface;
+import transferModels.AnalysisResultForLecture;
+import transferModels.SelfStudyTimeAndLectureTime;
 
 import java.time.Duration;
 import java.util.ArrayList;

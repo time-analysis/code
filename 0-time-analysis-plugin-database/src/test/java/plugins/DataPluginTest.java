@@ -1,10 +1,13 @@
 package plugins;
 
 import adapters.DataAdapter;
-import repositories.EntryRepository;
-import de.models.*;
+import de.models.Entry;
+import de.models.EntryType;
+import de.models.Lecture;
+import de.models.Semester;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import repositories.EntryRepository;
 import repositories.EntryRepositoryInterface;
 
 import java.io.*;

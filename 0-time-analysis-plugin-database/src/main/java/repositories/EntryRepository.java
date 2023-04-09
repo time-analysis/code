@@ -1,8 +1,8 @@
 package repositories;
 
-import filterCriteria.EntryFilterCriteria;
 import Interfaces.DataAdapterInterface;
 import de.models.Entry;
+import filterCriteria.EntryFilterCriteria;
 import ressourceModels.EntryRessource;
 import ressourceModels.EntryRessourceStatus;
 import ressourceModels.EntryRessourceType;

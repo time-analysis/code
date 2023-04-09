@@ -1,7 +1,5 @@
 package Interfaces;
 
-import transferModels.AnalysisResultForLecture;
-import transferModels.SelfStudyTimeAndLectureTime;
 import de.models.Entry;
 import de.models.Lecture;
 import de.models.Semester;
@@ -10,6 +8,8 @@ import renderModels.SelfStudyTimeAndLectureTimeRenderModel;
 import ressourceModels.EntryRessource;
 import ressourceModels.LectureResource;
 import ressourceModels.SemesterRessource;
+import transferModels.AnalysisResultForLecture;
+import transferModels.SelfStudyTimeAndLectureTime;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

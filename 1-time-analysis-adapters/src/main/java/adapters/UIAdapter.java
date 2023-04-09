@@ -1,8 +1,6 @@
 package adapters;
 
 import Interfaces.UIAdapterInterface;
-import transferModels.AnalysisResultForLecture;
-import transferModels.SelfStudyTimeAndLectureTime;
 import de.models.Entry;
 import de.models.Lecture;
 import de.models.Semester;
@@ -13,6 +11,8 @@ import repositories.SemesterRepositoryInterface;
 import ressourceModels.EntryRessource;
 import ressourceModels.LectureResource;
 import ressourceModels.SemesterRessource;
+import transferModels.AnalysisResultForLecture;
+import transferModels.SelfStudyTimeAndLectureTime;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

@@ -1,13 +1,13 @@
 package usecases;
 
-import transferModels.AnalysisResultForLecture;
-import transferModels.SelfStudyTimeAndLectureTime;
 import de.models.Entry;
 import de.models.EntryType;
 import de.models.Lecture;
 import de.models.Semester;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import transferModels.AnalysisResultForLecture;
+import transferModels.SelfStudyTimeAndLectureTime;
 
 import java.time.Duration;
 import java.time.LocalDate;
