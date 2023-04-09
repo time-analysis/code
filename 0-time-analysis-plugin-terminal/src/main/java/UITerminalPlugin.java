@@ -65,7 +65,6 @@ public class UITerminalPlugin implements UIPluginInterface {
         showMainMenu();
     }
 
-    @Override
     public void addEntryByTimeStamp() {
 
         String start = getStartTimeForEntry();
@@ -95,8 +94,7 @@ public class UITerminalPlugin implements UIPluginInterface {
         }
 
     }
-
-    @Override
+    
     public void addLecture() {
         //strings einlesen:   name, semester, lectureTime, selfStudyTime
         String name, lectureTime, selfStudyTime;
@@ -175,7 +173,7 @@ public class UITerminalPlugin implements UIPluginInterface {
 
 
     private String getStartTimeForEntry() {
-        System.out.println("Start time (press \"n\" to use current time)");
+        System.out.println("enter the start time. Format: " + uiAdapter.getLocalDateTimeFormatString() + " (press \"n\" to use current time)");
         String start = scanner.nextLine();
         if (start.equals("n")) {
             start = uiAdapter.formatLocalDateTime(LocalDateTime.now());
@@ -184,7 +182,7 @@ public class UITerminalPlugin implements UIPluginInterface {
     }
 
     private String getEndTimeForEntry() {
-        System.out.println("End time (press \"n\" to use current time)");
+        System.out.println("enter the end time. Format: " + uiAdapter.getLocalDateTimeFormatString() + "(press \"n\" to use current time)");
         String end = scanner.nextLine();
         if (end.equals("n")) {
             end = uiAdapter.formatLocalDateTime(LocalDateTime.now());
