@@ -3,7 +3,7 @@ import ressourceModels.listeable;
 import java.util.List;
 import java.util.Scanner;
 
-public class ListHandler {
+public class ListHandler implements ListHandlerInterface {
     private UITerminalPlugin terminalPlugin;
 
     public ListHandler(UITerminalPlugin terminalPlugin) {

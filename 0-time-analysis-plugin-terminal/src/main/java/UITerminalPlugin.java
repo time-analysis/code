@@ -20,7 +20,7 @@ public class UITerminalPlugin implements UIPluginInterface {
     private LectureRepositoryInterface lectureRepository;
     private EntryRepositoryInterface entryRepository;
     private Scanner scanner;
-    private ListHandler listHandler;
+    private ListHandlerInterface listHandler;
 
     public UITerminalPlugin(SemesterRepositoryInterface semesterRepository, LectureRepositoryInterface lectureRepository, EntryRepositoryInterface entryRepository, UIAdapterInterface uiAdapter) {
 
