@@ -1,4 +1,5 @@
 import Interfaces.UIAdapterInterface;
+import Interfaces.UIPluginInterface;
 import adapters.DataAdapter;
 import adapters.UIAdapter;
 import repositories.*;
@@ -6,7 +7,6 @@ import repositories.*;
 public class starter {
     public static void main(String[] args) {
 
-        //DataPluginInterface dataPlugin = new DataPlugin("Entries.csv", "Lectures.csv", "Semesters.csv");
         DataAdapter dataAdapter = new DataAdapter();
         SemesterRepositoryInterface semesterRepository = new SemesterRepository(dataAdapter, "Semesters.csv");
         LectureRepositoryInterface lectureRepository = new LectureRepository(dataAdapter, "Lectures.csv");
@@ -16,7 +16,7 @@ public class starter {
 
         dataAdapter.setRepositories(semesterRepository, lectureRepository);
         UIAdapterInterface uiAdapter = new UIAdapter(semesterRepository, lectureRepository);
-        UITerminalPlugin terminal = new UITerminalPlugin(semesterRepository, lectureRepository, entryRepositoryCache, uiAdapter);
+        UIPluginInterface terminal = new UITerminalPlugin(semesterRepository, lectureRepository, entryRepository, uiAdapter);
         terminal.start();
     }
 }

@@ -1,6 +1,7 @@
 import ressourceModels.listeable;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class ListHandler implements ListHandlerInterface {
@@ -22,9 +23,10 @@ public class ListHandler implements ListHandlerInterface {
     }
 
 
-    public <T extends listeable> T getObjectFromNumberedList(List<T> list, String listIsEmptyMessage) {
+    public <T extends listeable> Optional<T> getObjectFromNumberedList(List<T> list, String listIsEmptyMessage) {
         if (list.isEmpty()) {
             terminalPlugin.printMessage(listIsEmptyMessage);
+            return Optional.empty();
         } else {
             terminalPlugin.printMessage("choose an item from the list");
         }
@@ -35,7 +37,7 @@ public class ListHandler implements ListHandlerInterface {
             terminalPlugin.printMessage("invalid input, try again!");
             index = scanner.nextLine();
         }
-        return list.get(Integer.parseInt(index));
+        return Optional.of(list.get(Integer.parseInt(index)));
     }
 
     private <T extends listeable> String getListOfObjectsAsNumberedList(List<T> list) {
