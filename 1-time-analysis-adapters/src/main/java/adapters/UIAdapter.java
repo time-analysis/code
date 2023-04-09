@@ -30,6 +30,16 @@ public class UIAdapter implements UIAdapterInterface {
     }
 
 
+    @Override
+    public String getLocalDateTimeFormatString() {
+        return baseAdapter.getLocalDateTimeFormatString();
+    }
+
+    @Override
+    public String getLocalDateFormatString() {
+        return baseAdapter.getLocalDateFormatString();
+    }
+
     public Lecture mapLectureRessourceToLecture(LectureResource lectureResource) {
         return baseAdapter.mapLectureRessourceToLecture(lectureResource);
     }

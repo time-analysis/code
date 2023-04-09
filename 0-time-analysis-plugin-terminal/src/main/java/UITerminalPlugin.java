@@ -98,9 +98,9 @@ public class UITerminalPlugin implements UIPluginInterface {
     public void addLecture() {
         //strings einlesen:   name, semester, lectureTime, selfStudyTime
         String name, lectureTime, selfStudyTime;
-        name = getStringFromInputWithPrompt("Name of the lecture:");
-        lectureTime = getStringFromInputWithPrompt("enter the official lecture time");
-        selfStudyTime = getStringFromInputWithPrompt("enter the ammount of time you are supposed to study on your own");
+        name = getStringFromInputWithPrompt("enter the name of the lecture");
+        lectureTime = getStringFromInputWithPrompt("enter the ammount of hours you are supposed to attend lectures");
+        selfStudyTime = getStringFromInputWithPrompt("enter the ammount of hours you are supposed to study on your own");
         SemesterRessource semester = getSemesterForLecture();
 
         LectureResource lectureResource = new LectureResource(name, semester.getName(), Integer.parseInt(lectureTime), Integer.parseInt(selfStudyTime));
@@ -110,9 +110,9 @@ public class UITerminalPlugin implements UIPluginInterface {
 
     private void addSemester() {
 
-        String name = getStringFromInputWithPrompt("name of semester:");
-        String start = getStringFromInputWithPrompt("start date for semester:");
-        String end = getStringFromInputWithPrompt("end date for semester:");
+        String name = getStringFromInputWithPrompt("enter the name of the semester");
+        String start = getStringFromInputWithPrompt("enter the start date for the semester. Format: " + uiAdapter.getLocalDateFormatString());
+        String end = getStringFromInputWithPrompt("enter the end date for the semester. Format: " + uiAdapter.getLocalDateFormatString());
         AdditionalSemester additionalSemester = new AdditionalSemester(semesterRepository);
         SemesterRessource semesterRessource = new SemesterRessource(name, start, end);
         additionalSemester.addSemester(uiAdapter.mapSemesterRessourceToSemester(semesterRessource));
@@ -262,7 +262,7 @@ public class UITerminalPlugin implements UIPluginInterface {
     private <T extends listeable> String getListOfObjectsAsNumberedList(List<T> list) {
         String toReturn = "";
         for (int i = 0; i < list.size(); i++) {
-            toReturn = toReturn.concat(i + ">" + list.get(i).getDisplayName() + "\n");
+            toReturn = toReturn.concat(i + "> " + list.get(i).getDisplayName() + "\n");
         }
         return toReturn;
     }

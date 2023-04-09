@@ -17,6 +17,10 @@ import java.util.List;
 
 public interface UIAdapterInterface {
 
+    public String getLocalDateTimeFormatString();
+
+    public String getLocalDateFormatString();
+
     Lecture mapLectureRessourceToLecture(LectureResource lectureResource);
 
     Entry mapEntryRessourceToEntry(EntryRessource entryRessource);

@@ -152,4 +152,12 @@ public class BaseAdapter {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(localDateTimeFormatString);
         return LocalDateTime.parse(time, formatter);
     }
+
+    public String getLocalDateTimeFormatString() {
+        return localDateTimeFormatString;
+    }
+
+    public String getLocalDateFormatString() {
+        return localDateFormatString;
+    }
 }
