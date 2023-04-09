@@ -20,6 +20,7 @@ public class UITerminalPlugin implements UIPluginInterface {
     private LectureRepositoryInterface lectureRepository;
     private EntryRepositoryInterface entryRepository;
     private Scanner scanner;
+    private ListHandler listHandler;
 
     public UITerminalPlugin(SemesterRepositoryInterface semesterRepository, LectureRepositoryInterface lectureRepository, EntryRepositoryInterface entryRepository, UIAdapterInterface uiAdapter) {
 
@@ -28,6 +29,7 @@ public class UITerminalPlugin implements UIPluginInterface {
         this.semesterRepository = semesterRepository;
         this.lectureRepository = lectureRepository;
         this.entryRepository = entryRepository;
+        this.listHandler = new ListHandler(this);
     }
 
     public void start() {
@@ -122,7 +124,7 @@ public class UITerminalPlugin implements UIPluginInterface {
 
         GetSemesters getSemestersUseCase = new GetSemesters(semesterRepository);
         List<SemesterRessource> semesterList = uiAdapter.mapSemesterListToSemesterRessourceList(getSemestersUseCase.getSemesters());
-        SemesterRessource semester = getObjectFromNumberedList(semesterList, "no semesters found. Start by creating a semester");
+        SemesterRessource semester = this.listHandler.getObjectFromNumberedList(semesterList, "no semesters found. Start by creating a semester");
         Analysis analysis = new Analysis(entryRepository, lectureRepository);
         Duration duration = analysis.getTimePerSemester(uiAdapter.mapSemesterRessourceToSemester(semester));
         System.out.println(uiAdapter.formatDuration(duration));
@@ -144,7 +146,7 @@ public class UITerminalPlugin implements UIPluginInterface {
         Analysis analysis = new Analysis(entryRepository, lectureRepository);
         GetLectures getLectureUseCase = new GetLectures(lectureRepository);
         List<LectureResource> lectures = uiAdapter.mapLectureListToLectureListRessource(getLectureUseCase.getLectures());
-        LectureResource lecture = getObjectFromNumberedList(lectures, "no lectures found. Start by creating a lecture");
+        LectureResource lecture = this.listHandler.getObjectFromNumberedList(lectures, "no lectures found. Start by creating a lecture");
         SelfStudyTimeAndLectureTimeRenderModel time = this.uiAdapter.selfStudyTimeAndLectureTimeToRenderModel(analysis.getTimeSpentForLecture(lecture.getName()));
         System.out.println("Planned SelfStudyTime: " + lecture.getSelfStudyTime() + " Hours | Actual selfStudyTime: " + time.getSelfStudyTime());
         System.out.println("Planned lectureTime: " + lecture.getLectureTime() + " Hours | Actual lectureTime: " + time.getLectureTime());
@@ -164,7 +166,7 @@ public class UITerminalPlugin implements UIPluginInterface {
     private void getUnfinishedEntries() {
         GetEntries getEntries = new GetEntries(entryRepository);
         List<EntryRessource> unfinishedEntries = uiAdapter.mapEntryListToEntryRessourceList(getEntries.getUnfinishedEntries());
-        EntryRessource entryRessource = getObjectFromNumberedList(unfinishedEntries, "no unfinished entries found");
+        EntryRessource entryRessource = this.listHandler.getObjectFromNumberedList(unfinishedEntries, "no unfinished entries found");
         String end = getEndTimeForEntry();
         String details = getStringFromInputWithPrompt("Details of study");
         AdditionalEntry additionalEntry = new AdditionalEntry(entryRepository);
@@ -193,20 +195,20 @@ public class UITerminalPlugin implements UIPluginInterface {
     private EntryRessourceType getEntryTypeForEntry() {
         GetEntryTypes getEntryTypesUseCase = new GetEntryTypes();
         EntryRessourceType[] entryTypes = getEntryTypesUseCase.getEntryType();
-        return getObjectFromNumberedList(List.of(entryTypes), "No types found");
+        return this.listHandler.getObjectFromNumberedList(List.of(entryTypes), "No types found");
     }
 
     private LectureResource getLectureForEntry() {
         GetLectures getLectureUseCase = new GetLectures(lectureRepository);
         List<LectureResource> lectures = uiAdapter.mapLectureListToLectureListRessource(getLectureUseCase.getLectures());
-        return getObjectFromNumberedList(lectures, "no lectures found. Start by creating a lecture");
+        return this.listHandler.getObjectFromNumberedList(lectures, "no lectures found. Start by creating a lecture");
     }
 
 
     private SemesterRessource getSemesterForLecture() {
         GetSemesters getSemestersUseCase = new GetSemesters(semesterRepository);
         List<SemesterRessource> semesterList = uiAdapter.mapSemesterListToSemesterRessourceList(getSemestersUseCase.getSemesters());
-        return getObjectFromNumberedList(semesterList, "no semesters found. Start by creating a semester");
+        return this.listHandler.getObjectFromNumberedList(semesterList, "no semesters found. Start by creating a semester");
     }
 
 
@@ -231,40 +233,13 @@ public class UITerminalPlugin implements UIPluginInterface {
 
     }
 
-    private boolean isInputValidNumber(String input, int expectedRange) {
-        try {
-            Integer.parseInt(input);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        int inputAsInt = Integer.parseInt(input);
-        return inputAsInt < expectedRange && inputAsInt >= 0;
+    public void printMessage(String message) {
+        System.out.println(message);
     }
 
-
-    private <T extends listeable> T getObjectFromNumberedList(List<T> list, String listIsEmptyMessage) {
-        if (list.isEmpty()) {
-            System.out.println(listIsEmptyMessage);
-        } else {
-            System.out.println("choose an item from the list");
-        }
-        System.out.println(getListOfObjectsAsNumberedList(list));
-
-        String index = scanner.nextLine();
-        while (!isInputValidNumber(index, list.size())) {
-            System.out.println("invalid input, try again!");
-            index = scanner.nextLine();
-        }
-        return list.get(Integer.parseInt(index));
+    public Scanner getScanner() {
+        return this.scanner;
     }
 
-    private <T extends listeable> String getListOfObjectsAsNumberedList(List<T> list) {
-        String toReturn = "";
-        for (int i = 0; i < list.size(); i++) {
-            toReturn = toReturn.concat(i + "> " + list.get(i).getDisplayName() + "\n");
-        }
-        return toReturn;
-    }
 
 }
