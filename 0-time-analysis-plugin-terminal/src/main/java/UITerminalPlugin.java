@@ -43,9 +43,9 @@ public class UITerminalPlugin implements UIPluginInterface {
 
     public void showMainMenu() {
         Map<String, Command> commands = new HashMap<>();
-        commands.put("1", new ActionAndDesciption(this::addLecture, "Create new Lecture"));
-        commands.put("2", new ActionAndDesciption(this::addEntryByTimeStamp, "Create new Entry"));
-        commands.put("3", new ActionAndDesciption(this::addSemester, "Create new Semester"));
+        commands.put("1", new ActionAndDesciption(this::addSemester, "Create new Semester"));
+        commands.put("2", new ActionAndDesciption(this::addLecture, "Create new Lecture"));
+        commands.put("3", new ActionAndDesciption(this::addEntryByTimeStamp, "Create new Entry"));
         commands.put("4", new ActionAndDesciption(this::getTimePerLecture, "see how much time was spent for one specific Lecture"));
         commands.put("5", new ActionAndDesciption(this::getPresenceTime, "see how much time was spent listening to lectures"));
         commands.put("6", new ActionAndDesciption(this::getSelfStudyTime, "see how much time was spent studying on your own"));
