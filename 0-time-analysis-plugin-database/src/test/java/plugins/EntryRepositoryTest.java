@@ -1,21 +1,25 @@
 package plugins;
 
 import adapters.DataAdapter;
-import de.models.Entry;
-import de.models.EntryType;
-import de.models.Lecture;
-import de.models.Semester;
+import de.models.*;
+import filterCriteria.EntryFilterCriteria;
+import filterCriteria.EntryFilterCriteriaBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import repositories.EntryRepository;
 import repositories.EntryRepositoryInterface;
+import repositories.LectureRepositoryInterface;
+import repositories.SemesterRepositoryInterface;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class EntryRepositoryTest {
 
@@ -24,6 +28,20 @@ class EntryRepositoryTest {
     private final String semesterFileName = "SemesterTest.csv";
     private EntryRepositoryInterface entryRepository;
     private BufferedReader entryReader;
+    private SemesterRepositoryInterface semesterRepository;
+    private LectureRepositoryInterface lectureRepository;
+
+    LocalDate date = LocalDate.of(2022, 12, 12);
+    LocalDateTime start = LocalDateTime.of(2022, 10, 10, 10, 10);
+    LocalDateTime end = LocalDateTime.of(2022, 10, 10, 12, 10);
+    Semester semester = new Semester("meinSemester", date, date);
+    Lecture db = new Lecture("Datenbanken1", semester, 10, 10);
+    Lecture pm = new Lecture("Projektmanagement", semester, 10, 10);
+    Entry finishedPMLectureEntry = new Entry(start, end, EntryType.LECTURE, pm, "details");
+    Entry finishedPMSelfStudyEntry = new Entry(start, end, EntryType.SELFSTUDY, pm, "details");
+    Entry runningDBLectureEntry = new Entry(start, EntryType.LECTURE, db);
+    Entry runningDBSelfStudyEntry = new Entry(start, EntryType.SELFSTUDY, db);
+
 
     @BeforeEach
     void setup() {
@@ -41,8 +59,9 @@ class EntryRepositoryTest {
         DataAdapter dataAdapter = new DataAdapter();
         entryRepository = new EntryRepository(dataAdapter, entryFileName);
 
-
-        dataAdapter.setRepositories(new SemesterRepositoryMock(), new LectureRepositoryMock());
+        semesterRepository = new SemesterRepositoryMock();
+        lectureRepository = new LectureRepositoryMock();
+        dataAdapter.setRepositories(semesterRepository, lectureRepository);
         try {
             entryReader = new BufferedReader(new FileReader(entryFileName));
         } catch (FileNotFoundException e) {
@@ -65,4 +84,80 @@ class EntryRepositoryTest {
         }
         assertEquals(assumed, fromFile);
     }
+
+    @Test
+    void testFilterForName() {
+        loadSampleData();
+        EntryFilterCriteriaBuilder builder = new EntryFilterCriteriaBuilder();
+        EntryFilterCriteria criteria = builder.withLectureName("Datenbanken1").build();
+        List<Entry> entries = this.entryRepository.getEntrys(criteria);
+        assertTrue(entries.contains(runningDBLectureEntry));
+        assertTrue(entries.contains(runningDBSelfStudyEntry));
+        assertEquals(2, entries.size());
+    }
+
+    @Test
+    void testFilterForStatus() {
+        loadSampleData();
+        EntryFilterCriteriaBuilder builder = new EntryFilterCriteriaBuilder();
+        EntryFilterCriteria criteria = builder.withStatus(EntryStatus.FINISHED).build();
+        List<Entry> entries = this.entryRepository.getEntrys(criteria);
+        assertEquals(2, entries.size());
+        assertTrue(entries.contains(finishedPMLectureEntry));
+        assertTrue(entries.contains(finishedPMSelfStudyEntry));
+    }
+
+    @Test
+    void testFilterForType() {
+        loadSampleData();
+        EntryFilterCriteriaBuilder builder = new EntryFilterCriteriaBuilder();
+        EntryFilterCriteria criteria = builder.withType(EntryType.LECTURE).build();
+        List<Entry> entries = this.entryRepository.getEntrys(criteria);
+        assertEquals(2, entries.size());
+        assertTrue(entries.contains(finishedPMLectureEntry));
+        assertTrue(entries.contains(runningDBLectureEntry));
+    }
+
+    @Test
+    void testFilterWithNoCriteriaReturnsAllEntries() {
+        loadSampleData();
+        EntryFilterCriteriaBuilder builder = new EntryFilterCriteriaBuilder();
+        EntryFilterCriteria criteria = builder.build();
+        List<Entry> entries = this.entryRepository.getEntrys(criteria);
+        assertEquals(4, entries.size());
+        assertTrue(entries.contains(finishedPMLectureEntry));
+        assertTrue(entries.contains(finishedPMSelfStudyEntry));
+        assertTrue(entries.contains(runningDBLectureEntry));
+        assertTrue(entries.contains(runningDBSelfStudyEntry));
+    }
+
+    @Test
+    void testFilterWithNotExistingCriteriaReturnsNoEntries() {
+        loadSampleData();
+        EntryFilterCriteriaBuilder builder = new EntryFilterCriteriaBuilder();
+        EntryFilterCriteria criteria = builder.withLectureName("DieseVorlesungGibtEsNicht").build();
+        List<Entry> entries = this.entryRepository.getEntrys(criteria);
+        assertTrue(entries.isEmpty());
+    }
+
+    @Test
+    void testFilterWithCombinedCriteria() {
+        loadSampleData();
+        EntryFilterCriteriaBuilder builder = new EntryFilterCriteriaBuilder();
+        EntryFilterCriteria criteria = builder.withLectureName("Projektmanagement").withType(EntryType.LECTURE).build();
+        List<Entry> entries = this.entryRepository.getEntrys(criteria);
+        assertEquals(1, entries.size());
+        assertTrue(entries.contains(finishedPMLectureEntry));
+    }
+
+    private void loadSampleData() {
+        this.semesterRepository.createSemester(semester);
+        this.lectureRepository.createLecture(db);
+        this.lectureRepository.createLecture(pm);
+        this.entryRepository.createEntry(finishedPMLectureEntry);
+        this.entryRepository.createEntry(finishedPMSelfStudyEntry);
+        this.entryRepository.createEntry(runningDBLectureEntry);
+        this.entryRepository.createEntry(runningDBSelfStudyEntry);
+    }
+
 }
