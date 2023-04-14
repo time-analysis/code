@@ -6,7 +6,6 @@ import filterCriteria.EntryFilterCriteria;
 import filterCriteria.EntryFilterCriteriaBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import repositories.EntryRepository;
 import repositories.EntryRepositoryInterface;
 import repositories.LectureRepositoryInterface;

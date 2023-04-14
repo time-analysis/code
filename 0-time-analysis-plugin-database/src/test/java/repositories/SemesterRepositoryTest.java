@@ -1,22 +1,16 @@
 package repositories;
 
 import adapters.DataAdapter;
-import de.models.Entry;
-import de.models.EntryType;
-import de.models.Lecture;
 import de.models.Semester;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import plugins.LectureRepositoryMock;
-import plugins.SemesterRepositoryMock;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SemesterRepositoryTest {
 

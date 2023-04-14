@@ -1,6 +1,5 @@
 package plugins;
 
-import de.models.Lecture;
 import de.models.Semester;
 import repositories.SemesterRepositoryInterface;
 

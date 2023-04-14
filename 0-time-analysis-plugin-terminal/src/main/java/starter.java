@@ -1,4 +1,3 @@
-import Interfaces.DataAdapterInterface;
 import Interfaces.UIAdapterInterface;
 import Interfaces.UIPluginInterface;
 import adapters.DataAdapter;
