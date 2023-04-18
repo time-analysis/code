@@ -25,8 +25,7 @@ public class LectureRepository implements LectureRepositoryInterface {
         LectureResource lectureResource = this.dataAdapter.mapLectureToLectureRessource(lecture);
         Optional<Lecture> lectureResourceOptional = getLectureByName(sanitizeInputForCSVFormat(lectureResource.getName()));
         if (lectureResourceOptional.isPresent()) {
-            System.out.println("A lecture with this name already exists"); //todo remove
-            return;
+            throw new RuntimeException("A lecture with this name already exists");
         }
         String csvLecture = String.format(
                 "%s,%s,%s,%s"
@@ -63,9 +62,6 @@ public class LectureRepository implements LectureRepositoryInterface {
         String toReturn = input;
         if (!Objects.isNull(input)) {
             if (input.contains(",")) {
-                System.out.println("The letter \",\" is not allowed as input. It will be removed"); //todo use uiplugin
-                //SendUIMessageUseCase sendMessage = new SendUIMessageUesCase(uiPlugin);
-                //sendMessage.send("no comma allowed");
                 toReturn = toReturn.replace(",", "");
             }
         }

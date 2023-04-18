@@ -92,9 +92,6 @@ public class EntryRepository implements EntryRepositoryInterface {
         String toReturn = input;
         if (!Objects.isNull(input)) {
             if (input.contains(",")) {
-                System.out.println("The letter \",\" is not allowed as input. It will be removed"); //todo use uiplugin
-                //SendUIMessageUseCase sendMessage = new SendUIMessageUesCase(uiPlugin);
-                //sendMessage.send("no comma allowed");
                 toReturn = toReturn.replace(",", "");
             }
         }

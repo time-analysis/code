@@ -24,8 +24,7 @@ public class SemesterRepository implements SemesterRepositoryInterface {
         SemesterRessource semesterRessource = dataAdapter.mapSemesterToSemesterRessource(semester);
         Optional<Semester> semesterRessourceOptional = getSemesterByName(sanitizeInputForCSVFormat(semester.getName()));
         if (semesterRessourceOptional.isPresent()) {
-            System.out.println("A Semester with this name already exists");
-            return;
+            throw new RuntimeException("A Semester with this name already exists");
         }
         String csvSemester = String.format(
                 "%s,%s,%s"
@@ -61,9 +60,6 @@ public class SemesterRepository implements SemesterRepositoryInterface {
         String toReturn = input;
         if (!Objects.isNull(input)) {
             if (input.contains(",")) {
-                System.out.println("The letter \",\" is not allowed as input. It will be removed"); //todo use uiplugin
-                //SendUIMessageUseCase sendMessage = new SendUIMessageUesCase(uiPlugin);
-                //sendMessage.send("no comma allowed");
                 toReturn = toReturn.replace(",", "");
             }
         }
