@@ -10,11 +10,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class EntryRepositoryCache extends EntryRepositryDecorator {
-    List<Entry> pseudoCache = new LinkedList<>();
+    List<Entry> pseudoCache;
 
     public EntryRepositoryCache(EntryRepositoryInterface entryRepository) {
         super(entryRepository);
-        pseudoCache = super.getEntrys();
+        pseudoCache = new LinkedList<>(super.getEntrys());
     }
 
     @Override
